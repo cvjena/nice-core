@@ -1,0 +1,340 @@
+# -----------------------------
+# - configuration for libraries
+#
+# This is necessary to be able to use the $($(x)_CFLAGS) and $($(x)_LDFLAGS)
+# in the main Makefile. It is then simple to say a target will need library
+# $(x) with headers and libraries. all other variables defined in this section
+# are of no use later on in the process.
+
+CONFIGINFO=$(info $(1) $(if $(findstring 1,$(2)),will be used,not found (see Makefile.config)))
+
+# The following commands can be used
+# PKGCONFIG_3RDPARTY(PACKAGE_INITIALS, PACKAGE_NAME)
+# LIBEXIST(TESTFILE,LIBARGUMENTS)
+LIBEXISTS=$(shell g++ $(2) -x c++ -c libtests/$(1) -o /dev/null >/dev/null 2>&1 && echo "1")
+
+# determine platform (32 or 64bit)
+PLATFORM:=$(shell uname -m)
+
+ifeq (x86_64,$(PLATFORM))
+  ifeq (1,$(shell test -f $(HOME)/DBVFAIL && echo "1"))
+    THIRD_BASE=
+    $(call CONFIGINFO,DBVEXT,0)
+  else
+    THIRD_BASE=/home/dbv/3rdparty64-gcc43
+    $(call CONFIGINFO,DBVEXT,1)
+  endif
+
+  ifeq (1,$(shell test -d $(THIRD_BASE) && echo "1"))
+    # ICE
+   ifndef ICEDIR
+    ICEDIR=$(THIRD_BASE)/ice-for-limun/
+   endif
+
+    #ANN
+    ANN_CFLAGS=-I/home/dbv/3rdparty64/ANN/include -DNICE_USELIB_ANN
+    ANN_LDFLAGS=-L/home/dbv/3rdparty64/ANN/lib -lANN
+  
+    # IPP v5
+    IPPDIR=$(THIRD_BASE)/ipp53
+    ifeq (1,$(shell test -d $(IPPDIR) && echo "1"))
+	    IPP_CFLAGS=-I$(IPPDIR)/include -DNICE_USELIB_IPP=5
+  	  IPP_LDFLAGS=-L$(IPPDIR)/sharedlib -lippiem64t -lippccem64t -lippcvem64t -lippsem64t -lippmem64t -lippcoreem64t -lpthread
+      $(call CONFIGINFO,IPP,1)
+    else
+      $(call CONFIGINFO,IPP,0)
+    endif
+  else
+    THIRD_BASE=/usr/lib/
+  endif
+
+  ifdef ICEDIR
+    ifndef NOFFTW3
+      ICEOPT = -lfftw3
+    else
+      ICECFLAG = -DNOFFTW3
+    endif
+    ICE_CFLAGS=-I$(ICEDIR)/src -DNICE_USELIB_ICE -DDONT_USE_ICE_NAMESPACE_BY_DEFAULT $(ICECFLAG) 
+    ICE_LDFLAGS=-L$(ICEDIR)/lib/x86_64-suse-linux/ -lice -L/usr/X11R6/lib -lX11 -ljpeg $(ICEOPT) 
+    $(call CONFIGINFO,ICE,1)
+  else
+    $(call CONFIGINFO,ICE,0)
+  endif
+
+else
+  THIRD_BASE=/home/dbv/3rdparty32
+  
+  ifeq (1,$(shell test -d $(THIRD_BASE) && echo "1"))
+    # ICE
+    ICEDIR=$(THIRD_BASE)/ice-for-limun/
+    ICE_CFLAGS=-I$(ICEDIR)/src -DNICE_USELIB_ICE -DDONT_USE_ICE_NAMESPACE_BY_DEFAULT
+    ICE_LDFLAGS=-L$(ICEDIR)/lib/i686-suse-linux/ -lice -L/usr/X11R6/lib -lX11 -ljpeg -lfftw3
+
+    #ANN
+    ANN_CFLAGS=-I/home/dbv/3rdparty32/ANN/include -DNICE_USELIB_ANN
+    ANN_LDFLAGS=-L/home/dbv/3rdparty32/ANN/lib -lANN
+  
+    # IPP v5
+    IPPDIR=$(THIRD_BASE)/ipp53
+    IPP_CFLAGS=-I$(IPPDIR)/include -DNICE_USELIB_IPP=5
+    IPP_LDFLAGS=-L$(IPPDIR)/sharedlib -lippcore -lguide -lippi -lippcc -lippcv -lipps -lippm
+  else
+    THIRD_BASE=/usr/lib/
+  endif
+endif
+
+# OpenMP
+ifeq (1,$(call LIBEXISTS,test-libomp.cpp,-fopenmp -lgomp))
+    OPENMP_CFLAGS=-fopenmp -DNICE_USELIB_OPENMP
+    OPENMP_LDFLAGS=-fopenmp -lgomp
+  $(call CONFIGINFO,OPENMP,1) 
+else 
+  $(call CONFIGINFO,OPENMP,0) 
+endif 
+
+#CUDASIFTDEMO
+CUDASIFTDIR=$(THIRD_BASE)/cudaSIFT/
+CUDADIR=$(THIRD_BASE)/cuda/
+ifeq (1,$(shell test -d $(CUDASIFTDIR) && echo "1")) 
+  CUDASIFT_CFLAGS+=-I$(CUDASIFTDIR)/SiftGPU/SiftGPU -DNICE_USELIB_CUDASIFT
+  CUDASIFT_LDFLAGS+=-L$(CUDASIFTDIR)/SiftGPU/Linux/bin -lsiftgpu -L$(CUDASIFTDIR)/glew/lib/ -L$(CUDASIFTDIR)/devil/lib -L/usr/lib64/ -lGLEW -lglut -lIL -lGL -L$(CUDADIR)/lib64 -lcudart 
+  $(call CONFIGINFO,CUDASIFT,1) 
+else 
+  $(call CONFIGINFO,CUDASIFT,0) 
+endif
+
+# JPEG
+ifeq (1,$(call LIBEXISTS,test-libjpeg.cpp,-ljpeg))
+  JPG_CFLAGS=-DNICE_USELIB_JPG
+  JPG_LDFLAGS=-ljpeg
+  $(call CONFIGINFO,JPEGLIB,1) 
+else
+  $(call CONFIGINFO,JPEGLIB,0) 
+endif
+
+# PNG
+# The new version of the png library is not supported.
+# Therefore, we simply do not use it, because the whole functionality
+# is covered by the libMagick++ library.
+#PNG_CFLAGS=-DNICE_USELIB_PNG
+#PNG_LDFLAGS=-lpng
+
+# ZLIB (gz)
+ifeq (1,$(call LIBEXISTS,test-zlib.cpp,-lz))
+  ZLIB_CFLAGS=-DNICE_USELIB_ZLIB
+  ZLIB_LDFLAGS=-lz
+  $(call CONFIGINFO,ZLIB,1) 
+else
+  $(call CONFIGINFO,ZLIB,0) 
+endif
+
+# BZLIB (bz2)
+ifeq (1,$(call LIBEXISTS,test-bzlib.cpp,-lbz2))
+  BZLIB_CFLAGS=-DNICE_USELIB_BZLIB
+  BZLIB_LDFLAGS=-lbz2
+  $(call CONFIGINFO,BZLIB,1) 
+else
+  BZLIB_CFLAGS=
+  BZLIB_LDFLAGS=
+  $(call CONFIGINFO,BZLIB,0) 
+endif
+
+
+# OpenMP
+#OPENMP_CFLAGS=-fopenmp -DNICE_USELIB_OPENMP
+#OPENMP_LDFLAGS=-fopenmp -lgomp
+
+# Boost
+BOOSTDIR=$(THIRD_BASE)/boost
+ifeq (1,$(shell test -d $(BOOSTDIR) && echo "1"))
+  BOOST_CFLAGS=-I$(BOOSTDIR)/include -DNICE_USELIB_BOOST
+  BOOST_LDFLAGS=-L$(BOOSTDIR)/lib
+endif
+
+# LinAl
+LINALCONFIG=$(THIRD_BASE)/LinAl/bin/linal-config
+ifeq (1,$(shell test -f $(LINALCONFIG) && echo "1"))
+  LINAL_CFLAGS=`$(LINALCONFIG) --cxxflags` -DNICE_USELIB_LINAL
+  LINAL_LDFLAGS=`$(LINALCONFIG) --libs` -lgfortran
+endif
+
+# ---------------------------------- QT4 (first local install -> if not available 
+QT4_PKGCONFIG=QtGui QtCore QtOpenGL Qt3Support
+QT4_XML_PKGCONFIG=QtXml
+
+ifeq (1,$(shell pkg-config --exists $(QT4_PKGCONFIG) && echo "1"))
+  MOC_BINARY=moc
+  $(call CONFIGINFO,QT4_local,1)
+else
+  QTDIR=$(THIRD_BASE)/qt4
+  ifeq (1,$(shell test -d $(QTDIR)/lib/pkgconfig && echo "1"))
+    QT4_PKGCONFIG_XXX=$(QTDIR)/lib/pkgconfig
+    QT4_PKGCONFIG=$(QT4_PKGCONFIG_XXX)/QtGui.pc $(QT4_PKGCONFIG_XXX)/QtCore.pc $(QT4_PKGCONFIG_XXX)/QtOpenGL.pc $(QT4_PKGCONFIG_XXX)/Qt3Support.pc
+    QT4_XML_PKGCONFIG=$(QT4_PKGCONFIG_XXX)/QtXml.pc
+    MOC_BINARY=$(QTDIR)/bin/moc
+  	$(call CONFIGINFO,QT4_3rdparty,1)
+  endif
+endif
+
+#QT4_XML
+ifeq (1,$(shell pkg-config --exists $(QT4_XML_PKGCONFIG) && echo "1"))
+  QT4_XML_CFLAGS="-DNICE_USELIB_QT4_XML"
+  MOC=$(MOC_BINARY) $(QT4_CFLAGS) $(QT4_XML_CFLAGS)
+  $(call CONFIGINFO,QT4_XML,1)
+else
+  $(call CONFIGINFO,QT4_XML,0)
+endif
+
+#KRECONSTRUCTION
+KRECONSTRUCTION_PREFIX=$(HOME)/code/k_reconstruction
+ifeq (1,$(shell test -d $(KRECONSTRUCTION_PREFIX) && echo "1"))
+  KRECONSTRUCTION_PC_PATH=$(KRECONSTRUCTION_PREFIX)/BUILD_$(shell uname -m)/pkgconfig
+  KRECONSTRUCTION_CFLAGS=`export PKG_CONFIG_PATH=$(KRECONSTRUCTION_PC_PATH);\
+   pkg-config libtrackerregion libgeoprojective libreconstruct libgeo3dext libtrackerext --cflags` -DNICE_USELIB_KRECONSTRUCTION
+  KRECONSTRUCTION_LDFLAGS=\
+  `export PKG_CONFIG_PATH=$(KRECONSTRUCTION_PC_PATH);\
+  pkg-config libtrackerregion libgeoprojective libreconstruct libgeo3dext libtrackerext --libs`
+  $(call CONFIGINFO,KRECONSTRUCTION,1)
+else
+  $(call CONFIGINFO,KRECONSTRUCTION,0)
+endif
+
+# Coin3D
+COIN3DDIR=$(THIRD_BASE)/Coin3dQt4
+ifeq (1,$(shell test -d $(COIN3DDIR) && echo "1"))
+  COIN3D_CFLAGS=-I$(COIN3DDIR)/include -DNICE_USELIB_COIN3D
+  COIN3D_LDFLAGS=-L$(COIN3DDIR)/lib -lCoin -lSoQt
+  $(call CONFIGINFO,COIN3D,1)
+else
+  $(call CONFIGINFO,COIN3D,0)
+endif
+
+#OPEN CV
+ifeq (1,$(shell pkg-config --exists opencv && echo "1"))
+  OPENCV_CFLAGS= `pkg-config --cflags opencv` -DNICE_USELIB_OPENCV  
+  OPENCV_LDFLAGS=`pkg-config --libs opencv`
+  $(call CONFIGINFO,OPENCV_LOCAL,1)
+else
+  OPENCV_PREFIX=$(THIRD_BASE)/opencv
+  ifeq (1,$(shell test -d $(OPENCV_PREFIX) && echo "1"))
+    OPENCV_CFLAGS=-I$(OPENCV_PREFIX)/include/opencv -DNICE_USELIB_OPENCV
+    OPENCV_LDFLAGS=-L$(OPENCV_PREFIX)/lib
+    OPENCV_LDFLAGS+=-lcxcore -lcv -lhighgui -lcvaux -lml
+    $(call CONFIGINFO,OPENCV,1)
+  else
+    $(call CONFIGINFO,OPENCV,0)
+  endif
+endif
+
+#ARIA
+ARIA_PREFIX=$(THIRD_BASE)/Aria
+ifeq (1,$(shell test -d $(OPENCV_PREFIX) && echo "1"))
+  ARIA_CFLAGS=-I$(ARIA_PREFIX)/include -I$(ARIA_PREFIX)/ArNetworking/include -DNICE_USELIB_ARIA
+  ARIA_LDFLAGS=-L$(ARIA_PREFIX)/lib
+  ARIA_LDFLAGS+=-lAria -lArNetworking
+  $(call CONFIGINFO,ARIA,1)
+else
+  $(call CONFIGINFO,ARIA,0)
+endif
+
+#GLUT
+ifeq (1,$(call LIBEXISTS,test-glut.cpp,-lglut -lGLU))
+  GLUT_LDFLAGS= -lglut -lGLU -lGL 
+  GLUT_CFLAGS=-DNICE_USELIB_GLUT
+  $(call CONFIGINFO,GLUT,1)
+else
+  $(call CONFIGINFO,GLUT,0)
+endif
+
+#PTU
+PTU_CFLAGS=$(shell ptu-config --cxxflags) -DNICE_USELIB_PTU
+PTU_LDFLAGS=$(shell ptu-config --libs)
+
+# FireCap
+ifeq (1,$(shell pkg-config FireCap --exists && echo "1"))
+  $(call CONFIGINFO,FireCap,1)
+  FIRECAP_PKGCONFIG_XXX:=FireCap
+  FIRECAP_CFLAGS:=-DNICE_USELIB_FIRECAP `pkg-config $(FIRECAP_PKGCONFIG_XXX) --cflags`
+  FIRECAP_LDFLAGS:=`pkg-config $(FIRECAP_PKGCONFIG_XXX) --libs`
+  $(call CONFIGINFO,FireCap,1)
+else
+  $(call CONFIGINFO,FireCap,0)
+endif
+
+# libxml2
+XML2CONFIG=xml2-config
+ifeq (1,$(shell $(XML2CONFIG) --version >> /dev/null 2>&1 && echo "1"))
+  $(call CONFIGINFO,libxml2,1)
+  XML2_CFLAGS=`$(XML2CONFIG) --cflags` -DNICE_USELIB_XML2
+  XML2_LDFLAGS=`$(XML2CONFIG) --libs`
+else
+  $(call CONFIGINFO,libxml2,0)
+endif
+
+ifeq (1,$(shell which cppunit-config 2>/dev/null >/dev/null && echo "1"))
+# default: use standard package
+	CPPUNIT_CFLAGS=$(shell cppunit-config --cflags) -DNICE_USELIB_CPPUNIT
+	CPPUNIT_LDFLAGS=$(shell cppunit-config --libs)
+    $(call CONFIGINFO,CPPUNIT,1)
+else 
+ifeq (1,$(shell ls $(THIRD_BASE)/cppunit/bin/cppunit-config 2>/dev/null >/dev/null && echo "1"))
+# use cppunit available in third-party directory
+	CPPUNIT_PREFIX=$(THIRD_BASE)/cppunit
+	CPPUNIT_CFLAGS=$(shell $(CPPUNIT_PREFIX)/bin/cppunit-config --cflags) -DNICE_USELIB_CPPUNIT
+	CPPUNIT_LDFLAGS=$(shell $(CPPUNIT_PREFIX)/bin/cppunit-config --libs | sed s"=-L/usr/lib64=="g)
+    $(call CONFIGINFO,CPPUNIT,1)
+else
+# no cppunit available
+	CPPUNIT_CFLAGS=
+	CPPUNIT_LDFLAGS=
+    $(call CONFIGINFO,CPPUNIT,0)
+endif
+endif
+
+LIBMAGICKCONFIG=MagickCore-config
+ifeq (1,$(shell $(LIBMAGICKCONFIG) --version >> /dev/null 2>&1 && echo "1"))
+    LIBMAGICKCONFIG=Magick++-config
+    ifeq (1,$(shell $(LIBMAGICKCONFIG) --version >> /dev/null 2>&1 && echo "1"))
+      LIBMAGICK_CFLAGS=`$(LIBMAGICKCONFIG) --cppflags` -DNICE_USELIB_LIBMAGICK
+      LIBMAGICK_LDFLAGS=`$(LIBMAGICKCONFIG) --libs`
+      $(call CONFIGINFO,LIBMAGICK,1)
+    else
+      $(call CONFIGINFO,LIBMAGICK,0)
+    endif
+else
+  $(call CONFIGINFO,LIBMAGICK,0)
+endif
+
+# nice-dtsvm is a nice sub-lib, and we like
+# to have it optionally, therefore, we require
+# a flag passed to the compiler, which can be used
+# in our source code
+ifeq (1,$(shell test -d nice-dtsvm/ && echo "1"))
+    #NICEDTSVM_CFLAGS=-DNICE_USELIB_NICEDTSVM `pkg-config --cflags libnice-dtsvm`
+    #NICEDTSVM_LDFLAGS=`pkg-config --libs libnice-dtsvm`
+	NICEDTSVM_CFLAGS=-DNICE_USELIB_NICEDTSVM 
+	NICEDTSVM_LDFLAGS=
+    $(call CONFIGINFO,NICEDTSVM,1)
+else
+    $(call CONFIGINFO,NICEDTSVM,0)
+endif
+
+ifeq (1,$(shell test -d $(THIRD_BASE)/trlan/ && echo "1"))
+  TRLAN_CFLAGS=-DNICE_USELIB_TRLAN 
+  TRLAN_LDFLAGS=-L$(THIRD_BASE)/trlan/ -ltrlan
+  $(call CONFIGINFO,TRLAN,1)
+else
+  $(call CONFIGINFO,TRLAN,0)
+endif
+
+# for Matze Wackers optimization lib
+DEBUGFLAGS_CFLAGS=-DOPT_DEBUG -DDEBUG
+
+MATIODIR=matio/
+ifeq (1,$(shell test -d $(MATIODIR) && echo "1"))
+  MATIO_CFLAGS=-DNICE_USELIB_MATIO -I$(MATIODIR)
+  MATIO_LDFLAGS=-L$(MATIODIR) -lmatio
+  $(call CONFIGINFO,MATIO,1)
+else
+  $(call CONFIGINFO,MATIO,0)
+endif

@@ -1,0 +1,42 @@
+Installation
+============
+
+git clone /home/dbv/git/nice/
+
+-source the setenv.sh in the nice-directory (and nowhere else) to setup all necessary variables, relative paths, libraries etc.
+-make
+
+
+Additional Sub-Libraries
+=======================
+
+gp-hik-core:
+cd ../nice-core/ (goto NICE path)
+git clone /home/dbv/git/nice/gp-hik-core/
+(*) This module is also available at git-hub. Please replace the clone-command by the corresponding github clone command.
+
+gp-hik-exp:
+cd ../nice-core/ (goto NICE path)
+git clone /home/dbv/git/nice/gp-hik-exp/
+
+optimization:
+cd ../nice-core/ (goto NICE path)
+git clone /home/dbv/git/nice/optimization/
+
+vislearning:
+cd ../nice/ (goto NICE path)
+git clone /home/dbv/git/nice/vislearning/
+
+
+Known Issues
+============
+
+- fixing the -lg2c problem
+=> sudo ln -s /usr/lib/libg2c.so.0 /usr/lib/libg2c.so
+   sudo ln -s /usr/lib64/libg2c.so.0 /usr/lib64/libg2c.so
+
+Requirements
+============
+
+install gfortran ( openSUSE: gcc46-gfortran )
+install freeglut-devel

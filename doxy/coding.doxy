@@ -1,0 +1,10 @@
+/** \page coding Coding Guidlines
+
+
+NICE is basically guided on the <a href="http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml">Google style guide</a>
+
+Additionally, there are the following regulations:
+
+\verbinclude CODING
+
+ */

@@ -1,0 +1,27 @@
+Normal procedure:
+
+source setenv.sh
+make
+
+After that executables and libraries should be available in BUILD_*. Settings for libraries can be changed in Makefile.config. Please note that this file will be created after running make for the first time.
+
+The following is just a list of typical pitfalls:
+
+(1) On some systems (openSuSE) some library links are not set appropiately
+
+ln -s /lib/libbz2.so.1 /lib/libbz2.so
+ln -s /usr/lib/libg2c.so.0 /usr/lib/libg2c.so
+
+(2) For running unit tests with "make check" you need
+zypper install cppunit-devel
+
+(3)
+
+BZLIB not found (see Makefile.config) ...
+/usr/lib64/gcc/x86_64-suse-linux/4.6/../../../../x86_64-suse-linux/bin/ld: cannot find -lbz2
+
+This error occurs when the link to libbz2 is not set properly 
+32bit: ln -s /lib/libbz2.so.1 /lib/libbz2.so
+64bit: ln -s /lib64/libbz2.so.1 /lib64/libbz2.so
+
+The bz2 lib check successfully detects this mistake, however, Magick++-config uses -lbz2 anyway.

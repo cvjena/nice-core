@@ -1,0 +1,4 @@
+.dep
+.lib
+config.h*
+.config.h*

@@ -1,0 +1,7 @@
+/** \page install Installation Guide
+
+  \verbinclude README
+  
+  recommended packages:
+  \verbinclude PACKAGES
+*/

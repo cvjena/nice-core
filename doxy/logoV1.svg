@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.1 r9760"
+   sodipodi:docname="logoV1.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="5.6568542"
+     inkscape:cx="194.28172"
+     inkscape:cy="858.0379"
+     inkscape:document-units="px"
+     inkscape:current-layer="g4051"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="972"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g4051">
+      <flowRoot
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         id="flowRoot2985"
+         xml:space="preserve"><flowRegion
+           id="flowRegion2987"><rect
+             y="156.35687"
+             x="159.6041"
+             height="70.710678"
+             width="160.61426"
+             id="rect2989" /></flowRegion><flowPara
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:TeX Gyre Schola;-inkscape-font-specification:TeX Gyre Schola"
+           id="flowPara2991">CV</flowPara></flowRoot>      <flowRoot
+         transform="matrix(1.6881042,0,0,2.6839504,-198.72748,-269.84001)"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         id="flowRoot2993"
+         xml:space="preserve"><flowRegion
+           id="flowRegion2995"><rect
+             y="148.07646"
+             x="237.85715"
+             height="74.285713"
+             width="50.714287"
+             id="rect2997" /></flowRegion><flowPara
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:TeX Gyre Schola;-inkscape-font-specification:TeX Gyre Schola"
+           id="flowPara2999">J</flowPara></flowRoot>      <rect
+         ry="1.8145518"
+         y="154.19693"
+         x="177.67902"
+         height="3.6291037"
+         width="63.757946"
+         id="rect3001"
+         style="fill:#00000a;fill-opacity:1;stroke:#000000;stroke-width:2.60832787;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      <text
+         xml:space="preserve"
+         style="font-size:10px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:East Syriac Ctesiphon;-inkscape-font-specification:East Syriac Ctesiphon Bold Italic"
+         x="203.82353"
+         y="151.50813"
+         id="text2992"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan2994"
+           x="203.82353"
+           y="151.50813"
+           style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:TeX Gyre Schola;-inkscape-font-specification:TeX Gyre Schola Bold">NICE</tspan></text>
+    </g>
+  </g>
+</svg>

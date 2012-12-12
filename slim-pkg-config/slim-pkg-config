@@ -1,0 +1,366 @@
+#!/usr/bin/perl -w
+
+use strict;
+use Getopt::Long;
+
+my $persistence_support;
+
+eval ( "use Tie::Persistent;" );
+
+if ( !defined($@) || (length($@) == 0) ) {
+	$persistence_support = 1;
+} else {
+	$persistence_support = 0;
+}
+
+
+####### search_pc_files () // code date : 21.07.09 ######
+sub search_pc_files
+{
+    my $search_paths = $ENV{'PKG_CONFIG_PATH'};
+    if (!defined($search_paths)) {
+	$search_paths = "";
+    }
+    $search_paths .= ":.";
+
+    my @paths = split /:+/, $search_paths;
+    my $pc_locations;
+
+    for my $path ( @paths ) 
+    {
+	my @pcfiles = glob ("$path/*.pc");
+	for my $pcfile (@pcfiles)
+	{
+	    chomp $pcfile;
+	    my ($pcname) = ($pcfile =~ /([^\/]+)\.pc$/);
+	    if ( !defined($pcname) ) {
+		die ("unable to parse filename: $pcfile\n");
+	    }
+#	    print "$pcname -> $pcfile\n";
+	    $pc_locations->{$pcname} = "$pcfile";
+	}
+    }
+    return $pc_locations;
+}
+
+
+####### parse_pc_file () // code date : 21.07.09 ######
+sub parse_pc_file
+{
+    my $pc_file = shift @_;
+    my $data;
+    my %vars;
+
+    open ( FILE, "<$pc_file" ) or die ("$pc_file: $!\n");
+    while (<FILE>)
+    {
+		chomp;
+		# TODO: If a line contains "Cflags:-DVARIABLE=1 -I...", then this line is erroneously interpreted as a variable definition.
+		# Hopefully for the grammar designers of pkg-config files, this case was forbidden, requiring a whitespace after each ":" and "="
+		if ( /^(\S+?) *= *(.+?)$/ ) {
+			my $key = $1;
+			my $value = $2;
+			
+			for my $var ( keys %vars ) 
+			{
+				$value =~ s/\$\{$var\}/$vars{$var}/g;
+			}
+			
+			$vars{$key} = $value;
+
+		} elsif ( /^(\S+?) *: *(.+?)$/ ) {
+			my $key = $1;
+			my $value = $2;
+
+			for my $var ( keys %vars ) 
+			{
+				$value =~ s/\$\{$var\}/$vars{$var}/g;
+			}
+
+			$data->{$key} = $value;
+		}
+    }
+    
+    close (FILE);
+    return $data;
+}
+
+
+####### print_pc_file () // code date : 21.07.09 ######
+sub print_pc_file
+{
+    my $data = shift;
+    for my $key ( keys %{$data} ) {
+	my $value = $data->{$key};
+	print "$key = $value\n";
+    }
+}
+
+
+####### get_pc_data () // code date : 21.07.09 ######
+sub get_pc_data
+{
+    my $pkg = shift @_;
+
+    my $file;
+    if ( $pkg =~ /\.pc$/ ) {
+	$file = $pkg;
+    } else {
+	my $pc_locations = shift @_;
+	$file = $pc_locations->{$pkg};
+    }
+    if ( !defined($file) || !-f $file ) {
+	print <<PKGNOTFOUND;
+Package $pkg was not found in the pkg-config search path.
+Perhaps you should add the directory containing \`$pkg.pc\'
+to the PKG_CONFIG_PATH environment variable
+No package '$pkg' found
+PKGNOTFOUND
+	return undef;
+    }
+    my $data = parse_pc_file ($file);
+    return $data;
+}
+
+####### build_dependency_graph () // code date : 21.07.09 ######
+sub build_dependency_graph
+{
+    my $pkg = shift @_;
+    my $deptree = shift @_;
+    my $pc_locations = shift @_;
+
+    if ( exists $deptree->{$pkg} ) {
+	# already included in dependency graph
+    } else {
+	my $data = get_pc_data ( $pkg, $pc_locations );
+	$deptree->{$pkg}->{'data'} = $data;
+	my $children = undef;
+
+	if ( exists $data->{'Requires'} ) {
+	    my @pkg_childs = split /[\s\,]+/, $data->{'Requires'};
+	    for my $pkg_child ( @pkg_childs ) 
+	    {
+		my $childnode = build_dependency_graph ( $pkg_child, $deptree, $pc_locations );
+		push @{ $children }, $pkg_child;
+	    }
+	}
+
+	$deptree->{$pkg}->{'children'} = $children;
+	$deptree->{$pkg}->{'childrencount'} = defined($children) ? scalar @{$children} : 0;
+    }
+
+    return $deptree->{$pkg};
+}
+
+
+####### get_all_packages () // code date : 21.07.09 ######
+sub get_all_packages
+{
+    my $pkg = shift @_;
+    my $deptree = shift @_;
+    my $pkglist = shift @_;
+	my $pkghash = shift @_;
+
+    if ( !exists( $deptree->{$pkg} ) ) {
+		die ( "$pkg not found in the dependency graph\n" );
+    }
+
+    push @{$pkglist}, $pkg;
+	$pkghash->{$pkg} = 1;
+
+    my $children =  $deptree->{$pkg}->{'children'};
+    my $count = $deptree->{$pkg}->{'childrencount'};
+#    print "pkg $pkg ($count)\n";
+    
+    if ( defined($children) ) {
+		for my $child ( @{ $children } ) 
+		{
+		#	if ( !exists $pkghash->{$child} ) {
+				($pkglist, $pkghash) = get_all_packages ( $child, $deptree, $pkglist, $pkghash ); 
+		#	}
+		}
+    }
+    return ($pkglist, $pkghash);
+}
+
+
+####### uniquify () // code date : 21.07.09 ######
+sub uniquify
+{
+    my $pkg_list = shift @_;
+    my @new_list;
+    my %hash;
+
+    for (my $i = scalar(@{$pkg_list})-1 ; $i >= 0 ; $i-- )
+    {
+		my $val = $pkg_list->[$i];
+		next if ( exists $hash{$val} );
+		$hash{$val} = 1;
+		unshift @new_list, $val;
+    }
+
+    return @new_list;
+}
+
+
+####### print_options () // code date : 21.07.09 ######
+sub print_options
+{
+    my $root_packages = shift @_;
+    my $deptree = shift @_;
+    my $new_pkg_list = shift @_;
+    my $options = shift @_;
+
+    my $parameters = ""; # all parameters in a string :)
+    my @plist_duplicates;
+
+    for my $opt ( keys %{$options} )
+    {
+	next if ( $options->{$opt} != 1 );
+	for my $deppkg ( @{$new_pkg_list} )
+	{
+   if($deptree->{$deppkg}->{'data'}->{$opt})
+     {
+	    my @para = split /\s+/, $deptree->{$deppkg}->{'data'}->{$opt};
+	    push @plist_duplicates, @para;
+      }
+	}
+    }
+
+    my @plist = uniquify ( \@plist_duplicates );
+
+    return join (' ', @plist);
+}
+
+######################## handle conflicting libs
+
+
+####### handle_known_permutation_difficulties () // code date : 27.01.10 ######
+sub handle_known_permutation_difficulties
+{
+	my $options = shift @_;
+
+	# WORKAROUND 1: CUDA and pthread
+	if ( $options =~ /-lpthread.+?-lcuda/ ) 
+	{
+		$options =~ s/-lpthread//g;
+		$options = $options . " " . "-lpthread";
+	}
+	return $options;
+}
+
+################################### MAIN
+
+
+my $print_cflags = 0;
+my $print_libs = 0;
+my $print_modversion = 0;
+my $eval_exists = 0;
+my $print_version = 0;
+my ( $cache, $use_cache, $rebuild_cache ) = ( "", 0, 0);
+my $result = GetOptions ("libs"   => \$print_libs,      
+			 "cflags"  => \$print_cflags,
+			 "cppflags"  => \$print_cflags,
+			 "cxxflags"  => \$print_cflags,
+			 "modversion" => \$print_modversion,
+			 "exists" => \$eval_exists,
+			 "version" => \$print_version,
+			 "cache=s" => \$cache,
+			 "usecache" => \$use_cache );  
+
+if ( $print_version )
+{
+	print "slim-pkg-config 0.1beta (c) Erik Rodner\n";
+	exit;
+}
+
+my @root_packages = @ARGV;
+my %data;
+
+if ( !$persistence_support )
+{
+    $use_cache = 0;
+}
+
+if ( $use_cache ) {
+    if ( -f $cache ) {
+	# read cache
+	tie %data, 'Tie::Persistent', $cache, 'r'; 
+    } else {
+	$rebuild_cache = 1;
+	tie %data, 'Tie::Persistent', $cache, 'rw';
+    }
+}
+
+if ( !$use_cache || $rebuild_cache ) {
+	$data{'locations'} = search_pc_files ();
+}
+
+if ( $eval_exists ) {
+    for my $pkg ( @root_packages )
+    {
+	my $is_a_file = ( -f $pkg );
+	if ( (!$is_a_file) && (! exists $data{'locations'}->{$pkg}) ) {
+	    #warn("$pkg does not exist.");
+	    exit(-1);
+	}
+    }
+    exit(0);
+}
+
+
+
+# dummy to initialize memory
+$data{'deptree'}->{'_'} = 1;
+
+
+if ( !$use_cache || $rebuild_cache ) {
+    for my $pkg ( @root_packages )
+    {
+        build_dependency_graph ( $pkg, $data{'deptree'}, $data{'locations'} );
+    }
+} 
+
+
+if ( $print_modversion ) {
+    for my $pkg ( @root_packages )
+    {
+	print "$data{'deptree'}->{$pkg}->{'data'}->{'Version'}\n";
+    }
+}
+
+if ( $print_cflags || $print_libs ) 
+{
+    my $pkg_list;
+	my $pkg_hash;
+    for my $pkg ( @root_packages )
+    {
+		($pkg_list, $pkg_hash) = get_all_packages ( $pkg, $data{'deptree'}, $pkg_list, $pkg_hash );
+    }
+
+    my @new_pkg_list = uniquify ( $pkg_list );
+
+    my %options;
+    $options{'Cflags'} = ($print_cflags);
+    $options{'Libs'} = ($print_libs);
+
+    my $options = print_options ( \@root_packages, $data{'deptree'}, \@new_pkg_list, \%options );
+
+	if ( $print_libs )
+	{
+			$options = handle_known_permutation_difficulties ( $options );
+	}
+
+	print $options;
+
+    print "\n";
+}
+
+if ( $rebuild_cache ) {
+    # save tree
+    (tied %data)->sync();
+}
+if ( $use_cache ) {    
+    untie %data;
+}
+

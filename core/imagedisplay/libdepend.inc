@@ -1,0 +1,6 @@
+$(call PKG_DEPEND_EXT_ESSENTIAL,QT4)
+$(call PKG_DEPEND_EXT_ESSENTIAL,GLUT)
+# $(call PKG_DEPEND_EXT,SDL)
+$(call PKG_DEPEND_INT,core/basics)
+$(call PKG_DEPEND_INT,core/vector)
+$(call PKG_DEPEND_INT,core/image)
