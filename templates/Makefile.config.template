@@ -18,7 +18,7 @@ PLATFORM:=$(shell uname -m)
 
 ifeq (x86_64,$(PLATFORM))
   ifeq (1,$(shell test -f $(HOME)/DBVFAIL && echo "1"))
-    THIRD_BASE=
+    THIRD_BASE=nothirdbase
     $(call CONFIGINFO,DBVEXT,0)
   else
     THIRD_BASE=/home/dbv/3rdparty64-gcc43
