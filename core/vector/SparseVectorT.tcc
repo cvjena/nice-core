@@ -93,7 +93,7 @@ void SparseVectorT<I,V>::divide ( const SparseVectorT<I,V> & v )
     }
 
     if ( deleteEntry )
-      erase ( it++ );
+      this->erase ( it++ );
     else
       it++;
   }
@@ -114,7 +114,7 @@ void SparseVectorT<I,V>::divide ( V v )
       deleteEntry = true;
 
     if ( deleteEntry )
-      erase ( it++ );
+      this->erase ( it++ );
     else
       it++;
   }
@@ -137,7 +137,7 @@ void SparseVectorT<I,V>::multiply ( const SparseVectorT<I,V> & v )
     }
 
     if ( deleteEntry )
-      erase ( it++ );
+      this->erase ( it++ );
     else
       it++;
   }
@@ -151,7 +151,7 @@ void SparseVectorT<I,V>::multiply ( V val )
     it->second *= val;
     if ( fabs ( it->second ) < 1e-20 )
     {
-      erase ( it++ );
+      this->erase ( it++ );
     } else {
       it++;
     }

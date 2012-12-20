@@ -176,6 +176,15 @@ else
   endif
 endif
 
+ifeq (1,$(shell pkg-config --exists $(QT4_PKGCONFIG) && echo "1"))
+  QT4_CFLAGS=-DQT3_SUPPORT -DNICE_USELIB_QT
+  # The moc precompiler. Make sure it´s the Qt4 version!
+  MOC=$(MOC_BINARY) $(QT4_CFLAGS)
+else
+  QT4_PKGCONFIG=
+  $(call CONFIGINFO,QT4,0)
+endif
+
 #QT4_XML
 ifeq (1,$(shell pkg-config --exists $(QT4_XML_PKGCONFIG) && echo "1"))
   QT4_XML_CFLAGS="-DNICE_USELIB_QT4_XML"
