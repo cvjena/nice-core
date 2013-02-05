@@ -11,9 +11,9 @@ set(NICELibrary_VERSION_MINOR 0)
 
 set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
 
-IF(WIN32)
-  MESSAGE(FATAL_ERROR "not yet ready")
-ENDIF(WIN32) 
+#IF(WIN32)
+ # MESSAGE(FATAL_ERROR "not yet ready")
+#ENDIF(WIN32) 
 
 # add the binary tree to the search path for include files
 #include_directories ("${PROJECT_BINARY_DIR}")
