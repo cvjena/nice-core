@@ -18,7 +18,7 @@ ENDIF(WIN32)
 # add the binary tree to the search path for include files
 #include_directories ("${PROJECT_BINARY_DIR}")
 
-#SET(CMAKE_USE_RELATIVE_PATHS ON)
+SET(CMAKE_USE_RELATIVE_PATHS ON)
 check_symbol_exists("__assert_fail" "assert.h" HAVE_ASSERT_FAIL)
 
 

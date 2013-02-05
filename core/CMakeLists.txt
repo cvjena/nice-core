@@ -1,4 +1,10 @@
 
+CONFIGURE_FILE(
+  "CMakeDefinesConfig.h.in"
+  "${PROJECT_BINARY_DIR}/CMakeDefinesConfig.h"
+)
+include_directories("${PROJECT_BINARY_DIR}")
+
 INCLUDE_DIRECTORIES(basics)
 INCLUDE_DIRECTORIES(algebra)
 INCLUDE_DIRECTORIES(vector)

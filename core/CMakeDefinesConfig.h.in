@@ -1,0 +1,6 @@
+#ifndef CMAKEDEFINESCONFIG_H
+#define CMAKEDEFINESCONFIG_H
+
+#cmakedefine USE_TEST
+
+#endif
