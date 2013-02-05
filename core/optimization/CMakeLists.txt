@@ -1,0 +1,7 @@
+
+INCLUDE_DIRECTORIES(blackbox)
+INCLUDE_DIRECTORIES(gradientBased)
+
+ADD_SUBDIRECTORY(blackbox)
+ADD_SUBDIRECTORY(gradientBased)
+
