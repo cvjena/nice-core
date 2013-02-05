@@ -11,6 +11,6 @@ VectorT.tcc
 VVector.cpp
 )
 
-ADD_LIBRARY(core_vector SHARED ${core_vector_src})
+ADD_LIBRARY(core_vector ${NICE_BUILD_LIBS_STATIC_SHARED} ${core_vector_src})
 
 INSTALL(TARGETS core_vector DESTINATION libs)
