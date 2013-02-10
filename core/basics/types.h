@@ -5,4 +5,6 @@
 #include <stdlib.h>
 #include <sys/types.h>
 
+#include "CrossplatformDefines.h"
+
 #endif

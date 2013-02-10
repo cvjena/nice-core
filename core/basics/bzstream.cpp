@@ -27,6 +27,8 @@
 // ============================================================================
 
 #include <core/basics/bzstream.h>
+#include "CrossplatformDefines.h"
+
 #ifdef NICE_USELIB_BZLIB
 #include <iostream>
 #include <string.h>  // for memcpy
@@ -161,7 +163,7 @@ void bzstreambase::close() {
 } // namespace
 
 #else
-#warning "bzstream will not be compiled." 
+#pragma message WARNING("bzstream will not be compiled.")
 #endif
 
 // ============================================================================

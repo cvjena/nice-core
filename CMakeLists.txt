@@ -7,9 +7,17 @@ include(CheckSymbolExists)
 set(NICELibrary_VERSION_MAJOR 1)
 set(NICELibrary_VERSION_MINOR 0)
 
-#set(CMAKE_VERBOSE_MAKEFILE on) 
+set(CMAKE_VERBOSE_MAKEFILE on) 
 
 set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
+
+set(NICE_BUILD_LIBS_STATIC_SHARED STATIC)
+
+FIND_PACKAGE(Boost)
+IF (Boost_FOUND)
+    INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+    ADD_DEFINITIONS( "-DNICE_BOOST_FOUND" )
+ENDIF()
 
 #IF(WIN32)
  # MESSAGE(FATAL_ERROR "not yet ready")
@@ -18,7 +26,7 @@ set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
 # add the binary tree to the search path for include files
 #include_directories ("${PROJECT_BINARY_DIR}")
 
-#SET(CMAKE_USE_RELATIVE_PATHS ON)
+SET(CMAKE_USE_RELATIVE_PATHS ON)
 check_symbol_exists("__assert_fail" "assert.h" HAVE_ASSERT_FAIL)
 
 

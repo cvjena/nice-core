@@ -16,10 +16,11 @@
 
 #include "StringTools.h"
 
-#define USE_REGEX_LIB
+//#define USE_REGEX_LIB
 #ifdef USE_REGEX_LIB
 #include <regex.h>
 #endif
+
 
 #include "ossettings.h"
 
@@ -179,13 +180,18 @@ bool StringTools::regexSubstitute ( std::string & s, const std::string & regex, 
 
 bool StringTools::regexMatch ( const string & s, const string & regex )
 {
+#ifdef USE_REGEX_LIB
     vector<string> submatches;
     return regexMatch ( s, regex, submatches );
+#else
+	fthrow ( Exception, "You have to install the regex lib to use this function!");
+#endif
 }
 
 bool StringTools::regexMatch ( const string & s, const string & regex, 
 			 vector<string> & submatches )
 {
+#ifdef USE_REGEX_LIB
 	submatches.clear();
 
     int    status;
@@ -215,6 +221,9 @@ bool StringTools::regexMatch ( const string & s, const string & regex,
  
     regfree(&re);
     return true;
+#else
+	fthrow ( Exception, "You have to install the regex lib to use this function!");
+#endif
 }
 
 

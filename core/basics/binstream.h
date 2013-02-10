@@ -35,6 +35,7 @@
 #include <vector>
 #include <core/basics/types.h>
 #include <string.h>
+#include "CrossplatformDefines.h"
 #ifdef NICE_USELIB_LINAL
 #include <cstddef>
 #include "LinAl/matrix.h"
@@ -109,9 +110,15 @@ public:
   ibinstream &operator>>(std::string &n) {
     int l=0;
     read((char*) &l, sizeof(int));
-    char buf[l];
+#ifdef WIN32
+	char* buf = new char[l];
+    read( buf, l);
+    n.assign(buf,l);
+#else
+	char buf[l];
     read((char*) buf, l);
     n.assign(buf,l);
+#endif
     return *this;
   }
   
@@ -320,7 +327,7 @@ inline obinstream& operator<<(obinstream &s, const LinAl::MatrixC<Tp> &A) {
 
 #else
 #ifndef LINAL_WARNING
-#warning LinAl addons will not be compiled.
+#pragma message WARNING("LinAl addons will not be compiled.")
 #define LINAL_WARNING
 #endif
 #endif

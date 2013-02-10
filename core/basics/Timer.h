@@ -15,7 +15,12 @@
 #include <Shared/TimeET.h>
 #else
 #include <ctime>
-#include <sys/time.h>
+ #ifdef WIN32
+  #include <time.h>
+  #include "CrossplatformDefines.h"
+#else
+  #include <sys/time.h>
+ #endif
 #endif
 #include <string>
 #include <core/basics/Log.h>
@@ -192,9 +197,7 @@ class Timer {
      * (00:00:00 UTC, January 1, 1970)
      * @return double value of time in seconds
      */
-    static inline double convertTime ( const struct timeval &time ) {
-      return double ( time.tv_sec ) + double ( time.tv_usec ) * 1e-6;
-    }
+    static inline double convertTime ( const struct timeval &time );
 
     /**
      * Date string from time since Epoch (00:00:00 UTC, January 1, 1970),

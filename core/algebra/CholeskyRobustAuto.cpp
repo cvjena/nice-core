@@ -103,7 +103,7 @@ CholeskyRobustAuto::robustChol (const Matrix & A, Matrix & cholA)
 		}
 
 
-		if (isnan (m_logDetMatrix) || (m_logDetMatrix < m_minMatrixLogDeterminant))
+		if (NICE::isNaN (m_logDetMatrix) || (m_logDetMatrix < m_minMatrixLogDeterminant))
 		{
 			robust = false;
 		}

@@ -4,6 +4,8 @@ Config.cpp         FileName.cpp          numerictools.cpp  Streamable.cpp       
 Exception.cpp      FrameRateCounter.cpp  Observable.cpp    StringTools.cpp
 )
 
-ADD_LIBRARY(core_basics SHARED ${core_basics_src})
+ADD_SUBDIRECTORY(progs)
+
+ADD_LIBRARY(core_basics ${NICE_BUILD_LIBS_STATIC_SHARED} ${core_basics_src})
 
 INSTALL(TARGETS core_basics DESTINATION libs)

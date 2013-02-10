@@ -161,7 +161,8 @@ void gzstreambase::close() {
 } // namespace
 
 #else
-#warning "gzstream will not be compiled." 
+#include "CrossplatformDefines.h"
+#pragma message WARNING("gzstream will not be compiled.")
 #endif
 
 // ============================================================================

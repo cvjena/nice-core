@@ -7,8 +7,13 @@
 #ifndef _NICE_ResourceStatistics_INCLUDE
 #define _NICE_ResourceStatistics_INCLUDE
 
+#ifdef WIN32
+#include <time.h>
+#else
 #include <sys/time.h>
 #include <sys/resource.h>
+#endif
+
 #include <core/basics/Exception.h>
 
 namespace NICE {
@@ -25,7 +30,9 @@ class ResourceStatistics
       
       // both variables are necessary for the function "getrusage"
       int mode; 
+#ifndef WIN32
       struct rusage memoryStatistics;
+#endif
 
     public:
 
@@ -34,7 +41,11 @@ class ResourceStatistics
     * 
     * @param _mode mode for "getrusage", it is recommended to use the default value RUSAGE_SELF
     */
+#ifndef WIN32
     ResourceStatistics(int _mode = RUSAGE_SELF);
+#else
+	ResourceStatistics(int _mode = 0);
+#endif
       
     /**
     * @brief simple destructor 

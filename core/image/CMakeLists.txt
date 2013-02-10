@@ -47,6 +47,6 @@ RectT.tcc
 Region.cpp
 )
 
-ADD_LIBRARY(core_image ${core_image_src})
+ADD_LIBRARY(core_image ${NICE_BUILD_LIBS_STATIC_SHARED} ${core_image_src})
 
 INSTALL(TARGETS core_image DESTINATION libs)

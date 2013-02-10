@@ -8,6 +8,6 @@ SecondOrderTrustRegion.cpp
 TrustRegionBase.cpp
 )
 
-ADD_LIBRARY(core_optimization_gradientBased SHARED ${core_optimization_gradientBased_src})
+ADD_LIBRARY(core_optimization_gradientBased ${NICE_BUILD_LIBS_STATIC_SHARED} ${core_optimization_gradientBased_src})
 
 INSTALL(TARGETS core_optimization_gradientBased DESTINATION libs)

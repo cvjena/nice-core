@@ -16,8 +16,8 @@ GMSparse::GMSparse ( const NICE::Matrix & A, double epsilon )
   // derive a sparse matrix from a dense one
   m_rows = A.rows ();
   m_cols = A.cols ();
-  for ( u_int i = 0; i < m_rows; i++ )
-    for ( u_int j = 0; j < m_cols; j++ )
+  for ( uint i = 0; i < m_rows; i++ )
+    for ( uint j = 0; j < m_cols; j++ )
       if ( fabs ( A ( i, j ) ) > epsilon )
         this->A.insert ( this->A.begin (), NICE::triplet < int, int,
                          double > ( i, j, A ( i, j ) ) );

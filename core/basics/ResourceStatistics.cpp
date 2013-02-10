@@ -11,6 +11,8 @@
 using namespace NICE;
 using namespace std;
 
+#ifndef WIN32
+
 ResourceStatistics::ResourceStatistics(int _mode)
 {
   mode = _mode;
@@ -41,7 +43,6 @@ void ResourceStatistics::getMaximumMemory(long & memory)
     return;     
     
   }
-
 }
     
 
@@ -133,3 +134,42 @@ void ResourceStatistics::getStatistics(long & memory, double & userCpuTime, doub
   
   
 }
+
+#else 
+/// WIN32 PORT following here
+#include "CrossplatformDefines.h"
+
+#pragma message WARNING("ResourceStatistics class : not yet ported to WIN32 plattform")
+
+ResourceStatistics::ResourceStatistics(int _mode)
+{
+  mode = _mode;
+}
+      
+ResourceStatistics::~ResourceStatistics()
+{
+}
+
+void ResourceStatistics::getMaximumMemory(long & memory)
+{
+	fthrow ( Exception, "ResourceStatistics class : not yet ported to WIN32 plattform");
+}
+    
+
+void ResourceStatistics::getUserCpuTime(double & time)
+{
+	fthrow ( Exception, "ResourceStatistics class : not yet ported to WIN32 plattform");
+}
+    
+
+void ResourceStatistics::getSystemCpuTime(double & time)
+{
+	fthrow ( Exception, "ResourceStatistics class : not yet ported to WIN32 plattform");
+}
+
+void ResourceStatistics::getStatistics(long & memory, double & userCpuTime, double & systemCpuTime)
+{
+	fthrow ( Exception, "ResourceStatistics class : not yet ported to WIN32 plattform");
+}
+
+#endif

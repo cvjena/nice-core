@@ -7,11 +7,13 @@
 i*/
 #include <stdlib.h>
 
-#ifndef WIN32
+#ifdef WIN32
+#include <process.h>
+#else
 #include <unistd.h>
+#include <sys/file.h>
 #endif
 
-#include <sys/file.h>
 #include <sys/types.h>    // For stat()
 #include <sys/stat.h>     // For stat()
 
@@ -34,6 +36,7 @@ using namespace NICE;
 
 void FileMgt::DirectoryRecursive ( std::vector<string> & files, const std::string & dir )
 {	
+#ifndef WIN32
 	std::string command = "find -L \"" + dir + "\" -type f";
 	//cerr << "FileMgt::DirectoryRecursive: find command (" << command << ")" << endl;
 
@@ -62,15 +65,20 @@ void FileMgt::DirectoryRecursive ( std::vector<string> & files, const std::strin
 	pclose ( pipe );
 
 	std::sort ( files.begin(), files.end() );
+#else
+	#pragma message WARNING("FileMgt::DirectoryRecursive() : Function not yet ported for platform WIN")
+	fthrow ( Exception, "FileMgt::DirectoryRecursive() : Function not yet ported for platform WIN");
+#endif
 }
 	
 std::string FileMgt::createTempFile ( const std::string & templatefn )
 {
+#ifndef WIN32
     int max_iterations = 1024;
     int iteration = 0;
     char fn[1024];
     char subst[1024];
-    int pid = (int)getpid();
+	int pid = (int)getpid();
     struct stat statbuf;
     int statval = -1;
     int fd = -1;
@@ -100,11 +108,19 @@ std::string FileMgt::createTempFile ( const std::string & templatefn )
 	}
 
     return string(fn);
+#else
+	#pragma message WARNING("FileMgt::createTempFile() : Function not yet ported for platform WIN")
+	fthrow ( Exception, "FileMgt::createTempFile() : Function not yet ported for platform WIN");
+#endif
 }
 	
 void FileMgt::deleteTempFile ( const std::string & tempfile )
 {
-    if ( unlink(tempfile.c_str()) != 0 )
+#ifdef WIN32
+    if ( _unlink(tempfile.c_str()) != 0 )
+#else
+	if ( unlink(tempfile.c_str()) != 0 )
+#endif
     {
 		string errormessage = "FileMgt::deleteTempFile: FATAL ERROR removing "+tempfile+".\n";
 		fprintf (stderr, errormessage.c_str());

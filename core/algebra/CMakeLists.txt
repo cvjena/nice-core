@@ -3,6 +3,6 @@ CholeskyRobust.cpp        EigValuesTRLAN.cpp  GMSparseVectorMatrix.cpp  ILSConju
 DiagonalMatrixApprox.cpp  GBCDSolver.cpp      GMStandard.cpp            ILSMinResLanczos.cpp              IterativeLinearSolver.cpp
 )
 
-ADD_LIBRARY(core_algebra SHARED ${core_algebra_src}) 
+ADD_LIBRARY(core_algebra ${NICE_BUILD_LIBS_STATIC_SHARED} ${core_algebra_src}) 
 
 INSTALL(TARGETS core_algebra DESTINATION libs)

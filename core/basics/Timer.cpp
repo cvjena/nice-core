@@ -7,6 +7,13 @@
 #include <core/basics/Exception.h>
 #include <limits>
 
+#ifdef WIN32
+ #ifdef NICE_BOOST_FOUND
+	#include "boost/date_time/posix_time/posix_time.hpp"
+	#include "boost/date_time/gregorian/gregorian_types.hpp"
+#endif
+#endif
+
 namespace NICE {
 
 Timer::Timer() : printToLogWhenDestroyed ( false ), name ( "" ) {
@@ -29,6 +36,14 @@ Timer::~Timer() {
 }
 
 double Timer::getCurrentAbsoluteTime() const {
+#ifdef WIN32
+ #ifdef NICE_BOOST_FOUND
+	return getNow();
+ #else
+	return -1.0;
+	#pragma message WARNING("Timer::getCurrentAbsoluteTime() : not yet ported to WIN32 plattform, returning -1")
+ #endif
+#else
 #ifdef LIMUN_AIBO_MODE
   struct SystemTime t;
   GetSystemTime ( &t );
@@ -38,6 +53,7 @@ double Timer::getCurrentAbsoluteTime() const {
   struct timeval tv;
   gettimeofday ( &tv, &tz );
   return convertTime ( tv );
+#endif
 #endif
 }
 
@@ -69,6 +85,17 @@ double Timer::getStartTime() const
 
 double Timer::getNow()
 {
+#ifdef WIN32
+ #ifdef NICE_BOOST_FOUND
+	boost::posix_time::ptime time_t_epoch( boost::gregorian::date(1970,1,1)); 
+	boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
+	boost::posix_time::time_duration diff = now - time_t_epoch;
+	return  diff.total_seconds();
+ #else
+	return -1.0;
+	#pragma message WARNING("Timer::getNow() : not yet ported to WIN32 plattform, returning -1")
+ #endif
+#else
 #ifdef LIMUN_AIBO_MODE
   fthrow ( Exception, "Not supported on AIBO." );
 #else
@@ -76,6 +103,7 @@ double Timer::getNow()
   struct timezone tz;
   gettimeofday ( &actTime, &tz );
   return Timer::convertTime ( actTime );
+#endif
 #endif
 }
 
@@ -92,6 +120,15 @@ std::string Timer::getNowString() {
 }
 
 long int Timer::getMicroseconds() {
+#ifdef WIN32
+ #ifdef NICE_BOOST_FOUND
+	return getNow();
+ #else
+	return -1.0;
+	#pragma message WARNING("Timer::getMicroseconds() : not yet ported to WIN32 plattform, returning -1")
+ #endif
+#else
+
 #ifdef LIMUN_AIBO_MODE
   fthrow ( Exception, "Not supported on AIBO." );
 #else
@@ -99,6 +136,7 @@ long int Timer::getMicroseconds() {
   struct timezone tz;
   gettimeofday ( &actTime, &tz );
   return actTime.tv_usec;
+#endif
 #endif
 }
 
@@ -130,6 +168,15 @@ void Timer::reset() {
   lastAbsolute = 0.0;
   sumAbsolute = 0.0;
 }
+
+ inline double Timer::convertTime ( const struct timeval &time ) {
+#ifndef WIN32
+      return double ( time.tv_sec ) + double ( time.tv_usec ) * 1e-6;
+#else
+		return -1.0;
+		#pragma message WARNING("Timer::convertTime() : not yet ported to WIN32 plattform, returning -1")
+#endif
+    }
 
 } // namespace
 

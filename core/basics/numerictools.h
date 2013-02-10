@@ -5,10 +5,18 @@
  *  - libfbasics - library of some basic tools
  * See file License for license information.
  */
-
 #define _USE_MATH_DEFINES
 #include <cmath>
-// #include <math.h>
+#ifdef WIN32
+	#include <math.h>
+#endif
+
+#include "CrossplatformDefines.h"
+
+#ifdef NICE_BOOST_FOUND
+#include <boost/math/special_functions/fpclassify.hpp> // isnan
+#endif
+
 #include <stdlib.h>
 #include <limits>
 #include <string>
@@ -204,10 +212,16 @@ inline double cubeRoot(const double& t) {
  * Check if a floating point value is NaN
  */
 inline bool isNaN(double x) {
-#if (__GNUC__ > 3)
-  return isnan(x);
+	
+
+#ifdef NICE_BOOST_FOUND
+	return  boost::math::isnan(x);
 #else
-  return x != x;
+	#if (__GNUC__ > 3)
+	  return isnan(x);
+	#else
+	  return x != x;
+	#endif
 #endif
 }
 
@@ -215,10 +229,14 @@ inline bool isNaN(double x) {
  * Check if a floating point value is NaN
  */
 inline bool isNaN(float x) {
-#if (__GNUC__ > 3)
-  return isnan(x);
+#ifdef NICE_BOOST_FOUND
+	return  boost::math::isnan(x);
 #else
-  return x != x;
+	#if (__GNUC__ > 3)
+	  return isnan(x);
+	#else
+	  return x != x;
+	#endif
 #endif
 }
 
