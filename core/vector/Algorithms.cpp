@@ -61,7 +61,7 @@ void choleskyDecompLargeScale ( const Matrix & A, Matrix & G, bool resetUpperTri
 				G(i,j) = 0;
 #else
   #ifndef CHOLESKYLINAL_WARNING
-	#warning "LinAl is not installed: choleskyDecompLargeScale will not be optimized."  
+	#pragma message WARNING("LinAl is not installed: choleskyDecompLargeScale will not be optimized.")
   #define CHOLESKYLINAL_WARNING
   #endif
 	choleskyDecomp ( A, G, resetUpperTriangle );

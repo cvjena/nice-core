@@ -7,7 +7,7 @@ template<>
 Ipp32f EuclidianDistance<Ipp32f>::doCalculate(const VectorT<Ipp32f>& v1, const VectorT<Ipp32f>& v2) const {
 
     if(v1.size()!=v2.size())
-        _THROW_EVector("Input vectors must have the same size.");
+        fthrow(Exception, "Input vectors must have the same size.");
 
     Ipp32f dist = 0;
 
@@ -39,7 +39,7 @@ template<>
 Ipp32f BhattacharyyaDistance<Ipp32f>::doCalculate(const VectorT<Ipp32f>& v1, const VectorT<Ipp32f>& v2) const {
 
     if(v1.size()!=v2.size())
-        _THROW_EVector("Input vectors must have the same size.");
+        fthrow(Exception, "Input vectors must have the same size.");
 
     Ipp32f B;
 
