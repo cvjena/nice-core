@@ -44,7 +44,11 @@ EVArnoldi::getEigenvalues ( const GenericMatrix & data, Vector & eigenvalues,
   //random initialisation
   for ( uint i = 0; i < k; i++ )
     for ( uint j = 0; j < n; j++ )
-      rmatrix ( j, i ) = drand48 ();
+#ifdef WIN32
+		rmatrix (j, i) = double(rand())/RAND_MAX;
+#else
+		rmatrix (j, i) = drand48 ();
+#endif
 //       rmatrix ( j, i ) = 0.5;
       //TODO the random initialization might help, but it is bad for reproducibility :(
 

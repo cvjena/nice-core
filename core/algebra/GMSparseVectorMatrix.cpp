@@ -202,7 +202,7 @@ GMSparseVectorMatrix::mult (GMSparseVectorMatrix & y, GMSparseVectorMatrix & out
 			if (fabs (val) > 10e-7)
 				out[r][c] = val;
 
-			if (!finite (val * val))
+			if (!NICE::isFinite (val * val))
 			{
 				cout << "val " << val << endl;
 				for (int i = 0; i < rowsy; i++)

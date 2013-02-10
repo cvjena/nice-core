@@ -12,6 +12,8 @@
 
 #include "DiagonalMatrixApprox.h"
 
+#include "core/basics/numerictools.h"
+
 using namespace NICE;
 using namespace std;
 
@@ -67,7 +69,7 @@ void DiagonalMatrixApprox::approx ( const Matrix & A, Vector & D ) const
       cerr << D << endl;
     }
 
-    if ( !finite(f) )
+	if ( !NICE::isFinite(f) )
     {
       f = f0;
       D = D0;
@@ -152,7 +154,7 @@ double DiagonalMatrixApproxOptimizationProblem::computeObjective()
     cerr << "DiagonalMatrixApprox: maximum eigenvalue is " << eigenvalues.Max() << endl;
   //}
 
-  if ( !finite(fval) )
+  if ( !NICE::isFinite(fval) )
   {
     // some numerical problems occured
     fval = numeric_limits<double>::infinity();

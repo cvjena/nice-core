@@ -61,7 +61,7 @@ CholeskyRobust::robustChol (const Matrix & A, Matrix & cholA)
 		cerr << "CholeskyRobust::robustChol: Cholesky condition (logdet): " << m_logDetMatrix << endl;
 
   // if the log determinant is NaN or Inf, then we should warn!
-	if (!finite (m_logDetMatrix))
+	if (!NICE::isFinite (m_logDetMatrix))
 	{
 		fthrow (Exception,
 						"The matrix has infinite or not defined log determinant !");
