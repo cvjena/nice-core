@@ -133,12 +133,12 @@ void FirstOrderRasmussen::doOptimizeFirst(OptimizationProblemFirst& problem)
 
 				problem.applyStep ( x3*s );
 				f3 = problem.objective();
-				if ( finite(f3) ) success = true;
+				if ( NICE::isFinite(f3) ) success = true;
 				
 				if ( !success && (M>0) ) 
 					problem.unapplyStep ( x3*s );
 
-				if ( !finite(f3) )
+				if ( !NICE::isFinite(f3) )
         {
 					x3 = (x2 + x3) / 2.0;
         }
@@ -163,7 +163,7 @@ void FirstOrderRasmussen::doOptimizeFirst(OptimizationProblemFirst& problem)
 			double A = 6*(f1-f2) + 3*(d2+d1)*(x2-x1);
 			double B = 3*(f2-f1)-(2*d1+d2)*(x2-x1);
 			x3 = x1-d1*pow((x2-x1),2)/(B+sqrt(B*B-A*d1*(x2-x1)));
-			if ( !finite(x3) || (x3 < 0 ) )
+			if ( !NICE::isFinite(x3) || (x3 < 0 ) )
       {
 				x3 = x2*c_ext;
 			} else if (x3 > x2 * c_ext) {
@@ -195,7 +195,7 @@ void FirstOrderRasmussen::doOptimizeFirst(OptimizationProblemFirst& problem)
 				x3 = x2+(sqrt(B*B-A*d2*pow(x4-x2,2))-B)/A;
 			}
 
-			if ( !finite(x3) ) {
+			if ( !NICE::isFinite(x3) ) {
 				x3 = (x2 + x4) / 2.0;
       }
 
