@@ -240,6 +240,19 @@ inline bool isNaN(float x) {
 #endif
 }
 
+inline bool isFinite(double x)
+{
+#ifdef WIN32
+	#ifdef NICE_BOOST_FOUND
+	    return boost::math::isfinite(x);
+	#else
+		ERROR("isFinite() not defined (and neither is boost found for compensation...)")
+	#endif
+#else
+	return finite(x);
+#endif
+}
+
 /**
  * Create NaN
  */
