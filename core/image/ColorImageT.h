@@ -1,4 +1,4 @@
-    /*
+/*
  * NICE-Core - efficient algebra and computer vision methods
  *  - libimage - An image library
  * See file License for license information.
