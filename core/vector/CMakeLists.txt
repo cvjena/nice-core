@@ -1,16 +1,9 @@
-SET(core_vector_src Algorithms.cpp Algorithms.tcc
-Distance.cpp
-Distance.tcc
-Eigen.tcc
-ippwrapper.cpp
-ippwrapper.tcc
-MatrixT.tcc
-RowMatrixT.tcc
-SparseVectorT.tcc
-VectorT.tcc
-VVector.cpp
-)
+message(STATUS "vector_location: ${OPENCV_MODULE_vector_LOCATION}")
 
-ADD_LIBRARY(core_vector ${NICE_BUILD_LIBS_STATIC_SHARED} ${core_vector_src})
+ocv_add_module(vector)
 
-INSTALL(TARGETS core_vector DESTINATION libs)
+message(STATUS "vector_location: ${OPENCV_MODULE_vector_LOCATION}")
+
+ocv_module_include_directories()
+#ocv_glob_module_sources()
+#ocv_create_module()

@@ -1,9 +1,0 @@
-#ifndef CMAKEDEFINESCONFIG_H
-#define CMAKEDEFINESCONFIG_H
-
-#cmakedefine USE_TEST
-
-#cmakedefine WIN32
-
-
-#endif

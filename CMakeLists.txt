@@ -26,8 +26,11 @@ ENDIF()
 # add the binary tree to the search path for include files
 #include_directories ("${PROJECT_BINARY_DIR}")
 
-SET(CMAKE_USE_RELATIVE_PATHS ON)
-check_symbol_exists("__assert_fail" "assert.h" HAVE_ASSERT_FAIL)
+#SET(CMAKE_USE_RELATIVE_PATHS ON)
+#check_symbol_exists("__assert_fail" "assert.h" HAVE_ASSERT_FAIL)
+
+include(cmake/OpenCVUtils.cmake REQUIRE)
+include(cmake/NiceModules.cmake REQUIRE)
 
 
 INCLUDE_DIRECTORIES(".")
