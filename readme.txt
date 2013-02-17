@@ -34,11 +34,7 @@ foreach dir in subdirlist
 
 endmacro
 
-#####################
-
-
 set(NICE_CURR_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-
 
 
 #### geile funktionen der OpenCV:
@@ -61,3 +57,9 @@ ocv_glob_modules(pathcurrdir) -->in modules
   ocv_glob_module_sources() holt cpps und hpp h aus unterordnern -- sources bilden
   ocv_create_module (binary build the module ->add_library,  set_target etc
   
+
+#######
+defs to care about
+NICE_USELIB_CUDACHOLESKY
+NICE_USELIB_IPP
+

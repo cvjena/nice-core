@@ -19,7 +19,7 @@
 #include <core/image/ColorImageT.h>
 #include <core/image/Buffer.h>
 
-#warning "Filter.h is obsolete. Please use FilterT.h instead and adapt your calls and implement the filter if necessary :)"
+#pragma message WARNING("Filter.h is obsolete. Please use FilterT.h instead and adapt your calls and implement the filter if necessary :)")
 
 namespace NICE {
 /**

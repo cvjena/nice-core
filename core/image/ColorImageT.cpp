@@ -82,7 +82,8 @@ void ColorImageT<Ipp8u>::readPPM(const std::string& ppmFileName,
     }
   } else if(header.format==PGM_RAW) {
     for (int y = 0; y < header.height; y++) {
-      Pixel line[header.width];
+#ifdef WIN32
+		Pixel *line = new Pixel[header.width];
       file.read((char *)line,header.width);
       Pixel *target = getPixelPointerY(y);
       Pixel *src = line;
@@ -91,6 +92,18 @@ void ColorImageT<Ipp8u>::readPPM(const std::string& ppmFileName,
         *target++ = *src;
         *target++ = *src++;
       }
+		delete [] line;
+#else
+	  Pixel line[header.width];
+      file.read((char *)line,header.width);
+      Pixel *target = getPixelPointerY(y);
+      Pixel *src = line;
+      for (int x = 0; x < header.width; x++) {
+        *target++ = *src;
+        *target++ = *src;
+        *target++ = *src++;
+      }
+#endif
     }
   } else {
     fthrow(ImageException,"Format not yet implemented.");
