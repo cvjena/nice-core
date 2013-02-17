@@ -3,6 +3,7 @@ message(STATUS "${NICE_CURR_DIR}")
 ocv_glob_modules(${NICE_CURR_DIR})
 
 
+
 #CONFIGURE_FILE(
 #  "CMakeDefinesConfig.h.in"
 #  "${PROJECT_BINARY_DIR}/CMakeDefinesConfig.h"
@@ -14,6 +15,7 @@ ocv_glob_modules(${NICE_CURR_DIR})
 #INCLUDE_DIRECTORIES(vector)
 #INCLUDE_DIRECTORIES(optimization)
 #INCLUDE_DIRECTORIES(image)
+
 #INCLUDE_DIRECTORIES(iceconversion)
 #INCLUDE_DIRECTORIES(imagedisplay)
 #INCLUDE_DIRECTORIES(matlabAccess)
