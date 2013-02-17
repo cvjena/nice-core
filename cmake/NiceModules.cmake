@@ -43,7 +43,8 @@ macro(ocv_glob_modules)
       list(SORT __ocvmodules)
       foreach(mod ${__ocvmodules})
         ocv_get_real_path(__modpath "${__path}/${mod}")
-	message(STATUS "${__modpath}")
+		message(STATUS "${mod}")
+		message(STATUS "${__modpath}")
         if(EXISTS "${__modpath}/CMakeLists.txt")
 	  message(STATUS "${__modpath} adding subdir")
           list(FIND __directories_observed "${__modpath}" __pathIdx)
@@ -189,6 +190,7 @@ endmacro()
 macro(ocv_include_modules)
   foreach(d ${ARGN})
     if(d MATCHES "^opencv_" AND HAVE_${d})
+#		message(STATUS "${OPENCV_MODULE_${d}_LOCATION}")
       if (EXISTS "${OPENCV_MODULE_${d}_LOCATION}/include")
         ocv_include_directories("${OPENCV_MODULE_${d}_LOCATION}/include")
       endif()
@@ -201,9 +203,136 @@ endmacro()
 # setup include path for OpenCV headers for specified module
 # ocv_module_include_directories(<extra include directories/extra include modules>)
 macro(ocv_module_include_directories)
-  ocv_include_directories("${OPENCV_MODULE_${the_module}_LOCATION}/include"
-                          "${OPENCV_MODULE_${the_module}_LOCATION}/src"
+#  ocv_include_directories("${OPENCV_MODULE_${the_module}_LOCATION}/include"
+#                          "${OPENCV_MODULE_${the_module}_LOCATION}/src"
+#                          "${CMAKE_CURRENT_BINARY_DIR}" # for precompiled headers
+#                          )
+  ocv_include_directories("${OPENCV_MODULE_${the_module}_LOCATION}/"
                           "${CMAKE_CURRENT_BINARY_DIR}" # for precompiled headers
-                          )
+                          )						  
   ocv_include_modules(${OPENCV_MODULE_${the_module}_DEPS} ${ARGN})
+endmacro()
+
+
+# sets header and source files for the current module
+# NB: all files specified as headers will be installed
+# Usage:
+# ocv_set_module_sources([HEADERS] <list of files> [SOURCES] <list of files>)
+macro(ocv_set_module_sources)
+  set(OPENCV_MODULE_${the_module}_HEADERS "")
+  set(OPENCV_MODULE_${the_module}_SOURCES "")
+
+  foreach(f "HEADERS" ${ARGN})
+    if(f STREQUAL "HEADERS" OR f STREQUAL "SOURCES")
+      set(__filesvar "OPENCV_MODULE_${the_module}_${f}")
+    else()
+      list(APPEND ${__filesvar} "${f}")
+    endif()
+  endforeach()
+
+  # the hacky way to embeed any files into the OpenCV without modification of its build system
+  if(COMMAND ocv_get_module_external_sources)
+    ocv_get_module_external_sources()
+  endif()
+
+  # use full paths for module to be independent from the module location
+  ocv_convert_to_full_paths(OPENCV_MODULE_${the_module}_HEADERS)
+
+  set(OPENCV_MODULE_${the_module}_HEADERS ${OPENCV_MODULE_${the_module}_HEADERS} CACHE INTERNAL "List of header files for ${the_module}")
+  set(OPENCV_MODULE_${the_module}_SOURCES ${OPENCV_MODULE_${the_module}_SOURCES} CACHE INTERNAL "List of source files for ${the_module}")
+endmacro()
+
+# finds and sets headers and sources for the standard OpenCV module
+# Usage:
+# ocv_glob_module_sources(<extra sources&headers in the same format as used in ocv_set_module_sources>)
+macro(ocv_glob_module_sources)
+#  file(GLOB_RECURSE lib_srcs "src/*.cpp")
+#  file(GLOB_RECURSE lib_int_hdrs "src/*.hpp" "src/*.h")
+#  file(GLOB lib_hdrs "include/opencv2/${name}/*.hpp" "include/opencv2/${name}/*.h")
+#  file(GLOB lib_hdrs_detail "include/opencv2/${name}/detail/*.hpp" "include/opencv2/${name}/detail/*.h")
+
+#  source_group("Src" FILES ${lib_srcs} ${lib_int_hdrs})
+#  source_group("Include" FILES ${lib_hdrs})
+#  source_group("Include\\detail" FILES ${lib_hdrs_detail})
+
+#  ocv_set_module_sources(${ARGN} HEADERS ${lib_hdrs} ${lib_hdrs_detail} SOURCES ${lib_srcs} ${lib_int_hdrs})
+
+  file(GLOB_RECURSE lib_srcs "*.cpp" "*.tcc")
+  #file(GLOB_RECURSE lib_int_hdrs "./*.hpp" "./*.h")
+  #file(GLOB_RECURSE lib_int_hdrs "./*.hpp" "./*.h")
+  file(GLOB lib_hdrs "*.hpp" "*.h")
+  message(status "lib_srcs: ${lib_srcs}")
+  message(status "lib_hdrs: ${lib_hdrs}")
+  source_group("Src" FILES ${lib_srcs})
+  source_group("Include" FILES ${lib_hdrs})
+  ocv_set_module_sources(${ARGN} HEADERS ${lib_hdrs} SOURCES ${lib_srcs})
+endmacro()
+
+# creates OpenCV module in current folder
+# creates new target, configures standard dependencies, compilers flags, install rules
+# Usage:
+#   ocv_create_module(<extra link dependencies>)
+#   ocv_create_module(SKIP_LINK)
+macro(ocv_create_module)
+  #add_library(${the_module} ${OPENCV_MODULE_TYPE} ${OPENCV_MODULE_${the_module}_HEADERS} ${OPENCV_MODULE_${the_module}_SOURCES})
+  add_library(${the_module} ${NICE_BUILD_LIBS_STATIC_SHARED} ${OPENCV_MODULE_${the_module}_HEADERS} ${OPENCV_MODULE_${the_module}_SOURCES})  
+
+  if(NOT "${ARGN}" STREQUAL "SKIP_LINK")
+    target_link_libraries(${the_module} ${OPENCV_MODULE_${the_module}_DEPS} ${OPENCV_MODULE_${the_module}_DEPS_EXT} ${OPENCV_LINKER_LIBS} ${IPP_LIBS} ${ARGN})
+  endif()
+
+#jojo  add_dependencies(opencv_modules ${the_module})
+
+  if(ENABLE_SOLUTION_FOLDERS)
+    set_target_properties(${the_module} PROPERTIES FOLDER "modules")
+  endif()
+
+  set_target_properties(${the_module} PROPERTIES
+    OUTPUT_NAME "${the_module}${OPENCV_DLLVERSION}"
+    DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
+    ARCHIVE_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+    RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
+    INSTALL_NAME_DIR lib
+  )
+
+  # For dynamic link numbering convenions
+  if(NOT ANDROID)
+    # Android SDK build scripts can include only .so files into final .apk
+    # As result we should not set version properties for Android
+    set_target_properties(${the_module} PROPERTIES
+      VERSION ${OPENCV_VERSION}
+      SOVERSION ${OPENCV_SOVERSION}
+    )
+  endif()
+
+  if(BUILD_SHARED_LIBS)
+    if(MSVC)
+      set_target_properties(${the_module} PROPERTIES DEFINE_SYMBOL CVAPI_EXPORTS)
+    else()
+      add_definitions(-DCVAPI_EXPORTS)
+    endif()
+  endif()
+
+  if(MSVC)
+    if(CMAKE_CROSSCOMPILING)
+      set_target_properties(${the_module} PROPERTIES LINK_FLAGS "/NODEFAULTLIB:secchk")
+    endif()
+    set_target_properties(${the_module} PROPERTIES LINK_FLAGS "/NODEFAULTLIB:libc /DEBUG")
+  endif()
+
+  install(TARGETS ${the_module}
+    RUNTIME DESTINATION bin COMPONENT main
+    LIBRARY DESTINATION ${OPENCV_LIB_INSTALL_PATH} COMPONENT main
+    ARCHIVE DESTINATION ${OPENCV_LIB_INSTALL_PATH} COMPONENT main
+    )
+
+  # only "public" headers need to be installed
+  if(OPENCV_MODULE_${the_module}_HEADERS AND ";${OPENCV_MODULES_PUBLIC};" MATCHES ";${the_module};")
+    foreach(hdr ${OPENCV_MODULE_${the_module}_HEADERS})
+      string(REGEX REPLACE "^.*opencv2/" "opencv2/" hdr2 "${hdr}")
+      if(hdr2 MATCHES "^(opencv2/.*)/[^/]+.h(..)?$")
+        install(FILES ${hdr} DESTINATION "${OPENCV_INCLUDE_INSTALL_PATH}/${CMAKE_MATCH_1}" COMPONENT main)
+      endif()
+    endforeach()
+  endif()
 endmacro()

@@ -32,6 +32,7 @@ ENDIF()
 include(cmake/OpenCVUtils.cmake REQUIRE)
 include(cmake/NiceModules.cmake REQUIRE)
 
+set(OPENCV_LIB_INSTALL_PATH lib)
 
 INCLUDE_DIRECTORIES(".")
 INCLUDE_DIRECTORIES(core)
