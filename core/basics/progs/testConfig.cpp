@@ -16,7 +16,9 @@ using namespace std;
 */
 int main (int argc, char **argv)
 {   
+#ifndef WIN32
     std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
+#endif
 
     Config conf ( argc, argv );
     conf.store(cout);    

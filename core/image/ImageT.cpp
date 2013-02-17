@@ -80,6 +80,21 @@ void ImageT<Ipp8u>::readPGM(const std::string& pgmFileName,
     ippiRGBToGray_8u_C3C1R(line, header.width*header.channel, target, header.width, region);
 #else
     for (int y = 0; y < header.height; y++) {
+#ifdef WIN32
+	  Pixel *line = new Pixel[header.width*header.channel];
+      file.read((char *)line,header.width*header.channel);
+      Pixel *target = getPixelPointerY(y);
+      Pixel *src = line;
+      for (int x = 0; x < header.width; x++) {
+        //  // with lookup table (see firewire ColorConvert)
+        // *target = pLutRg[*src]+pLutGg[*(src+1)]+pLutBg[*(src+2)];
+        // *target++ += (pLutRgr[*src]+pLutGgr[*(src+1)]+pLutBgr[*(src+2)])/64;
+        // src=src+3;
+        *target++ = static_cast<Pixel>(*src*0.299+*(src+1)*0.587+*(src+2)*0.114);
+        src=src+3;
+      }
+	  delete [] line;
+#else
       Pixel line[header.width*header.channel];
       file.read((char *)line,header.width*header.channel);
       Pixel *target = getPixelPointerY(y);
@@ -92,6 +107,7 @@ void ImageT<Ipp8u>::readPGM(const std::string& pgmFileName,
         *target++ = static_cast<Pixel>(*src*0.299+*(src+1)*0.587+*(src+2)*0.114);
         src=src+3;
       }
+#endif
     }
 #endif
   } else {

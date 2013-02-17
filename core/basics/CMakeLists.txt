@@ -4,8 +4,12 @@ Config.cpp         FileName.cpp          numerictools.cpp  Streamable.cpp       
 Exception.cpp      FrameRateCounter.cpp  Observable.cpp    StringTools.cpp
 )
 
-ADD_SUBDIRECTORY(progs)
+message(STATUS "vector sources: ${core_vectors_src}")
+ADD_LIBRARY(core_basics ${NICE_BUILD_LIBS_STATIC_SHARED} ${core_basics_src} ${core_vectors_src})
+#TARGET_LINK_LIBRARIES(core_basics core_vector)
 
-ADD_LIBRARY(core_basics ${NICE_BUILD_LIBS_STATIC_SHARED} ${core_basics_src})
+#add_dependencies(core_basics core_vectors)
+
+ADD_SUBDIRECTORY(progs)
 
 INSTALL(TARGETS core_basics DESTINATION libs)
