@@ -27,6 +27,11 @@ macro(ocv_glob_modules)
   endif()
   set(__directories_observed "")
 
+  #nice-----
+  get_filename_component(currDirName ${CMAKE_CURRENT_SOURCE_DIR} NAME )
+  set(the_module "${the_module}_${currDirName}")
+  #------
+  
   # collect modules
   set(OPENCV_INITIAL_PASS ON)
   foreach(__path ${ARGN})
@@ -118,10 +123,14 @@ endmacro()
 # Example:
 #   ocv_add_module(yaom INTERNAL opencv_core opencv_highgui opencv_flann OPTIONAL opencv_gpu)
 macro(ocv_add_module _name)
-  string(TOLOWER "${_name}" name)
-  string(REGEX REPLACE "^opencv_" "" ${name} "${name}")
-  set(the_module opencv_${name})
-
+  #string(TOLOWER "${_name}" name)
+  #string(REGEX REPLACE "^opencv_" "" ${name} "${name}")
+  #set(the_module opencv_${name})
+  #-----
+  get_filename_component(currDirName ${CMAKE_CURRENT_SOURCE_DIR} NAME )
+  set(the_module "${the_module}_${currDirName}")
+  #----
+  
   # the first pass - collect modules info, the second pass - create targets
   if(OPENCV_INITIAL_PASS)
     #guard agains redefinition
@@ -257,7 +266,7 @@ macro(ocv_glob_module_sources)
 
 #  ocv_set_module_sources(${ARGN} HEADERS ${lib_hdrs} ${lib_hdrs_detail} SOURCES ${lib_srcs} ${lib_int_hdrs})
 
-  file(GLOB_RECURSE lib_srcs "*.cpp" "*.tcc")
+  file(GLOB lib_srcs "*.cpp" "*.tcc")
   #file(GLOB_RECURSE lib_int_hdrs "./*.hpp" "./*.h")
   #file(GLOB_RECURSE lib_int_hdrs "./*.hpp" "./*.h")
   file(GLOB lib_hdrs "*.hpp" "*.h")

@@ -37,8 +37,9 @@ set(OPENCV_LIB_INSTALL_PATH lib)
 INCLUDE_DIRECTORIES(".")
 INCLUDE_DIRECTORIES(core)
 
-ADD_SUBDIRECTORY(core bin)
+set(the_module "libnice")
 
+ADD_SUBDIRECTORY(core bin)
 
 # doxygen support
 FIND_PROGRAM(DOXYGEN_EXECUTABLE "doxygen")
