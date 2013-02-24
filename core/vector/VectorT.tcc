@@ -265,7 +265,8 @@ template<class ElementType>
 const ElementType& VectorT<ElementType>::operator()(const ptrdiff_t i) const
 {
     if((ptrdiff_t)dataSize<=i||i<0) {
-        std::__throw_out_of_range("VectorT () access out of range");
+        //std::__throw_out_of_range("VectorT () access out of range");
+		std::out_of_range("VectorT () access out of range");
     }
     return constData[i];
 }
@@ -273,7 +274,8 @@ const ElementType& VectorT<ElementType>::operator()(const ptrdiff_t i) const
 template<class ElementType>
 ElementType& VectorT<ElementType>::operator()(const ptrdiff_t i) {
     if((ptrdiff_t)dataSize<=i||i<0) {
-        std::__throw_out_of_range("VectorT () access out of range");
+        //std::__throw_out_of_range("VectorT () access out of range");
+		std::out_of_range("VectorT () access out of range");
     }
     return data[i];
 }
