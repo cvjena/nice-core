@@ -20,7 +20,7 @@
 
 #ifndef NICE_USELIB_MATIO
 
-#warning "We need the MATIO Library for accessing MATLAB structures. Otherwise this is not compiling."
+#pragma message WARNING("We need the MATIO Library for accessing MATLAB structures. Otherwise this is not compiling.")
 
 #else //#ifdef NICE_USELIB_MATIO
 
