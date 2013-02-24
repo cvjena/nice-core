@@ -256,8 +256,8 @@ inline double absoluteAngleBetweenVectorsIgnoringDirection(
 
 } // namespace
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
   #include <core/vector/Algorithms.tcc>
-#endif
+//#endif
 
 #endif // ALGORITHMS_H

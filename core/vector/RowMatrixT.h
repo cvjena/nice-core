@@ -511,9 +511,9 @@ typedef RowMatrixT<double> DoubleRowMatrix;
 typedef RowMatrixT<char>  CharRowMatrix;
 }
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 #include "core/vector/RowMatrixT.tcc"
-#endif
+//#endif
 
 #endif // _EROWMATRIX_BASICVECTOR_H
 

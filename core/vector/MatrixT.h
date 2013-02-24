@@ -741,9 +741,9 @@ void blockwiseMultiplication ( const MatrixT<T> & A, uint blockSize, const Vecto
 
 }
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 #include "core/vector/MatrixT.tcc"
-#endif
+//#endif
 
 #endif // _EMATRIX_BASICVECTOR_H
 

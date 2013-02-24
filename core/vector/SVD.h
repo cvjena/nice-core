@@ -119,7 +119,7 @@ inline void enforceRankDefect(MatrixT<T>& m, const uint defect) {
 
 #else // no LinAl
 #ifndef SVDLINAL_WARNING
-#warning SVD requires LinAl.
+#pragma message WARNING("SVD requires LinAl.")
 #define SVDLINAL_WARNING
 #endif
 #endif

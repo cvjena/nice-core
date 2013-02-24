@@ -953,8 +953,8 @@ inline VectorT<Tp> operator* ( double s, const VectorT<Tp> & x )
 #include "core/vector/MatrixT.h"
 #include "core/vector/RowMatrixT.h"
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 #include "core/vector/VectorT.tcc"
-#endif
+//#endif
 
 #endif // _EVECTOR_BASICVECTOR_H

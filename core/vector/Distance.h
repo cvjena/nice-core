@@ -254,8 +254,8 @@ protected:
 
 } // namespace NICE
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
     #include <core/vector/Distance.tcc>
-#endif
+//#endif
 
 #endif // __VECTOR_DISTANCE_H__

@@ -60,8 +60,8 @@ void readVectorOfPointers ( std::istream& input, std::vector<T*>& v );
 
 } // namespace
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 #include "core/basics/vectorio.tcc"
-#endif
+//#endif
 
 #endif //_VECTORIO_H_
