@@ -1,4 +1,4 @@
-ocv_add_module(gradientBased)
+ocv_add_module(matlabAccess)
 
 ocv_module_include_directories()
 ocv_glob_module_sources()

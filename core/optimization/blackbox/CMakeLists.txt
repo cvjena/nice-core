@@ -1,13 +1,5 @@
-SET(core_optimization_blackbox_src CostFunction.cpp
-DimWrapperCostFunction.cpp
-DownhillSimplexOptimizer.cpp
-Optimizable.cpp
-Optimizer.cpp
-OptLogBase.cpp
-SimpleOptimizer.cpp
-SimpleOptProblem.cpp
-)
+ocv_add_module(blackbox)
 
-ADD_LIBRARY(core_optimization_blackbox ${NICE_BUILD_LIBS_STATIC_SHARED} ${core_optimization_blackbox_src})
-
-INSTALL(TARGETS core_optimization_blackbox DESTINATION libs)
+ocv_module_include_directories()
+ocv_glob_module_sources()
+ocv_create_module()

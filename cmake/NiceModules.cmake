@@ -16,25 +16,36 @@ set(OPENCV_MODULES_DISABLED_AUTO  "" CACHE INTERNAL "List of OpenCV modules impl
 set(OPENCV_MODULES_DISABLED_FORCE "" CACHE INTERNAL "List of OpenCV modules which can not be build in current configuration")
 
 
-
-
+# get a list of all sub directories in curdir
+MACRO(SUBDIRLIST result curdir)
+  FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
+  SET(dirlist "")
+  FOREACH(child ${children})
+    IF(IS_DIRECTORY ${curdir}/${child})
+        SET(dirlist ${dirlist} ${child})
+    ENDIF()
+  ENDFOREACH()
+  SET(${result} ${dirlist})
+ENDMACRO()
 
 # collect modules from specified directories
 # NB: must be called only once!
-macro(ocv_glob_modules)
+macro(ocv_glob_modules modulepath)
   if(DEFINED OPENCV_INITIAL_PASS)
     message(FATAL_ERROR "OpenCV has already loaded its modules. Calling ocv_glob_modules second time is not allowed.")
   endif()
   set(__directories_observed "")
 
   #nice-----
-  get_filename_component(currDirName ${CMAKE_CURRENT_SOURCE_DIR} NAME )
+  #get_filename_component(currDirName ${CMAKE_CURRENT_SOURCE_DIR} NAME )
+  get_filename_component(currDirName ${modulepath} NAME )
   set(the_module "${the_module}_${currDirName}")
+  message(STATUS "currDirName=${currDirName}")
   #------
   
   # collect modules
   set(OPENCV_INITIAL_PASS ON)
-  foreach(__path ${ARGN})
+  foreach(__path ${modulepath} ) #${ARGN})
     ocv_get_real_path(__path "${__path}")
 
     list(FIND __directories_observed "${__path}" __pathIdx)
@@ -48,10 +59,8 @@ macro(ocv_glob_modules)
       list(SORT __ocvmodules)
       foreach(mod ${__ocvmodules})
         ocv_get_real_path(__modpath "${__path}/${mod}")
-		message(STATUS "${mod}")
-		message(STATUS "${__modpath}")
         if(EXISTS "${__modpath}/CMakeLists.txt")
-	  message(STATUS "${__modpath} adding subdir")
+	      message(STATUS "${__modpath} adding subdir")
           list(FIND __directories_observed "${__modpath}" __pathIdx)
           if(__pathIdx GREATER -1)
             message(FATAL_ERROR "The module from ${__modpath} is already loaded.")
@@ -228,8 +237,10 @@ endmacro()
 # Usage:
 # ocv_set_module_sources([HEADERS] <list of files> [SOURCES] <list of files>)
 macro(ocv_set_module_sources)
-  set(OPENCV_MODULE_${the_module}_HEADERS "")
-  set(OPENCV_MODULE_${the_module}_SOURCES "")
+  #opencv: set(OPENCV_MODULE_${the_module}_HEADERS "" )
+  #opencv: set(OPENCV_MODULE_${the_module}_SOURCES "" )
+  set(OPENCV_MODULE_${the_module}_HEADERS "" PARENT_SCOPE)
+  set(OPENCV_MODULE_${the_module}_SOURCES "" PARENT_SCOPE)
 
   foreach(f "HEADERS" ${ARGN})
     if(f STREQUAL "HEADERS" OR f STREQUAL "SOURCES")
@@ -266,10 +277,10 @@ macro(ocv_glob_module_sources)
 
 #  ocv_set_module_sources(${ARGN} HEADERS ${lib_hdrs} ${lib_hdrs_detail} SOURCES ${lib_srcs} ${lib_int_hdrs})
 
-  file(GLOB lib_srcs "*.cpp" "*.tcc")
+  file(GLOB lib_srcs "*.cpp")
   #file(GLOB_RECURSE lib_int_hdrs "./*.hpp" "./*.h")
   #file(GLOB_RECURSE lib_int_hdrs "./*.hpp" "./*.h")
-  file(GLOB lib_hdrs "*.hpp" "*.h")
+  file(GLOB lib_hdrs "*.hpp" "*.h" "*.tcc")
   message(status "lib_srcs: ${lib_srcs}")
   message(status "lib_hdrs: ${lib_hdrs}")
   source_group("Src" FILES ${lib_srcs})
@@ -283,7 +294,52 @@ endmacro()
 #   ocv_create_module(<extra link dependencies>)
 #   ocv_create_module(SKIP_LINK)
 macro(ocv_create_module)
+	##############################################
+	### process all subdirs #####
+	#get list subdirs
+	# include subdirs if != progs && != test, handle these two separately
+	set(__path "${CMAKE_CURRENT_SOURCE_DIR}")
+	#file(GLOB __listSubdirs RELATIVE "${__path}" "${__path}/*")
+    SUBDIRLIST(__listSubdirs "${__path}")
+	if(__listSubdirs)
+		list(SORT __listSubdirs)
+		foreach(currSubDir ${__listSubdirs})
+			ocv_get_real_path(__subdirpath "${__path}/${currSubDir}")
+			#message(STATUS "${currSubDir}")
+			message(STATUS "subdir examining: ${__subdirpath}")
+			if(EXISTS "${__subdirpath}/CMakeLists.txt")
+				message(STATUS "has CMakeLists.txt")
+				if ( "${currSubDir}" STREQUAL "tests" )
+					if( NICE_BUILD_TESTS )
+						#add tests
+					else()
+						message(STATUS "by configuration: tests/ not added")
+					endif()
+				elseif( "${currSubDir}" STREQUAL "progs" )
+					if( NICE_BUILD_PROGS )
+						#add progs
+					else()
+						message(STATUS "by configuration: progs/ not added")	
+					endif()
+				else()
+					message(STATUS "adding subdir")
+					add_subdirectory("${__subdirpath}")
+					#add subdir sources to the accumulated source variable of this directory
+					message(STATUS "subdir-sources: ${OPENCV_MODULE_${the_module}_${currSubDir}_SOURCES}")
+					set(OPENCV_MODULE_${the_module}_SOURCES "${OPENCV_MODULE_${the_module}_SOURCES}" "${OPENCV_MODULE_${the_module}_${currSubDir}_SOURCES}")
+					set(OPENCV_MODULE_${the_module}_HEADERS "${OPENCV_MODULE_${the_module}_HEADERS}" "${OPENCV_MODULE_${the_module}_${currSubDir}_HEADERS}")
+					message(STATUS "accumulated sources of ${the_module}: ${OPENCV_MODULE_${the_module}_SOURCES}")
+					message(STATUS "accumulated headers of ${the_module}: ${OPENCV_MODULE_${the_module}_HEADERS}")
+				endif()
+			endif()
+		endforeach()
+	endif()
+
+	##################################################
+
   #add_library(${the_module} ${OPENCV_MODULE_TYPE} ${OPENCV_MODULE_${the_module}_HEADERS} ${OPENCV_MODULE_${the_module}_SOURCES})
+  message(STATUS "linking source files of ${the_module}: ${OPENCV_MODULE_${the_module}_SOURCES}")
+  message(STATUS "linking header files of ${the_module}: ${OPENCV_MODULE_${the_module}_HEADERS}")
   add_library(${the_module} ${NICE_BUILD_LIBS_STATIC_SHARED} ${OPENCV_MODULE_${the_module}_HEADERS} ${OPENCV_MODULE_${the_module}_SOURCES})  
 
   if(NOT "${ARGN}" STREQUAL "SKIP_LINK")
@@ -344,4 +400,34 @@ macro(ocv_create_module)
       endif()
     endforeach()
   endif()
+endmacro()
+
+
+# opencv precompiled headers macro (can add pch to modules and tests)
+# this macro must be called after any "add_definitions" commands, otherwise precompiled headers will not work
+# Usage:
+# ocv_add_precompiled_headers(${the_module})
+macro(ocv_add_precompiled_headers the_target)
+    if("${the_target}" MATCHES "^opencv_test_.*$")
+        SET(pch_path "test/test_")
+    elseif("${the_target}" MATCHES "^opencv_perf_.*$")
+        SET(pch_path "perf/perf_")
+    else()
+        SET(pch_path "src/")
+    endif()
+    set(pch_header "${CMAKE_CURRENT_SOURCE_DIR}/${pch_path}precomp.hpp")
+
+    if(PCHSupport_FOUND AND ENABLE_PRECOMPILED_HEADERS AND EXISTS "${pch_header}")
+        if(CMAKE_GENERATOR MATCHES Visual)
+            set(${the_target}_pch "${CMAKE_CURRENT_SOURCE_DIR}/${pch_path}precomp.cpp")
+            add_native_precompiled_header(${the_target} ${pch_header})
+        elseif(CMAKE_GENERATOR MATCHES Xcode)
+            add_native_precompiled_header(${the_target} ${pch_header})
+        elseif(CMAKE_COMPILER_IS_GNUCXX AND CMAKE_GENERATOR MATCHES "Makefiles|Ninja")
+            add_precompiled_header(${the_target} ${pch_header})
+        endif()
+    endif()
+    unset(pch_header)
+    unset(pch_path)
+    unset(${the_target}_pch)
 endmacro()

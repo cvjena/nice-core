@@ -39,8 +39,19 @@ INCLUDE_DIRECTORIES(core)
 
 set(the_module "libnice")
 
-ADD_SUBDIRECTORY(core bin)
-
+set(NICE_CURR_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+SUBDIRLIST(__listSubDirs "${NICE_CURR_DIR}")
+foreach(_curSubdir ${__listSubDirs})
+	ocv_get_real_path(__modpath "${NICE_CURR_DIR}/${_curSubdir}/")
+	if(EXISTS "${__modpath}/CMakeLists.txt")
+		message(STATUS "add module: ${__modpath}")
+		#set(__modpath "${__modpath}/")
+		#message(STATUS "add module: ${__modpath}")
+		ocv_glob_modules( ${__modpath} )
+	endif()
+endforeach()
+#ADD_SUBDIRECTORY(core bin)
+  
 # doxygen support
 FIND_PROGRAM(DOXYGEN_EXECUTABLE "doxygen")
 

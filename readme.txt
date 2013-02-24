@@ -1,4 +1,11 @@
-notes on porting NICE to WIN using CMAKE:
+﻿notes on porting NICE to WIN using CMAKE:
+-------
+fixing all these includes of template definitons:
+//#ifdef __GNUC__
+#include "core/vector/RowMatrixT.tcc"
+//#endif
+tcc are not cpps, they need to be included into the header file otherwise template usage will result in linking errors
+See, Inclusion model of Template classes: http://stackoverflow.com/questions/3705740/c-lnk2019-error-unresolved-external-symbol-template-classs-constructor-and
 
 
 ------------------------------------------
@@ -62,4 +69,8 @@ ocv_glob_modules(pathcurrdir) -->in modules
 defs to care about
 NICE_USELIB_CUDACHOLESKY
 NICE_USELIB_IPP
+#ifdef NICE_USELIB_MATIO
 
+#eigene definiton zum builden der sub-test-ordners
+NICE_BUILD_TESTS	
+NICE_BUILD_PROGS
