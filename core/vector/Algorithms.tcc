@@ -224,7 +224,7 @@ inline void lnIP(VectorT<T> &v) {
 }
 
 template<class T>
-inline VectorT<T> *ln(const VectorT<T> &v, VectorT<T> *buffer=NULL) {
+inline VectorT<T> *ln(const VectorT<T> &v, VectorT<T> *buffer) {
 #ifdef NICE_USELIB_IPP
   VectorT<T> *result;
   if(buffer==NULL || buffer->size()!=v.size()) {
@@ -243,7 +243,7 @@ inline VectorT<T> *ln(const VectorT<T> &v, VectorT<T> *buffer=NULL) {
 }
 
 template<class T>
-inline VectorT<T> *createGaussFunc(float sigma, VectorT<T> *buffer=NULL)
+inline VectorT<T> *createGaussFunc(float sigma, VectorT<T> *buffer)
 {
 #ifdef NICE_USELIB_IPP
     int resultlength;
