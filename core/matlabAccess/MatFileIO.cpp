@@ -7,8 +7,9 @@
 
 #include "MatFileIO.h"
 
+#ifdef NICE_USELIB_MATIO
+
 namespace NICE {
-  
       //------------------------------------------------------
       // several constructors and destructors
       //------------------------------------------------------
@@ -656,3 +657,4 @@ namespace NICE {
       }
 }
 
+#endif
