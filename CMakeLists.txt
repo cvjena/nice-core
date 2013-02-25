@@ -15,6 +15,7 @@ set(NICE_BUILD_LIBS_STATIC_SHARED STATIC)
 
 set(NICE_BUILD_PROGS 1)
 
+set(Boost_USE_STATIC_LIBS ON)
 FIND_PACKAGE(Boost COMPONENTS date_time filesystem)
 IF (Boost_FOUND)
 	message(STATUS "boost-incl-dir: ${Boost_INCLUDE_DIRS}")
