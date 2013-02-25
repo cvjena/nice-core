@@ -40,7 +40,8 @@ set(OPENCV_LIB_INSTALL_PATH lib)
 INCLUDE_DIRECTORIES(".")
 INCLUDE_DIRECTORIES(core)
 
-set(the_module "libnice")
+#set(the_module "libnice")
+set(the_module "nice")
 
 set(NICE_CURR_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 SUBDIRLIST(__listSubDirs "${NICE_CURR_DIR}")
