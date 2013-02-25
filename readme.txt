@@ -69,6 +69,7 @@ ocv_glob_modules(pathcurrdir) -->in modules
 defs to care about
 NICE_USELIB_CUDACHOLESKY
 NICE_USELIB_IPP
+NICE_USELIB_OPENMP
 #ifdef NICE_USELIB_MATIO
 
 #eigene definiton zum builden der sub-test-ordners

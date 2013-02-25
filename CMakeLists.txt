@@ -22,6 +22,15 @@ IF (Boost_FOUND)
     ADD_DEFINITIONS( "-DNICE_BOOST_FOUND" )
 ENDIF()
 
+
+find_package(OpenMP)
+if (OPENMP_FOUND)
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    ADD_DEFINITIONS( "-DNICE_USELIB_OPENMP")
+endif()
+
+
 #IF(WIN32)
  # MESSAGE(FATAL_ERROR "not yet ready")
 #ENDIF(WIN32) 
