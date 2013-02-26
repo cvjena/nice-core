@@ -3,6 +3,11 @@ project (NICELibrary)
 
 include(CheckSymbolExists)
 
+include(cmake/OpenCVUtils.cmake REQUIRED)
+include(cmake/OpenCVDetectCXXCompiler.cmake REQUIRED)
+include(cmake/NiceModules.cmake REQUIRED)
+include(cmake/OpenCVCompilerOptions.cmake REQUIRED)
+
 # The version number.
 set(NICELibrary_VERSION_MAJOR 1)
 set(NICELibrary_VERSION_MINOR 0)
@@ -37,6 +42,8 @@ if (PNG_FOUND)
   ADD_DEFINITIONS( "-DNICE_USELIB_PNG")
 endif()
 
+FIND_PACKAGE(Qt4)
+
 #find_package(ImageMagick COMPONENTS Magick++)
 #if(ImageMagick_FOUND)
 #  INCLUDE_DIRECTORIES(${ImageMagick_INCLUDE_DIRS})
@@ -53,8 +60,6 @@ endif()
 #SET(CMAKE_USE_RELATIVE_PATHS ON)
 #check_symbol_exists("__assert_fail" "assert.h" HAVE_ASSERT_FAIL)
 
-include(cmake/OpenCVUtils.cmake REQUIRE)
-include(cmake/NiceModules.cmake REQUIRE)
 
 set(OPENCV_LIB_INSTALL_PATH lib)
 
