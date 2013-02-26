@@ -166,13 +166,14 @@ void ImageFile::readerPXM ( GrayColorImageCommonImplementationT<P> *image )
       else if ( fileheader.channel == 1 )
       {
         for ( int y = 0; y < fileheader.height; y++ ) {
-          P line[fileheader.width];
+          P *line = new P[fileheader.width];
           file.read ( reinterpret_cast<char *> ( line ), fileheader.width );
           P *target = image->getPixelPointerY ( y );
           P *src = line;
           for ( int x = 0; x < fileheader.width; x++, src++ ) {
             for ( int i = 0;i < image->channels();i++, target++ )
               *target = *src;
+		  delete [] line;
           }
         }
       }
@@ -201,7 +202,7 @@ void ImageFile::readerPXM ( GrayColorImageCommonImplementationT<P> *image )
     if ( fileformat == PPM_RAW || fileformat == PGM_RAW ) {
       if ( fileheader.channel == 1 || ( fileheader.channel == 3 && image->channels() == 3 ) ) { // have to cast
         for ( int y = 0; y < fileheader.height; y++ ) {
-          Ipp8u line[fileheader.width*fileheader.channel*srcbytedepth];
+          Ipp8u *line = new Ipp8u[fileheader.width*fileheader.channel*srcbytedepth];
           file.read ( reinterpret_cast<char *> ( line ), fileheader.width*fileheader.channel*srcbytedepth );
           P *target = image->getPixelPointerY ( y );
           Ipp8u *src = line;
@@ -216,11 +217,12 @@ void ImageFile::readerPXM ( GrayColorImageCommonImplementationT<P> *image )
                 * target = static_cast<P> ( *reinterpret_cast<Ipp16u *> ( src ) );
             }
           }
+		  delete [] line;
         }
       } else if ( fileheader.channel == 3 && image->channels() == 1 ) { // have to cast and to convert
         ColorImageT<P> rgb ( fileheader.width, fileheader.height );
         for ( int y = 0; y < fileheader.height; y++ ) {
-          Ipp8u line[fileheader.width*fileheader.channel*srcbytedepth];
+          Ipp8u *line = new Ipp8u[fileheader.width*fileheader.channel*srcbytedepth];
           file.read ( reinterpret_cast<char *> ( line ), fileheader.width*fileheader.channel*srcbytedepth );
           P *target = rgb.getPixelPointerY ( y );
           Ipp8u *src = line;
@@ -235,6 +237,7 @@ void ImageFile::readerPXM ( GrayColorImageCommonImplementationT<P> *image )
                 * target = static_cast<P> ( *reinterpret_cast<Ipp16u *> ( src ) );
             }
           }
+		  delete [] line;
         }
         rgbToGray ( rgb, dynamic_cast<ImageT<P> *> ( image ) );
       } else {
