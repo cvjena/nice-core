@@ -16,7 +16,7 @@ ImageT<P>& ImageT<P>::operator= ( const P c ) {
   ippiSet_C1R ( static_cast<P> ( c ), this->getPixelPointer(), this->rowStepsize(), ippiSize );
 #else
   Ipp8u* pos = reinterpret_cast<Ipp8u*> ( this->getPixelPointer() );
-  P *row[this->height() ];
+  P **row = new P*[this->height() ];
   for ( int y = 0;y < this->height(); ++y ) {
     row[y] = reinterpret_cast<P*> ( pos );
     pos += this->rowStepsize();
@@ -28,6 +28,7 @@ ImageT<P>& ImageT<P>::operator= ( const P c ) {
       *p = c;
     }
   }
+  delete [] row;
 #endif
   return *this;
 }
