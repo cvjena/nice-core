@@ -171,9 +171,11 @@ ImageT<P> *filterGaussSigma ( const NICE::ImageT<P> &src, double sigma, NICE::Im
     result->set ( 0.0 );
 
     /* initialize 1D Gauss filter mask */
-    PCalc filt[filtersize];
+    //PCalc filt[filtersize];
+	PCalc *filt = new PCalc[filtersize];
 
-    double filt_dbl[masksize+1];
+    //double filt_dbl[masksize+1];
+	double *filt_dbl = new double[masksize+1];
     for ( int x = 0; x <= masksize; x++ )
       filt_dbl[x] = exp ( - ( x * x ) / ( 2 * sigma * sigma ) );
 
@@ -188,6 +190,8 @@ ImageT<P> *filterGaussSigma ( const NICE::ImageT<P> &src, double sigma, NICE::Im
       filt[i+masksize] = ( filt_dbl[i] / filt_dbl[masksize] );
       sum += filt[i];
     }
+	
+	delete [] filt_dbl;
 
     /* temporary image */
     NICE::ImageT<P> temp ( src.width(), src.height() );
@@ -233,9 +237,14 @@ ImageT<P> *filterGaussSigma ( const NICE::ImageT<P> &src, double sigma, NICE::Im
         if ( filterweight > 0 )
           result->setPixelQuick ( x, y, ( P ) ( filtersum / filterweight ) );
       }
+	  
+	  delete [] filt;
+
   } else {
     *result = src;
   }
+
+ 
 
   return result;
 }
