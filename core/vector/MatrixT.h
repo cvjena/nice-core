@@ -612,21 +612,21 @@ protected:
   size_t m_rows;
   size_t m_cols;
 
-  inline void setDataPointer(ElementType* _data, size_t rows, size_t cols,
+  inline void setDataPointer(ElementType* _data, size_t p_rows, size_t p_cols,
                              bool _externalStorage) {
     data = _data;
     constData = _data;
-    m_rows = rows;
-    m_cols = cols;
+    m_rows = p_rows;
+    m_cols = p_cols;
     externalStorage = _externalStorage;
   }
 
   inline void setConstDataPointer(const ElementType* _data,
-                                  size_t rows, size_t cols) {
+                                  size_t p_rows, size_t p_cols) {
     data = NULL;
     constData = _data;
-    m_rows = rows;
-    m_cols = cols;
+    m_rows = p_rows;
+    m_cols = p_cols;
     externalStorage = true;
   }
 
