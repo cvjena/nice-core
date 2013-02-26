@@ -91,7 +91,7 @@ void GrayColorImageCommonImplementationT<P>::deallocPixel() {
 }
 
 template <class P>
-GrayColorImageCommonImplementationT<P>::~GrayColorImageCommonImplementationT<P>() {
+GrayColorImageCommonImplementationT<P>::~GrayColorImageCommonImplementationT() {
   deallocPixel();
 }
 
