@@ -78,3 +78,5 @@ NICE_USELIB_LIBMAGICK
 #eigene definiton zum builden der sub-test-ordners
 NICE_BUILD_TESTS	
 NICE_BUILD_PROGS
+
+/wd"4244" /wd"4100" /wd"4127" /wd"4091" 
