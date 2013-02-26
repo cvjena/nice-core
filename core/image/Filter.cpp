@@ -6,6 +6,10 @@
 #include <iostream>
 using namespace std;
 
+#ifdef NICE_BOOST_FOUND 
+#include <boost/math/special_functions/round.hpp>
+#endif
+
 namespace NICE {
 
 // // // // // general filter functions // // // // //
@@ -69,8 +73,11 @@ Image* filterX ( const Image& src, const IntVector& kernel, Image* dst, const in
         sum += * ( pSrc - ka + i ) * kernel[kernel.size()-i];
         --i;
       } while ( i != 0 );
-
+#ifdef NICE_BOOST_FOUND
+      *pDst = static_cast<Ipp8u> ( boost::math::lround ( sum / dKernelSum ) + kerneloff );
+#else
       *pDst = static_cast<Ipp8u> ( lround ( sum / dKernelSum ) + kerneloff );
+#endif
     }
 
     pSrcStart += src.getStepsize();
@@ -138,8 +145,11 @@ Image* filterY ( const Image& src, const VectorT<int>& kernel, Image* dst, const
         sum += * ( pSrc - ( kernelanch - i ) * src.getStepsize() ) * kernel[ks-i];
         --i;
       } while ( i >= 0 );
-
+#ifdef NICE_BOOST_FOUND
+	  *pDst = static_cast<Ipp8u> ( boost::math::lround ( sum / dKernelSum ) + kerneloff );
+#else
       *pDst = static_cast<Ipp8u> ( lround ( sum / dKernelSum ) + kerneloff );
+#endif
     }
 
     pSrcStart += src.getStepsize();
@@ -217,8 +227,11 @@ Image* filter ( const Image& src, const IntMatrix& mask, Image* dst, const int& 
         for ( uint i = 0; i <= mc; ++i, ++pMask )
           sum += *pMask * mask ( mr - ( j + anchor.y ), mc - i );
       }
-
-      *pDst = static_cast<Image::Pixel> ( lround ( sum / dMaskSum ) + maskoff );
+#ifdef NICE_BOOST_FOUND
+      *pDst = static_cast<Image::Pixel> ( boost::math::lround ( sum / dMaskSum ) + maskoff );
+#else
+	  *pDst = static_cast<Image::Pixel> ( lround ( sum / dMaskSum ) + maskoff );
+#endif
     }
 
     pSrcStart += src.getStepsize();
