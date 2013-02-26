@@ -64,8 +64,8 @@ public:
 typedef CircleT<Ipp8u> Circle;
 } // namespace NICE
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 #include "core/image/CircleT.tcc"
-#endif
+//#endif
 
 #endif /* _CIRCLE_IMAGE_H */

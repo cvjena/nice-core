@@ -36,8 +36,8 @@ namespace NICE {
 } // namespace
 
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 	#include <core/image/Buffer.tcc>
-#endif
+//#endif
 
 #endif //LIMUN_BUFFER_H

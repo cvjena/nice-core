@@ -112,8 +112,8 @@ typedef FilterT<double,double,double> FilterDouble;
 
 } //namespace
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 #include <core/image/FilterT.tcc>
-#endif
+//#endif
 
 #endif
