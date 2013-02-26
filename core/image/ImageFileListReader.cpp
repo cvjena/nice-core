@@ -24,7 +24,7 @@ void ImageFileListReader::init(const std::string& fileName, bool _preload) {
     inputFileName = FileName(inputFileName.str() + lastPart.str() + ".txt");
   }
 
-  std::ifstream file(inputFileName);
+  std::ifstream file( inputFileName.str() );
   if (!file.good()) {
     fthrow(ImageException,
            std::string("ImageFileListReader: Error opening filelist: ")
