@@ -105,8 +105,8 @@ typedef RectangleT<Ipp8u> Rectangle;
 
 } // namespace NICE
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 #include "core/image/RectangleT.tcc"
-#endif
+//#endif
 
 #endif /* _RectangleT_IMAGE_H */

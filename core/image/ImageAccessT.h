@@ -34,8 +34,8 @@ public:
 
 } // namespace
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 #include "core/image/ImageAccessT.tcc"
-#endif
+//#endif
 
 #endif

@@ -125,8 +125,8 @@ typedef ColorT<Ipp8u> Color;
 
 }; // namespace NICE
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 #include "core/image/ColorT.tcc"
-#endif
+//#endif
 
 #endif // COLOR_H

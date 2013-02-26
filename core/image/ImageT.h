@@ -811,8 +811,8 @@ typedef ImageT<Ipp32f> FloatImage;
 
 #include "core/image/GrayColorImageCommonImplementationT.h"
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 #include "core/image/ImageT.tcc"
-#endif
+//#endif
 
 #endif

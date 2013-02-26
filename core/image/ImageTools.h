@@ -418,8 +418,8 @@ namespace NICE {
 #include "core/image/ColorImageT.h"
 #include "core/image/Buffer.h"
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 	#include <core/image/ImageTools.tcc>
-#endif
+//#endif
 
 #endif //LIMUN_IMAGETOOLS_H

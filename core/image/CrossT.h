@@ -69,8 +69,8 @@ typedef CrossT<Ipp8u> Cross;
 
 } // namespace NICE
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 #include "core/image/CrossT.tcc"
-#endif
+//#endif
 
 #endif /* _CROSS_IMAGE_H */

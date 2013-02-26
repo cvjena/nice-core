@@ -379,8 +379,8 @@ template<class P> class ImageT;
     void preventIppBug(IppiSize& ippiSize, Rect& clippedROI);
 } // namespace
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 #include <core/image/Convert.tcc>
-#endif
+//#endif
 
 #endif // LIMUN_CONVERT_H

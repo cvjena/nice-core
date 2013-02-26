@@ -74,8 +74,8 @@ typedef PointT<Ipp8u> Point;
 
 } // namespace NICE
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 #include "core/image/PointT.tcc"
-#endif
+//#endif
 
 #endif /* _POINT_IMAGE_H */

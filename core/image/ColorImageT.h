@@ -885,8 +885,8 @@ typedef ColorImageT<Ipp8u> YUVColorImage;
 
 } // namespace
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 #include "core/image/ColorImageT.tcc"
-#endif
+//#endif
 
 #endif

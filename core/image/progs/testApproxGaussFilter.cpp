@@ -26,9 +26,9 @@ int main ( int argc, char **argv )
   gaussResult.set ( 0 );
   gaussResultApprox.set ( 0 );
 
-  bool verbose = false;
+  bool verbose = true;
   bool evaluate_mean_filter = false;
-  bool write_last_result = false;
+  bool write_last_result = true;
 
   // ignore the following boundary when calculating the error
   const int boundary = 120;

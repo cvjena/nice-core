@@ -881,8 +881,8 @@ private:
 #include "core/image/ImageT.h"
 #include "core/image/ColorImageT.h"
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 #include <core/image/DeprecatedConverter.tcc>
-#endif
+//#endif
 
 #endif

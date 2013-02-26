@@ -220,9 +220,9 @@ class ImageFile
 
 #include <core/image/GrayColorImageCommonImplementationT.h>
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
   #include "core/image/ImageFile.tcc"
-#endif
+//#endif
 
 #endif /* _IMAGEFILE_IMAGE_H */
 

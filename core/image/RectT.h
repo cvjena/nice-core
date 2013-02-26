@@ -181,9 +181,9 @@ public:
 
 } // namespace
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 #include "core/image/RectT.tcc"
-#endif
+//#endif
 
 
 #endif // _IMAGE_RECT_H

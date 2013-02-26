@@ -79,8 +79,8 @@ typedef EllipseT<Ipp8u> Ellipse;
 
 } // namespace NICE
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 #include "core/image/EllipseT.tcc"
-#endif
+//#endif
 
 #endif /* _ELLIPSE_IMAGE_H */

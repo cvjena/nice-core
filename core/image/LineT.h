@@ -76,8 +76,8 @@ typedef LineT<Ipp8u> Line;
 
 } // namespace NICE
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 #include "core/image/LineT.tcc"
-#endif
+//#endif
 
 #endif /* _LINE_IMAGE_H */

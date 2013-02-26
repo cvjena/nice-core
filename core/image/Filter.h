@@ -470,9 +470,9 @@ ColorImageT<P>* wiener ( const ColorImageT<P>& src, int anchorx = -1, int anchor
                          float noiserateB = 0.5, ColorImageT<P>* dst = NULL );
 } // namespace
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 #include <core/image/Filter.tcc>
-#endif
+//#endif
 
 #endif //LIMUN_FILTER_H
 

@@ -96,8 +96,8 @@ public:
 
 }; // namespace NICE 
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
 #include "core/image/Pixel.tcc"
-#endif
+//#endif
 
 #endif // PIXEL_H

@@ -31,6 +31,17 @@ if (OPENMP_FOUND)
     ADD_DEFINITIONS( "-DNICE_USELIB_OPENMP")
 endif()
 
+find_package(PNG)
+if (PNG_FOUND)
+  INCLUDE_DIRECTORIES(${PNG_INCLUDE_DIRS})
+  ADD_DEFINITIONS( "-DNICE_USELIB_PNG")
+endif()
+
+#find_package(ImageMagick COMPONENTS Magick++)
+#if(ImageMagick_FOUND)
+#  INCLUDE_DIRECTORIES(${ImageMagick_INCLUDE_DIRS})
+#  ADD_DEFINITIONS( "-DNICE_USELIB_LIBMAGICK")
+#endif()
 
 #IF(WIN32)
  # MESSAGE(FATAL_ERROR "not yet ready")
