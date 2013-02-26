@@ -103,7 +103,7 @@ std::string FileMgt::createTempFile ( const std::string & templatefn )
 	if ( fd < 0 ) 
 	{
 		string errormessage = "FileMgt::createTempFile: FATAL ERROR unable to create temporary filename with template "+templatefn+".\n";
-		fprintf (stderr, errormessage.c_str());
+		fprintf (stderr,"%s", errormessage.c_str());
 		throw (errormessage.c_str());
 	}
 
@@ -123,7 +123,7 @@ void FileMgt::deleteTempFile ( const std::string & tempfile )
 #endif
     {
 		string errormessage = "FileMgt::deleteTempFile: FATAL ERROR removing "+tempfile+".\n";
-		fprintf (stderr, errormessage.c_str());
+		fprintf (stderr,"%s", errormessage.c_str());
 		throw (errormessage.c_str());
     }
 }
