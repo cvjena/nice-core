@@ -230,7 +230,7 @@ void ColorImageT<P>::doAllocPixelIPP() {
 // // // // // Destruktor // // // // //
 
 template <class P>
-ColorImageT<P>::~ColorImageT<P>() {
+ColorImageT<P>::~ColorImageT() {
 }
 
 template <class P>
