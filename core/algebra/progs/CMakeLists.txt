@@ -1,3 +1,4 @@
+if(BUILD_CORE_PROGS)
 
 ADD_EXECUTABLE(testILSConjugateGradients testILSConjugateGradients.cpp)
 ADD_EXECUTABLE(testILSmethods testILSmethods.cpp)
@@ -11,3 +12,5 @@ TARGET_LINK_LIBRARIES(testILSmethods nice_core ${Boost_LIBRARIES})#nice_core_alg
 INSTALL(TARGETS testILSConjugateGradients DESTINATION bin)
 INSTALL(TARGETS testILSmethods DESTINATION bin)
 #INSTALL(TARGETS testMemoryUsage DESTINATION bin)
+
+endif()

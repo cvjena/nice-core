@@ -50,15 +50,15 @@ FIND_PACKAGE(Qt4)
 #  ADD_DEFINITIONS( "-DNICE_USELIB_LIBMAGICK")
 #endif()
 
-#IF(WIN32)
- # MESSAGE(FATAL_ERROR "not yet ready")
-#ENDIF(WIN32) 
 
-# add the binary tree to the search path for include files
-#include_directories ("${PROJECT_BINARY_DIR}")
+set(BUILD_CORE_VECTOR ON)
+set(BUILD_CORE_BASICS ON)
+#set(BUILD_CORE_ALGEBRA ON)
+#set(BUILD_CORE_OPTIMIZATION ON)
+#set(BUILD_CORE_IMAGE ON)
+#set(BUILD_CORE_MATLABACCESS ON)
 
-#SET(CMAKE_USE_RELATIVE_PATHS ON)
-#check_symbol_exists("__assert_fail" "assert.h" HAVE_ASSERT_FAIL)
+#set(BUILD_CORE_PROGS ON)
 
 
 set(OPENCV_LIB_INSTALL_PATH lib)

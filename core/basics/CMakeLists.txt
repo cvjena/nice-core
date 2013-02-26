@@ -1,3 +1,4 @@
+if(BUILD_CORE_BASICS)
 #message(STATUS "vector_location: ${OPENCV_MODULE_opencv_vector_LOCATION}")
 
 ocv_add_module(basics)# ${Boost_LIBRARIES})# INTERNAL libnice_core_vector)
@@ -10,3 +11,4 @@ ocv_glob_module_sources()#(SOURCES ${OPENCV_MODULE_libnice_core_vector_SOURCES})
 ocv_create_module()
 
 #add_subdirectory(progs bin)
+endif()

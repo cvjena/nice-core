@@ -1,3 +1,5 @@
+if(BUILD_CORE_VECTOR)
+
 ocv_add_module(vector)
 
 
@@ -42,5 +44,5 @@ endif()
 
 
 
-
+endif()
 

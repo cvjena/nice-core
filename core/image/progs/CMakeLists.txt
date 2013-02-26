@@ -1,3 +1,4 @@
+if(BUILD_CORE_PROGS)
 
 ADD_EXECUTABLE(testApproxGaussFilter testApproxGaussFilter.cpp)
 #ADD_EXECUTABLE(testGenericSobelFilter testGenericSobelFilter.cpp)
@@ -7,3 +8,5 @@ TARGET_LINK_LIBRARIES(testApproxGaussFilter nice_core nice_core_image ${Boost_LI
 
 INSTALL(TARGETS testApproxGaussFilter DESTINATION bin)
 #INSTALL(TARGETS testGenericSobelFilter DESTINATION bin)
+
+endif()

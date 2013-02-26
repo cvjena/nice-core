@@ -75,7 +75,8 @@ macro(ocv_glob_modules modulepath)
               set(OPENCV_MODULE_opencv_${mod}_LOCATION "${__modpath}" CACHE PATH "" FORCE)
             endif()
           else()
-            add_subdirectory("${__modpath}" "${CMAKE_CURRENT_BINARY_DIR}/${mod}/.${mod}")
+            #org: add_subdirectory("${__modpath}" "${CMAKE_CURRENT_BINARY_DIR}/${mod}/.${mod}")
+			add_subdirectory("${__modpath}" "${CMAKE_CURRENT_BINARY_DIR}/${mod}")
           endif()
         endif()
       endforeach()
@@ -353,7 +354,9 @@ macro(ocv_create_module)
   if(ENABLE_SOLUTION_FOLDERS)
     set_target_properties(${the_module} PROPERTIES FOLDER "modules")
   endif()
-
+	
+#	message(STATUS "LIBRARY_OUTPUT_PATH: ${LIBRARY_OUTPUT_PATH}")
+	#message(STATUS "EXECUTABLE_OUTPUT_PATH: ${EXECUTABLE_OUTPUT_PATH}")
   set_target_properties(${the_module} PROPERTIES
     OUTPUT_NAME "${the_module}${OPENCV_DLLVERSION}"
     DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
