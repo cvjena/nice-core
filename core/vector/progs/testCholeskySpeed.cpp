@@ -37,7 +37,9 @@ double getInvError ( const Matrix & A, const Matrix & Ainv )
 */
 int main (int argc, char **argv)
 {   
+#ifndef WIN32
     std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
+#endif
 
     int size = 500;
 	if ( argc > 1 )

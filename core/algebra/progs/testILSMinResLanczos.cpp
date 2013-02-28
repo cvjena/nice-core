@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
 			if ( j == i ) A(i,j) = (i+1)+(j+1);
 			else {
 			  
-			    A(i,j) = sqrt((i+1)*(j+1));
+			    A(i,j) = sqrt((double)( (i+1)*(j+1) ));
 			}
 
 			fprintf(logfile, "%f  ",A(i,j));
@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 	fprintf(logfile, "b:\n");
 	for (uint i = 0; i < b.size(); i++)
 	{	
-	    b(i) = (i+1)*sqrt(i+1);
+	    b(i) = (i+1)*sqrt((double)( i+1) );
 	    fprintf(logfile, "%f  ",b(i));
 	}
 	fprintf(logfile, "\n");
