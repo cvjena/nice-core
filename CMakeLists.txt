@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.6) #version 2.8.6 at least required because of command set(CMAKE_AUTOMOC TRUE) for qt moc-ing (see below)
 project (NICELibrary)
 
 include(CheckSymbolExists)
@@ -12,7 +12,7 @@ include(CheckSymbolExists)
 set(NICELibrary_VERSION_MAJOR 1)
 set(NICELibrary_VERSION_MINOR 0)
 
-set(CMAKE_VERBOSE_MAKEFILE on) 
+set(CMAKE_VERBOSE_MAKEFILE off) 
 
 set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
 
@@ -42,7 +42,31 @@ if (PNG_FOUND)
   ADD_DEFINITIONS( "-DNICE_USELIB_PNG")
 endif()
 
-FIND_PACKAGE(Qt4)
+FIND_PACKAGE(Qt4)# COMPONENTS Qt3Support QtOpenGl)
+SET(QT_USE_QTOPENGL TRUE)
+SET(QT_USE_QT3SUPPORT TRUE)
+if(QT_FOUND)
+#  ADD_DEFINITIONS("-DQT3_SUPPORT")
+  message(STATUS "QTfound ${QT_QT3SUPPORT_INCLUDE_DIR}")
+  set(CMAKE_AUTOMOC TRUE) #see doc: http://blogs.kde.org/2011/11/01/cool-new-stuff-cmake-286-automoc
+  INCLUDE(${QT_USE_FILE})
+  #INCLUDE(${QT_QT3SUPPORT_INCLUDE_DIR})
+  ADD_DEFINITIONS(${QT_DEFINITIONS})
+  ADD_DEFINITIONS( "-DNICE_USELIB_QT")
+endif()
+find_package(OpenGL)
+if(OPENGL_FOUND)
+  message(STATUS "OPENGL found")
+  include_directories( ${OPENGL_INCLUDE_DIRS} )
+  ADD_DEFINITIONS( "-DNICE_USELIB_OPENGL")
+endif()
+
+find_package(GLUT)
+if(GLUT_FOUND)
+  message(STATUS "GLUT found")
+  include_directories( ${GLUT_INCLUDE_DIRS} )
+  ADD_DEFINITIONS( "-DNICE_USELIB_GLUT")
+endif()
 
 #find_package(ImageMagick COMPONENTS Magick++)
 #if(ImageMagick_FOUND)

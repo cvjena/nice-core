@@ -24,18 +24,18 @@ SET(NICE_CORE_SRC
 ./image/ImageInputStream.cpp
 ./image/Filter.cpp
 ./matlabAccess/MatFileIO.cpp
-# ./imagedisplay/DefaultMainWindow.cpp
-# ./imagedisplay/PolygonDrawer.cpp
-# ./imagedisplay/ArrayPlot.cpp
-# ./imagedisplay/CaptureDialog.cpp
-# ./imagedisplay/ImageDisplaySDL.cpp
-# ./imagedisplay/QtFramework.cpp
-# ./imagedisplay/CaptureWidget.cpp
-# ./imagedisplay/EpipolarGeometryDisplay.cpp
-# ./imagedisplay/ImageDisplayManager.cpp
-# ./imagedisplay/ImageDisplayManagerWidget.cpp
-# ./imagedisplay/SimpleSelector.cpp
-# ./imagedisplay/ImageDisplay.cpp
+./imagedisplay/DefaultMainWindow.cpp
+./imagedisplay/PolygonDrawer.cpp
+./imagedisplay/ArrayPlot.cpp
+./imagedisplay/CaptureDialog.cpp
+./imagedisplay/ImageDisplaySDL.cpp
+./imagedisplay/QtFramework.cpp
+./imagedisplay/CaptureWidget.cpp
+./imagedisplay/EpipolarGeometryDisplay.cpp
+./imagedisplay/ImageDisplayManager.cpp
+./imagedisplay/ImageDisplayManagerWidget.cpp
+./imagedisplay/SimpleSelector.cpp
+./imagedisplay/ImageDisplay.cpp
 ./basics/bzstream.cpp
 ./basics/tools.cpp
 ./basics/BinStreamable.cpp
@@ -141,19 +141,19 @@ set(NICE_CORE_HDR
 ./image/EllipseT.h
 ./image/FilterT.h
 ./matlabAccess/MatFileIO.h
-# ./imagedisplay/DefaultMainWindow.h
-# ./imagedisplay/ImageDisplay.h
-# ./imagedisplay/EpipolarGeometryDisplay.h
-# ./imagedisplay/OverlayColors.h
-# ./imagedisplay/CaptureWidget.h
-# ./imagedisplay/PolygonDrawer.h
-# ./imagedisplay/SimpleSelector.h
-# ./imagedisplay/CaptureDialog.h
-# ./imagedisplay/ImageDisplayManagerWidget.h
-# ./imagedisplay/QtFramework.h
-# ./imagedisplay/ImageDisplayManager.h
-# ./imagedisplay/ArrayPlot.h
-# ./imagedisplay/ImageDisplaySDL.h
+./imagedisplay/DefaultMainWindow.h
+./imagedisplay/ImageDisplay.h
+./imagedisplay/EpipolarGeometryDisplay.h
+./imagedisplay/OverlayColors.h
+./imagedisplay/CaptureWidget.h
+./imagedisplay/PolygonDrawer.h
+./imagedisplay/SimpleSelector.h
+./imagedisplay/CaptureDialog.h
+./imagedisplay/ImageDisplayManagerWidget.h
+./imagedisplay/QtFramework.h
+./imagedisplay/ImageDisplayManager.h
+./imagedisplay/ArrayPlot.h
+./imagedisplay/ImageDisplaySDL.h
 ./basics/bzstream.h
 ./basics/RoundToNearest.h
 ./basics/FrameRateCounter.h

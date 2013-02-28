@@ -6,7 +6,7 @@ set(NICE_PROGFILES_SRC
 ./image/progs/testGenericSobelFilter.cpp
 ./matlabAccess/progs/testMatFileIO.cpp
 ./progs/imageDemo.cpp
-#./imagedisplay/progs/showImage.cpp
+./imagedisplay/progs/showImage.cpp
 ./basics/progs/testConfig.cpp
 ./basics/progs/testMemoryUsage.cpp
 ./algebra/progs/testILSMinResLanczos.cpp
