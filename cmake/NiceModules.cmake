@@ -122,6 +122,9 @@ macro(ocv_add_dependencies full_modname)
   ocv_list_unique(OPENCV_MODULE_${full_modname}_REQ_DEPS)
   ocv_list_unique(OPENCV_MODULE_${full_modname}_OPT_DEPS)
 
+  message(STATUS "OPENCV_MODULE_${full_modname}_REQ_DEPS: ${OPENCV_MODULE_${full_modname}_REQ_DEPS}")
+  message(STATUS "OPENCV_MODULE_${full_modname}_OPT_DEPS: ${OPENCV_MODULE_${full_modname}_OPT_DEPS}")
+
   set(OPENCV_MODULE_${full_modname}_REQ_DEPS ${OPENCV_MODULE_${full_modname}_REQ_DEPS} CACHE INTERNAL "Required dependencies of ${full_modname} module")
   set(OPENCV_MODULE_${full_modname}_OPT_DEPS ${OPENCV_MODULE_${full_modname}_OPT_DEPS} CACHE INTERNAL "Optional dependencies of ${full_modname} module")
 endmacro()
