@@ -21,14 +21,18 @@ QtFramework::QtFramework()
   //application.reset(new QApplication(argc, argv));
   application = new QApplication(fake_argc, fake_argv);
   glutInit(&fake_argc, fake_argv);
+#ifndef WIN32
   std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
+#endif
 }
 
 QtFramework::QtFramework(int& argc, char** argv)
     : application(new QApplication(argc, argv)), mainWindow(NULL) {
   fake_argv = NULL;
   glutInit(&argc, argv);
+#ifndef WIN32
   std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
+#endif
 }
 
 QtFramework::~QtFramework() {

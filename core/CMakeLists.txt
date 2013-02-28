@@ -6,7 +6,9 @@ include( testfiles.cmake)
 
 ADD_LIBRARY(nice_core ${NICE_BUILD_LIBS_STATIC_SHARED} ${NICE_CORE_HDR} ${NICE_CORE_SRC})
 TARGET_LINK_LIBRARIES(nice_core ${Boost_LIBRARIES} ${OPENGL_LIBRARY} ${GLUT_LIBRARY} ${QT_LIBRARIES})
+SET_PROPERTY(TARGET nice_core PROPERTY FOLDER "library")
 INSTALL(TARGETS nice_core DESTINATION lib)
+
 
 if(BUILD_CORE_PROGS)
   message(STATUS "building progs:")
@@ -17,6 +19,7 @@ if(BUILD_CORE_PROGS)
     ADD_EXECUTABLE( ${__progname} ${__progcpp})
     TARGET_LINK_LIBRARIES(${__progname} nice_core)
     INSTALL(TARGETS ${__progname} DESTINATION bin)
+	SET_PROPERTY(TARGET ${__progname} PROPERTY FOLDER "programs")
   endforeach()
 endif()
 
@@ -48,7 +51,7 @@ endif()
     RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
     INSTALL_NAME_DIR lib
   )
-
+  
   if(BUILD_SHARED_LIBS)
     if(MSVC)
       set_target_properties(${the_module} PROPERTIES DEFINE_SYMBOL CVAPI_EXPORTS)

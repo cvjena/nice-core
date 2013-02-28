@@ -18,7 +18,9 @@ using namespace std;
 */
 int main ( int argc, char **argv )
 {
+#ifndef WIN32
   std::set_terminate ( __gnu_cxx::__verbose_terminate_handler );
+#endif
 
   for ( int i = 1 ; i < argc ; i++ )
   {
