@@ -3,6 +3,8 @@ project (NICELibrary)
 
 include(CheckSymbolExists)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+
 #include(cmake/OpenCVUtils.cmake REQUIRED)
 #include(cmake/OpenCVDetectCXXCompiler.cmake REQUIRED)
 #include(cmake/NiceModules.cmake REQUIRED)
@@ -28,6 +30,16 @@ IF (Boost_FOUND)
     ADD_DEFINITIONS( "-DNICE_BOOST_FOUND" )
 ENDIF()
 
+FIND_PACKAGE(CppUnit)
+IF (CPPUNIT_FOUND)
+	message(STATUS "CppUnit-dir: ${CPPUNIT_INCLUDE_DIR}")
+    INCLUDE_DIRECTORIES(${CPPUNIT_INCLUDE_DIR})
+    ADD_DEFINITIONS( "-DNICE_USELIB_CPPUNIT" )
+else()
+  set(CPPUNIT_INCLUDE_DIR "/usr/include/") #can be found in  /usr/include/cppunit
+  ADD_DEFINITIONS( "-DNICE_USELIB_CPPUNIT" )
+  message(STATUS "CppUnit not found, but : ${CPPUNIT_INCLUDE_DIR}")
+ENDIF()
 
 find_package(OpenMP)
 if (OPENMP_FOUND)
@@ -81,7 +93,7 @@ set(BUILD_CORE_BASICS ON)
 #set(BUILD_CORE_OPTIMIZATION ON)
 #set(BUILD_CORE_IMAGE ON)
 #set(BUILD_CORE_MATLABACCESS ON)
-
+set(BUILD_CORE_TESTS ON)
 set(BUILD_CORE_PROGS ON)
 
 

@@ -1,6 +1,6 @@
 include( corefiles.cmake)
 include( progfiles.cmake)
-#include( testfiles.cmake)
+include( testfiles.cmake)
 
 #message(STATUS "nice_core_hdr:${NICE_CORE_HDR}")
 
@@ -13,10 +13,25 @@ if(BUILD_CORE_PROGS)
   foreach(__progcpp ${NICE_PROGFILES_SRC})
     #message(STATUS "progcpp: ${__progcpp}")
     get_filename_component(__progname ${__progcpp} NAME_WE )
-    message(STATUS "progname: ${__progname}")
+    #message(STATUS "progname: ${__progname}")
     ADD_EXECUTABLE( ${__progname} ${__progcpp})
     TARGET_LINK_LIBRARIES(${__progname} nice_core)
     INSTALL(TARGETS ${__progname} DESTINATION bin)
+  endforeach()
+endif()
+
+if(BUILD_CORE_TESTS)
+  INCLUDE_DIRECTORIES(${CPPUNIT_INCLUDE_DIR})
+  message(STATUS "building tests:")
+  foreach(__testcpp ${NICE_TESTFILES_SRC})
+    message(STATUS "progcpp: ${__testcpp}")
+    get_filename_component(__testname ${__testcpp} NAME_WE )
+    message(STATUS "progname: ${__testname}")
+    
+    ADD_EXECUTABLE( ${__testname} ../templates/cppUnitTestRunner.cpp ${__testcpp})
+    TARGET_LINK_LIBRARIES(${__testname} nice_core ${CPPUNIT_LIBRARIES} )
+
+    INSTALL(TARGETS ${__testname} DESTINATION bin)
   endforeach()
 endif()
 
