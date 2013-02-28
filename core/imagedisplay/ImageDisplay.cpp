@@ -421,7 +421,7 @@ void ImageDisplay::menuSave() {
   }
 
   NICE::FileName filename ( s.local8Bit() );
-  const std::string ext = filename.extractExtension();
+  const std::string ext = filename.extractExtension().str();
   const bool extensionOk
   = ( ext == std::string ( ".ppm" ) || ext == std::string ( ".pgm" )
       || ext == std::string ( ".png" ) || ext == std::string ( ".jpg" ) );

@@ -42,6 +42,14 @@ if (PNG_FOUND)
   ADD_DEFINITIONS( "-DNICE_USELIB_PNG")
 endif()
 
+
+find_package(ImageMagick COMPONENTS Magick++)
+if(ImageMagick_FOUND)
+	message(STATUS "imagemagick found: ${ImageMagick_LIBRARIES}")
+	else()
+	message(STATUS "imagemagick not found")
+endif()
+
 FIND_PACKAGE(Qt4)# COMPONENTS Qt3Support QtOpenGl)
 SET(QT_USE_QTOPENGL TRUE)
 SET(QT_USE_QT3SUPPORT TRUE)
@@ -61,11 +69,27 @@ if(OPENGL_FOUND)
   ADD_DEFINITIONS( "-DNICE_USELIB_OPENGL")
 endif()
 
-find_package(GLUT)
-if(GLUT_FOUND)
-  message(STATUS "GLUT found")
-  include_directories( ${GLUT_INCLUDE_DIRS} )
-  ADD_DEFINITIONS( "-DNICE_USELIB_GLUT")
+if(WIN32)
+	message(STATUS "find GLUT for win32")
+	set(GLUT_INCLUDE_DIR "C:/Libraries/freeglut-MSVC-2.8.0-1.mp/freeglut/include/")# , where to find GL/glut.h, etc.
+	set(GLUT_ROOT_PATH "C:/Libraries/freeglut-MSVC-2.8.0-1.mp/freeglut/") #  GLUT_LIBRARIES
+	set(tmp_OPENGL_LIBRARY_DIR "${OPENGL_LIBRARY_DIR}") #temporarily store opengl_lib path
+	set(OPENGL_LIBRARY_DIR "${GLUT_ROOT_PATH}lib")
+	find_package(GLUT)
+	if(GLUT_FOUND)
+	  message(STATUS "GLUT found")
+	  include_directories( ${GLUT_INCLUDE_DIR} )
+	  ADD_DEFINITIONS( -DNICE_USELIB_GLUT)
+	  ADD_DEFINITIONS(-DBUILD_VTI -DFREEGLUT_STATIC)
+	endif()
+	set(OPENGL_LIBRARY_DIR "${tmp_OPENGL_LIBRARY_DIR}") #reset opengl lib path
+else()
+	find_package(GLUT)
+	if(GLUT_FOUND)
+	  message(STATUS "GLUT found")
+	  include_directories( ${GLUT_INCLUDE_DIR} )
+	  ADD_DEFINITIONS(-DNICE_USELIB_GLUT)
+	endif()
 endif()
 
 #find_package(ImageMagick COMPONENTS Magick++)
@@ -74,6 +98,14 @@ endif()
 #  ADD_DEFINITIONS( "-DNICE_USELIB_LIBMAGICK")
 #endif()
 
+if(MSVC)
+  #enable solution folders
+  SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
+  SET_PROPERTY(GLOBAL PROPERTY AUTOMOC_FOLDER automoc) #in future (>cmake1.8.11 this might separate the automoc projects into a separate solution folder)
+  
+  #in Visual Studio avoid overwriting of std::max with macro definition max() in WinDef.h (http://support.microsoft.com/kb/143208/de)
+  ADD_DEFINITIONS("-DNOMINMAX")
+endif()
 
 set(BUILD_CORE_VECTOR ON)
 set(BUILD_CORE_BASICS ON)
@@ -107,6 +139,7 @@ set(NICE_CURR_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 # endforeach()
 ADD_SUBDIRECTORY(core)
   
+
 # doxygen support
 #FIND_PROGRAM(DOXYGEN_EXECUTABLE "doxygen")
 

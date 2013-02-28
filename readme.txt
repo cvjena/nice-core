@@ -4,7 +4,37 @@
 1. Never use GLOB_RECURSE. It's evil. E.g. if you add or remove source files, CMake has no way of knowing that it should be re-run. Just list all the files in your CMakeLists.txt (or, if you think the list is excessively long, create a file called e.g. files.cmake, put the list in there and INCLUDE it in the CMakeLists.txt file.
 2. Never do in-source builds. CMake creates many, many files, and you don't want to delete them all individually for a clean build. And there's no way to implement a safe "make clean" (e.g. your build system might be running a custom utility which generates files CMake knows nothing about).
 
+%%%% todos
+- libmagic++ scheint sehr aufwendig in der benutzung unter Windows: How to build it with vs, anleitung:http://www.graphicsmagick.org/INSTALL-windows.html#windows-xp-vista-7-visual-c-6-0-through-9-0-compilation
+unter windows doch einfacher: http://www.imagemagick.org/script/binary-releases.php#windows (sind nur die binaries, keine includes und libs)
+http://www.imagemagick.org/Magick++/ sources runterladen
+braucht man überhaupt libmagick? warum nicht lieber opencv zum bilderlesen benutzen: momentan ist das lesen und schreiben eh mit throw exception not implemented verbunden:
+void ImageFile::readerMagick ( GrayColorImageCommonImplementationT<P> *image )
+{
+  fthrow ( ImageException, "Format not yet implemented (only available for standard images)." );
+}
+weil magick momentan der default imagereader ist: void ImageFile::reader(...)
 
+
+
+- make compilable without Qt
+- make compileable without opengl
+
+- regex lib nutzen von boost (->config.h)
+- substitue FileMgt::DirectoryRecursive by platform independend code using boost::filesystem
+
+- Implement ResouceStatistics for windows
+- 
+- braucht man GLUT noch ? Alt??? enable build without glut atleast!!
+
+- remove all warnings for function shadowing
+- remove all warning unreachable code
+%%%%%
+needed libraries windows:
+freeglut (download from: http://freeglut.sourceforge.net/index.php#download)
+adjust pathes GLUT_ROOT_PATH in root-CMakeLists.txt
+
+%%%%%%
 
 fixing all these includes of template definitons:
 //#ifdef __GNUC__
