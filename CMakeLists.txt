@@ -3,10 +3,10 @@ project (NICELibrary)
 
 include(CheckSymbolExists)
 
-include(cmake/OpenCVUtils.cmake REQUIRED)
-include(cmake/OpenCVDetectCXXCompiler.cmake REQUIRED)
-include(cmake/NiceModules.cmake REQUIRED)
-include(cmake/OpenCVCompilerOptions.cmake REQUIRED)
+#include(cmake/OpenCVUtils.cmake REQUIRED)
+#include(cmake/OpenCVDetectCXXCompiler.cmake REQUIRED)
+#include(cmake/NiceModules.cmake REQUIRED)
+#include(cmake/OpenCVCompilerOptions.cmake REQUIRED)
 
 # The version number.
 set(NICELibrary_VERSION_MAJOR 1)
@@ -36,7 +36,7 @@ if (OPENMP_FOUND)
     ADD_DEFINITIONS( "-DNICE_USELIB_OPENMP")
 endif()
 
-find_package(PNG)
+#find_package(PNG)
 if (PNG_FOUND)
   INCLUDE_DIRECTORIES(${PNG_INCLUDE_DIRS})
   ADD_DEFINITIONS( "-DNICE_USELIB_PNG")
@@ -58,7 +58,7 @@ set(BUILD_CORE_BASICS ON)
 #set(BUILD_CORE_IMAGE ON)
 #set(BUILD_CORE_MATLABACCESS ON)
 
-#set(BUILD_CORE_PROGS ON)
+set(BUILD_CORE_PROGS ON)
 
 
 set(OPENCV_LIB_INSTALL_PATH lib)
@@ -70,8 +70,8 @@ INCLUDE_DIRECTORIES(core)
 set(the_module "nice")
 
 set(NICE_CURR_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-SUBDIRLIST(__listSubDirs "${NICE_CURR_DIR}")
-ocv_glob_modules( ${NICE_CURR_DIR} )
+#SUBDIRLIST(__listSubDirs "${NICE_CURR_DIR}")
+#ocv_glob_modules( ${NICE_CURR_DIR} )
 # foreach(_curSubdir ${__listSubDirs})
 	# ocv_get_real_path(__modpath "${NICE_CURR_DIR}/${_curSubdir}/")
 	# if(EXISTS "${__modpath}/CMakeLists.txt")
@@ -81,10 +81,10 @@ ocv_glob_modules( ${NICE_CURR_DIR} )
 		# ocv_glob_modules( ${__modpath} )
 	# endif()
 # endforeach()
-#ADD_SUBDIRECTORY(core bin)
+ADD_SUBDIRECTORY(core)
   
 # doxygen support
-FIND_PROGRAM(DOXYGEN_EXECUTABLE "doxygen")
+#FIND_PROGRAM(DOXYGEN_EXECUTABLE "doxygen")
 
 
 #cmake code from: https://github.com/hmeyer/dcmtk/blob/master/CMakeLists.txt

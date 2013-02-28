@@ -1,5 +1,11 @@
 ﻿notes on porting NICE to WIN using CMAKE:
 -------
+
+1. Never use GLOB_RECURSE. It's evil. E.g. if you add or remove source files, CMake has no way of knowing that it should be re-run. Just list all the files in your CMakeLists.txt (or, if you think the list is excessively long, create a file called e.g. files.cmake, put the list in there and INCLUDE it in the CMakeLists.txt file.
+2. Never do in-source builds. CMake creates many, many files, and you don't want to delete them all individually for a clean build. And there's no way to implement a safe "make clean" (e.g. your build system might be running a custom utility which generates files CMake knows nothing about).
+
+
+
 fixing all these includes of template definitons:
 //#ifdef __GNUC__
 #include "core/vector/RowMatrixT.tcc"
