@@ -40,7 +40,7 @@ class StreamableClass : public NICE::Streamable, public NICE::BinStreamable {
 
 void TestStreamable::setUp() {
   s=NULL;
-  int k=10;
+  static const int k=10;
   double darray[k];
   long larray[2*k];
   float farray[2*k];
