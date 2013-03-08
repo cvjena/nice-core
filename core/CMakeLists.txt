@@ -40,7 +40,7 @@ if(BUILD_CORE_TESTS)
                    COMMAND "$<TARGET_FILE:${__testname}>"
                    COMMENT "Unit Tests...")
 	else()
-		ADD_TEST(${__testname} UnitTester ${__testname})
+		ADD_TEST(${__testname} ${__testname})
 	endif()
   endforeach()
 endif()
