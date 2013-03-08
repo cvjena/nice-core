@@ -30,6 +30,9 @@ IF (Boost_FOUND)
     ADD_DEFINITIONS( "-DNICE_BOOST_FOUND" )
 ENDIF()
 
+if(WIN32)
+  set(CPPUNIT_INCLUDE_DIR "C:/Libraries/cppunit-1.12.1.VS2010/cppunit-1.12.1/include/")
+endif()
 FIND_PACKAGE(CppUnit)
 IF (CPPUNIT_FOUND)
 	message(STATUS "CppUnit-dir: ${CPPUNIT_INCLUDE_DIR}")
@@ -92,7 +95,7 @@ if(WIN32)
 	  message(STATUS "GLUT found")
 	  include_directories( ${GLUT_INCLUDE_DIR} )
 	  ADD_DEFINITIONS( -DNICE_USELIB_GLUT)
-	  ADD_DEFINITIONS(-DBUILD_VTI -DFREEGLUT_STATIC)
+	  #ADD_DEFINITIONS(-DBUILD_VTI -DFREEGLUT_STATIC) with static seems not to work
 	endif()
 	set(OPENGL_LIBRARY_DIR "${tmp_OPENGL_LIBRARY_DIR}") #reset opengl lib path
 else()
@@ -126,7 +129,7 @@ set(BUILD_CORE_BASICS ON)
 #set(BUILD_CORE_IMAGE ON)
 #set(BUILD_CORE_MATLABACCESS ON)
 set(BUILD_CORE_TESTS ON)
-set(BUILD_CORE_PROGS ON)
+set(BUILD_CORE_PROGS OFF)
 
 
 set(OPENCV_LIB_INSTALL_PATH lib)

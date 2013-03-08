@@ -7,13 +7,13 @@
 %%%% todos
 - libmagic++ scheint sehr aufwendig in der benutzung unter Windows: How to build it with vs, anleitung:http://www.graphicsmagick.org/INSTALL-windows.html#windows-xp-vista-7-visual-c-6-0-through-9-0-compilation
 unter windows doch einfacher: http://www.imagemagick.org/script/binary-releases.php#windows (sind nur die binaries, keine includes und libs)
-http://www.imagemagick.org/Magick++/ sources runterladen
+http://www.imagemagick.org/Magick++/ sources runterladen (getan. TODO: entpacken c/libraries/ImageMagick-6.8.3-6-windows.zip)
 braucht man überhaupt libmagick? warum nicht lieber opencv zum bilderlesen benutzen: momentan ist das lesen und schreiben eh mit throw exception not implemented verbunden:
 void ImageFile::readerMagick ( GrayColorImageCommonImplementationT<P> *image )
 {
   fthrow ( ImageException, "Format not yet implemented (only available for standard images)." );
 }
-weil magick momentan der default imagereader ist: void ImageFile::reader(...)
+weil magick momentan der default imagereader ist: void ImageFile::reader(...), wenn keine libPNG und LibJpeg gegeben ist.
 
 
 
@@ -112,7 +112,7 @@ NICE_USELIB_JPG
 NICE_USELIB_LIBMAGICK
 
 #eigene definiton zum builden der sub-test-ordners
-NICE_BUILD_TESTS	
+NICE_BUILD_TESTS	 http://www.comp.nus.edu.sg/~cs3215/tools/cppunitAll.html
 NICE_BUILD_PROGS
 
 /wd"4244" /wd"4100" /wd"4127" /wd"4091" 
