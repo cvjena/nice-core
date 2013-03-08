@@ -39,6 +39,8 @@ if(BUILD_CORE_TESTS)
                    POST_BUILD
                    COMMAND "$<TARGET_FILE:${__testname}>"
                    COMMENT "Unit Tests...")
+	else()
+		ADD_TEST(${__testname} UnitTester ${__testname})
 	endif()
   endforeach()
 endif()
