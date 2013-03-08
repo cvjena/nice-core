@@ -13,9 +13,8 @@ INSTALL(TARGETS nice_core DESTINATION lib)
 if(BUILD_CORE_PROGS)
   message(STATUS "building progs:")
   foreach(__progcpp ${NICE_PROGFILES_SRC})
-    #message(STATUS "progcpp: ${__progcpp}")
     get_filename_component(__progname ${__progcpp} NAME_WE )
-    #message(STATUS "progname: ${__progname}")
+    message(STATUS "progname: ${__progname} ${__progcpp}")
     ADD_EXECUTABLE( ${__progname} ${__progcpp})
     TARGET_LINK_LIBRARIES(${__progname} nice_core)
     INSTALL(TARGETS ${__progname} DESTINATION bin)
@@ -27,14 +26,18 @@ if(BUILD_CORE_TESTS)
   INCLUDE_DIRECTORIES(${CPPUNIT_INCLUDE_DIR})
   message(STATUS "building tests:")
   foreach(__testcpp ${NICE_TESTFILES_SRC})
-    message(STATUS "progcpp: ${__testcpp}")
     get_filename_component(__testname ${__testcpp} NAME_WE )
-    message(STATUS "progname: ${__testname}")
+    message(STATUS "unittest: ${__testname} ${__testcpp}")
     
     ADD_EXECUTABLE( ${__testname} ../templates/cppUnitTestRunner.cpp ${__testcpp})
     TARGET_LINK_LIBRARIES(${__testname} nice_core ${CPPUNIT_LIBRARIES} )
 
     INSTALL(TARGETS ${__testname} DESTINATION bin)
+	SET_PROPERTY(TARGET ${__testname} PROPERTY FOLDER "unittests")
+	add_custom_command(TARGET ${__testname}
+                   POST_BUILD
+                   COMMAND "$<TARGET_FILE:${__testname}>"
+                   COMMENT "Unit Tests...")
   endforeach()
 endif()
 
