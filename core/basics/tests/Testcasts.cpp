@@ -44,7 +44,7 @@ void Testcasts::testCasts() {
     float x=1.56;
     float y=1.34;
     CPPUNIT_ASSERT_EQUAL(2l, round_to_nearest_cast<long>(x));
-    CPPUNIT_ASSERT_EQUAL(1ul, round_to_nearest_cast<ulong>(y));
+    CPPUNIT_ASSERT_EQUAL(1ul, round_to_nearest_cast<unsigned long>(y));
     CPPUNIT_ASSERT_EQUAL(-2l, round_to_nearest_cast<long>(-x));
     CPPUNIT_ASSERT_EQUAL(-1l, round_to_nearest_cast<long>(-y));
  }
