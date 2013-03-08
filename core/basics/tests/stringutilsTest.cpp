@@ -1,6 +1,5 @@
 #include "stringutilsTest.h"
 
-#include <unistd.h>
 #include <cmath>
 
 using namespace std;
