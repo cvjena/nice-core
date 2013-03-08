@@ -14,7 +14,7 @@ void Observable::removeObserver(Observer* observer) {
        ++iter) {
     if (*iter == observer) {
       observers.erase(iter);
-      --iter;
+     // --iter; don't know, this line doesnt make sense... code crashes when not uncommenting this line
       break;
     }
   }
