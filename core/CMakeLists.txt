@@ -34,14 +34,7 @@ if(BUILD_CORE_TESTS)
 
     INSTALL(TARGETS ${__testname} DESTINATION tests)
 	SET_PROPERTY(TARGET ${__testname} PROPERTY FOLDER "unittests")
-	if(BUILD_CORE_TESTS_PERFORM_AS_POSTBUILD_STEP)
-		add_custom_command(TARGET ${__testname}
-                   POST_BUILD
-                   COMMAND "$<TARGET_FILE:${__testname}>"
-                   COMMENT "Unit Tests...")
-	else()
-		ADD_TEST(${__testname} ${__testname})
-	endif()
+	ADD_TEST(${__testname} ${__testname})
   endforeach()
 endif()
 
