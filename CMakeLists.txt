@@ -132,6 +132,10 @@ set(BUILD_CORE_TESTS ON)
 set(BUILD_CORE_TESTS_PERFORM_AS_POSTBUILD_STEP OFF)
 set(BUILD_CORE_PROGS OFF)
 
+if( BUILD_CORE_TESTS)
+	enable_testing()
+	include(CTest)
+endif()
 
 set(OPENCV_LIB_INSTALL_PATH lib)
 
