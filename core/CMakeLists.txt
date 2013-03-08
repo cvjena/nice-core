@@ -32,12 +32,14 @@ if(BUILD_CORE_TESTS)
     ADD_EXECUTABLE( ${__testname} ../templates/cppUnitTestRunner.cpp ${__testcpp})
     TARGET_LINK_LIBRARIES(${__testname} nice_core ${CPPUNIT_LIBRARIES} )
 
-    INSTALL(TARGETS ${__testname} DESTINATION bin)
+    INSTALL(TARGETS ${__testname} DESTINATION tests)
 	SET_PROPERTY(TARGET ${__testname} PROPERTY FOLDER "unittests")
-	add_custom_command(TARGET ${__testname}
+	if(BUILD_CORE_TESTS_PERFORM_AS_POSTBUILD_STEP)
+		add_custom_command(TARGET ${__testname}
                    POST_BUILD
                    COMMAND "$<TARGET_FILE:${__testname}>"
                    COMMENT "Unit Tests...")
+	endif()
   endforeach()
 endif()
 
