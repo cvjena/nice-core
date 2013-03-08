@@ -70,7 +70,7 @@ public:
   operator()(const ptrdiff_t i, const ptrdiff_t j) {
     if (i < 0 || static_cast<unsigned int>(i) >= this->rows()
         || j < 0 || static_cast<unsigned int>(j) >= this->cols()) {
-        std::__throw_out_of_range("RowMatrixT () access out of range"); 
+        std::out_of_range("RowMatrixT () access out of range"); 
     }
     return RowMatrixT<ElementType>::operator()(i, j);
   }

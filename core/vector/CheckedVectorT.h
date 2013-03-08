@@ -61,7 +61,7 @@ public:
   inline typename VectorT<ElementType>::reference
   operator[](const ptrdiff_t i) {
     if (i < 0 || static_cast<unsigned int>(i) >= this->size()) {
-		std::__throw_out_of_range("VectorT () access out of range"); 
+		std::out_of_range("VectorT () access out of range"); 
     }
     return this->data[i];
   }
