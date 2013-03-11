@@ -113,6 +113,18 @@ NICE_USELIB_LIBMAGICK
 
 #eigene definiton zum builden der sub-test-ordners
 NICE_BUILD_TESTS	 http://www.comp.nus.edu.sg/~cs3215/tools/cppunitAll.html
+running tests: <build ordner>: cmake
+running tests mit schönen übersicht: <build ordner>: cmake --output-on-failure
+
+
 NICE_BUILD_PROGS
 
 /wd"4244" /wd"4100" /wd"4127" /wd"4091" 
+
+#adding custom build step:
+	if(BUILD_CORE_TESTS_PERFORM_AS_POSTBUILD_STEP)
+		add_custom_command(TARGET ${__testname}
+                   POST_BUILD
+                   COMMAND "$<TARGET_FILE:${__testname}>"
+                   COMMENT "Unit Tests...")
+	else()
