@@ -327,7 +327,7 @@ inline obinstream& operator<<(obinstream &s, const LinAl::MatrixC<Tp> &A) {
 
 #else
 #ifndef LINAL_WARNING
-#pragma message WARNING("LinAl addons will not be compiled.")
+#pragma message NICE_WARNING("LinAl addons will not be compiled.")
 #define LINAL_WARNING
 #endif
 #endif

@@ -139,7 +139,7 @@ void ResourceStatistics::getStatistics(long & memory, double & userCpuTime, doub
 /// WIN32 PORT following here
 #include "CrossplatformDefines.h"
 
-#pragma message WARNING("ResourceStatistics class : not yet ported to WIN32 plattform")
+#pragma message NICE_WARNING("ResourceStatistics class : not yet ported to WIN32 plattform")
 
 ResourceStatistics::ResourceStatistics(int _mode)
 {

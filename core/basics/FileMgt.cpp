@@ -66,7 +66,7 @@ void FileMgt::DirectoryRecursive ( std::vector<string> & files, const std::strin
 
 	std::sort ( files.begin(), files.end() );
 #else
-	#pragma message WARNING("FileMgt::DirectoryRecursive() : Function not yet ported for platform WIN")
+	#pragma message NICE_WARNING("FileMgt::DirectoryRecursive() : Function not yet ported for platform WIN")
 	fthrow ( Exception, "FileMgt::DirectoryRecursive() : Function not yet ported for platform WIN");
 #endif
 }
@@ -109,7 +109,7 @@ std::string FileMgt::createTempFile ( const std::string & templatefn )
 
     return string(fn);
 #else
-	#pragma message WARNING("FileMgt::createTempFile() : Function not yet ported for platform WIN")
+	#pragma message NICE_WARNING("FileMgt::createTempFile() : Function not yet ported for platform WIN")
 	fthrow ( Exception, "FileMgt::createTempFile() : Function not yet ported for platform WIN");
 #endif
 }

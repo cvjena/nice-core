@@ -61,7 +61,7 @@ void choleskyDecompLargeScale ( const Matrix & A, Matrix & G, bool resetUpperTri
 				G(i,j) = 0;
 #else
   #ifndef CHOLESKYLINAL_WARNING
-	#pragma message WARNING("LinAl is not installed: choleskyDecompLargeScale will not be optimized.")
+	#pragma message NICE_WARNING("LinAl is not installed: choleskyDecompLargeScale will not be optimized.")
   #define CHOLESKYLINAL_WARNING
   #endif
 	choleskyDecomp ( A, G, resetUpperTriangle );
@@ -102,7 +102,7 @@ void choleskySolveMatrixLargeScale ( const Matrix & G, Matrix & B )
 		B.getDataPointer(), &ldb, &info );
 #else
   #ifndef CHOLESKYLINAL_WARNING
-	#warning "LinAl is not installed: choleskyInvertLargeScale will not be optimized."
+	#pragma message NICE_WARNING("LinAl is not installed: choleskyInvertLargeScale will not be optimized.")
   #define CHOLESKYLINAL_WARNING
   #endif
 	choleskyInvert ( G, B );
@@ -209,7 +209,7 @@ void choleskySolveLargeScale ( const Matrix & G, const Vector & b, Vector & x )
 
 #else
   #ifndef CHOLESKYLINAL_WARNING
-	#warning "LinAl is not installed: choleskyInvertLargeScale will not be optimized."
+	#pragma message NICE_WARNING("LinAl is not installed: choleskyInvertLargeScale will not be optimized.")
   #define CHOLESKYLINAL_WARNING
   #endif
 	choleskySolve ( G, b, x );

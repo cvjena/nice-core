@@ -9,14 +9,14 @@
 #define STRINGISE_IMPL(x) #x
 #define STRINGISE(x) STRINGISE_IMPL(x)
 
-// Use: #pragma message WARNING("My message")
+// Use: #pragma message NICE_WARNING("My message")
 #if _MSC_VER
 #   define FILE_LINE_LINK __FILE__ "(" STRINGISE(__LINE__) ") : "
-#   define WARNING(exp) (FILE_LINE_LINK "WARNING: " exp)
+#   define NICE_WARNING(exp) (FILE_LINE_LINK "WARNING: " exp)
 
 #   define __MESSAGE(text) __pragma( message(__FILE__ "(" STRINGISE(__LINE__) ")" text) ) 
-#   define ERROR(text) __MESSAGE( " : Error: " #text )
-#   define MESSAGE(text) __MESSAGE( ": " #text )
+#   define NICE_ERROR(text) __MESSAGE( " : Error: " #text )
+#   define NICE_MESSAGE(text) __MESSAGE( ": " #text )
 //#   define TODO(text) WARNING( TODO: text )
 //use as:
 //ERROR( This will be a compiler error );
