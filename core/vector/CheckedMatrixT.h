@@ -89,7 +89,7 @@ public:
   operator()(const ptrdiff_t i, const ptrdiff_t j) {
     if (i < 0 || static_cast<unsigned int>(i) >= this->rows()
         || j < 0 || static_cast<unsigned int>(j) >= this->cols()) {
-        std::out_of_range("MatrixT () access out of range"); 
+        throw std::out_of_range("MatrixT () access out of range"); 
     }
     return MatrixT<ElementType>::operator()(i, j);
   }

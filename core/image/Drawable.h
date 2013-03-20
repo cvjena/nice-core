@@ -65,7 +65,7 @@ public:
       #ifdef NICE_USELIB_FBASICS
         fthrow(Exception,"color has to few channels");
       #else
-        std::__throw_range_error("color has to few channels"); 
+        throw std::range_error("color has to few channels"); 
       #endif
     else
         doDraw(image, color);
