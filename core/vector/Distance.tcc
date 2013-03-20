@@ -45,7 +45,7 @@ T EuclidianDistance<T>::doCalculate(const VectorT<T>& v1, const VectorT<T>& v2) 
 
 //     #endif // NICE_USELIB_IPP
 
-    return T(std::sqrt(dist));
+    return T(std::sqrt( (double) dist)); //double cast neccessary, otherwise the template cast is disambigous
 }
 
 
