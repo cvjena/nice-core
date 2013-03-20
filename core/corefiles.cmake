@@ -1,5 +1,5 @@
 # find . -name "*.cpp" -not -ipath "*tests*" -not -ipath "*progs*" > corefiles.cmake.t
-SET(NICE_CORE_SRC
+SET(nice_core_SRC
 ./image/DeprecatedConverter.cpp
 ./image/Histogram.cpp
 ./image/Fourier.cpp
@@ -93,7 +93,7 @@ SET(NICE_CORE_SRC
 ./vector/ippwrapper.cpp
 )
 
-set(NICE_CORE_HDR
+set(nice_core_HDR
 ./image/ColorImageT.h
 ./image/ImageT.h
 ./image/Region.h

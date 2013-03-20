@@ -1,22 +1,37 @@
+####################################################
+## library individual settings
+
+#library name (name is appended to "nice_" to form the target library name)
+set(the_library "core")
+
+#define variable nice_<libname>_HDR and nice_<libname>_SRC for library header and source files (don't include progs and test source files here)
 include( corefiles.cmake)
+
+#define variable nice_<libname>_PROGFILES_HDR and nice_<libname>_PROGFILES_SRC for program header and source files (don't include library and test source files here)
 include( progfiles.cmake)
-include( testfiles.cmake)
 
-#message(STATUS "nice_core_hdr:${NICE_CORE_HDR}")
+#define variable nice_<libname>_TESTFILES_HDR and nice_<libname>_TESTFILES_SRC for unit test header and source files (don't include library and progs source files here)
+include( testfiles.cmake)	
 
-ADD_LIBRARY(nice_core ${NICE_BUILD_LIBS_STATIC_SHARED} ${NICE_CORE_HDR} ${NICE_CORE_SRC})
-TARGET_LINK_LIBRARIES(nice_core ${Boost_LIBRARIES} ${OPENGL_LIBRARY} ${GLUT_LIBRARY} ${QT_LIBRARIES})
-SET_PROPERTY(TARGET nice_core PROPERTY FOLDER "library")
-INSTALL(TARGETS nice_core DESTINATION lib)
+#add linkage dependencies to other libraries here
+set("nice_${the_library}_LINKING_DEPENDENCIES" "")
+
+#####################################################
+message(STATUS "adding library ${the_library}")
+
+ADD_LIBRARY("nice_${the_library}" ${NICE_BUILD_LIBS_STATIC_SHARED} ${nice_${the_library}_HDR} ${nice_${the_library}_SRC})
+TARGET_LINK_LIBRARIES("nice_${the_library}" "${nice_${the_library}_LINKING_DEPENDENCIES}" ${Boost_LIBRARIES} ${OPENGL_LIBRARY} ${GLUT_LIBRARY} ${QT_LIBRARIES})
+SET_PROPERTY(TARGET "nice_${the_library}" PROPERTY FOLDER "library")
+INSTALL(TARGETS "nice_${the_library}" DESTINATION lib)
 
 
 if(BUILD_CORE_PROGS)
   message(STATUS "building progs:")
-  foreach(__progcpp ${NICE_PROGFILES_SRC})
+  foreach(__progcpp ${nice_${the_library}_PROGFILES_SRC})
     get_filename_component(__progname ${__progcpp} NAME_WE )
     message(STATUS "progname: ${__progname} ${__progcpp}")
     ADD_EXECUTABLE( ${__progname} ${__progcpp})
-    TARGET_LINK_LIBRARIES(${__progname} nice_core)
+    TARGET_LINK_LIBRARIES(${__progname} "nice_${the_library}")
     INSTALL(TARGETS ${__progname} DESTINATION bin)
 	SET_PROPERTY(TARGET ${__progname} PROPERTY FOLDER "programs")
   endforeach()
@@ -25,12 +40,12 @@ endif()
 if(BUILD_CORE_TESTS)
   INCLUDE_DIRECTORIES(${CPPUNIT_INCLUDE_DIR})
   message(STATUS "building tests:")
-  foreach(__testcpp ${NICE_TESTFILES_SRC})
+  foreach(__testcpp ${nice_${the_library}_TESTFILES_SRC})
     get_filename_component(__testname ${__testcpp} NAME_WE )
     message(STATUS "unittest: ${__testname} ${__testcpp}")
     
     ADD_EXECUTABLE( ${__testname} ../templates/cppUnitTestRunner.cpp ${__testcpp})
-    TARGET_LINK_LIBRARIES(${__testname} nice_core ${CPPUNIT_LIBRARIES} )
+    TARGET_LINK_LIBRARIES(${__testname} "nice_${the_library}" ${CPPUNIT_LIBRARIES} )
 
     INSTALL(TARGETS ${__testname} DESTINATION tests)
 	SET_PROPERTY(TARGET ${__testname} PROPERTY FOLDER "unittests")
@@ -39,7 +54,7 @@ if(BUILD_CORE_TESTS)
 endif()
 
 #####
- set(the_module "nice_core")
+ set(the_module "nice_${the_library}")
  if(ENABLE_SOLUTION_FOLDERS)
     set_target_properties(${the_module} PROPERTIES FOLDER "modules")
   endif()
@@ -82,35 +97,3 @@ endif()
 #       endif()
 #     endforeach()
 #   endif()
-
-
-#############################################################
-# set(NICE_CURR_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-# ocv_glob_modules(${NICE_CURR_DIR})
-#ocv_add_module(core)
-
-#ocv_module_include_directories()
-#ocv_glob_module_sources()
-#ocv_create_module()
-
-
-# set(NICE_CURR_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-# ocv_glob_modules(${NICE_CURR_DIR})
-
-# ADD_EXECUTABLE(testConfig ./basics/progs/testConfig.cpp)
-# ADD_EXECUTABLE(testMemoryUsage ./basics/progs/testMemoryUsage.cpp)
-
-# TARGET_LINK_LIBRARIES(testConfig libnice_core_basics libnice_core_vector)
-# TARGET_LINK_LIBRARIES(testMemoryUsage libnice_core_basics)
-
-# INSTALL(TARGETS testConfig DESTINATION bin)
-# INSTALL(TARGETS testMemoryUsage DESTINATION bin)
-
-
-###
-
-#CONFIGURE_FILE(
-#  "CMakeDefinesConfig.h.in"
-#  "${PROJECT_BINARY_DIR}/CMakeDefinesConfig.h"
-#)
-#include_directories("${PROJECT_BINARY_DIR}")
