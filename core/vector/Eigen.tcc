@@ -30,7 +30,7 @@ VectorT<T> maxEigenVector(const MatrixT<T>& a) {
 }
 
 template<class T>
-VectorT<T> *eigenvalues(const MatrixT<T> &A, VectorT<T> *evals=NULL)
+VectorT<T> *eigenvalues(const MatrixT<T> &A, VectorT<T> *evals)
 {
     size_t vsize=A.cols();
     if(A.rows()!=vsize)
@@ -61,17 +61,18 @@ void eigenvectorvalues(const MatrixT<T> &A, MatrixT<T> &evecs,  VectorT<T> &eval
         evecs.resize(vsize,vsize);
     if(evals.size()!=vsize)
         evals.resize(vsize);
-    T buffer[vsize*vsize];
+    T *buffer = new T[vsize*vsize];
     size_t tsize=sizeof(T);
     IppStatus ret = ippmEigenValuesVectorsSym_m(A.getDataPointer(), vsize*tsize, tsize, buffer,
                                                 evecs.getDataPointer(), vsize*tsize, tsize, evals.getDataPointer(), vsize);
     evecs.transposeInplace();
+	delete [] buffer;
 	if(ret!=ippStsNoErr)
 	   _THROW_EVector(ippGetStatusString(ret));
 }
 
 template<class T>
-VectorT<T> *eigenvalues(const RowMatrixT<T> &A, VectorT<T> *evals=NULL)
+VectorT<T> *eigenvalues(const RowMatrixT<T> &A, VectorT<T> *evals)
 {
     size_t vsize=A.cols();
     if(A.rows()!=vsize)
