@@ -1653,7 +1653,7 @@ template<class P>
 inline IppStatus ippsNorm_L2(const P* pSrc, int len, P* pNorm) {
  if(len==0)
      return ippStsSizeErr;
- *pNorm = static_cast<P>(::sqrt(std::inner_product(pSrc, pSrc + len, pSrc, static_cast<P>(0))));
+ *pNorm = static_cast<P>(::sqrt((double)std::inner_product(pSrc, pSrc + len, pSrc, static_cast<P>(0))));
  return ippStsNoErr;
 }
 template<class P1, class P2>
