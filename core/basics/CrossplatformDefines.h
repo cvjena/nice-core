@@ -24,7 +24,7 @@
 //TODO( Still have to fix 3D rendering );
 
 #else//__GNUC__ - may need other defines for different compilers
-#   define WARNING(exp) ("WARNING: " exp)
+#   define NICE_WARNING(exp) ("WARNING: " exp)
 #endif
 
 //
