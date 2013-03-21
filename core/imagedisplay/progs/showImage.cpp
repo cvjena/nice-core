@@ -31,13 +31,13 @@ int main ( int argc, char **argv )
   return 0;
 }
 #else
-#warning "showImage only works with GLUT"
+#pragma message NICE_WARNING("showImage only works with GLUT")
 int main ( void ) {
   fthrow ( Exception, "Please install the GLUT development files..." );
 }
 #endif
 #else
-#warning "showImage only works with Qt"
+#pragma message NICE_WARNING("showImage only works with Qt")
 int main ( void ) {
   fthrow ( Exception, "Please install the Qt development files..." );
 }

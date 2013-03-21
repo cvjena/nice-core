@@ -6,8 +6,9 @@
 #include "core/imagedisplay/ImageDisplay.h"
 
 #include <iostream>
-
+#ifdef NICE_USELIB_GLUT
 #include <GL/glut.h>
+#endif
 #include <qcursor.h>
 #include <q3filedialog.h>
 #include <qapplication.h>
@@ -283,7 +284,8 @@ void ImageDisplay::paintGL() {
   }
 
   if ( texts.size() > 0 ) {
-    glEnable ( GL_BLEND );
+#ifdef NICE_USELIB_GLUT
+	  glEnable ( GL_BLEND );
     glBlendFunc ( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
     for ( uint i = 0; i < texts.size(); ++i ) {
@@ -305,16 +307,24 @@ void ImageDisplay::paintGL() {
 
     glDisable ( GL_BLEND );
     glFlush();
+#else
+	  throw std::exception("GLUT lib not availabe, recompile using GLUT!");
+#endif
   }
 
   paintGLObjects();
 }
 
 void ImageDisplay::setGLProjection ( void ) {
+#ifdef NICE_USELIB_GLUT  
   glViewport ( 0, 0, width(), height() );
   glMatrixMode ( GL_PROJECTION );
   glLoadIdentity();
   gluOrtho2D ( 0.0, ( GLdouble ) width(), 0.0, ( GLdouble ) height() );
+#else
+	  throw std::exception("GLUT lib not availabe, recompile using GLUT!");
+#endif
+
 }
 
 void ImageDisplay::paintGLObjects ( void ) {

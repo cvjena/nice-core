@@ -56,7 +56,9 @@ void ArrayPlot::paintGL ( void ) {
   glViewport ( 0, 0, width(), height() );
   glMatrixMode ( GL_PROJECTION );
   glLoadIdentity();
+#ifdef NICE_USELIB_GLUT
   gluOrtho2D ( 0.0, ( GLdouble ) width(), 0.0, ( GLdouble ) height() );
+#endif
 
   double quadWidth = width() / ( double ) ( m_width );
   double quadHeight = height() / ( double ) ( m_height );

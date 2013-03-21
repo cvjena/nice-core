@@ -5,7 +5,9 @@
  */
 #include "core/imagedisplay/QtFramework.h"
 #include "core/imagedisplay/DefaultMainWindow.h"
-#include <GL/glut.h>
+#ifdef NICE_USELIB_GLUT
+	#include <GL/glut.h>
+#endif
 
 namespace NICE {
 
@@ -20,7 +22,11 @@ QtFramework::QtFramework()
   fake_argv[0][1] = '\0';
   //application.reset(new QApplication(argc, argv));
   application = new QApplication(fake_argc, fake_argv);
+
+#ifdef NICE_USELIB_GLUT
   glutInit(&fake_argc, fake_argv);
+#endif
+
 #ifndef WIN32
   std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
 #endif
@@ -29,7 +35,10 @@ QtFramework::QtFramework()
 QtFramework::QtFramework(int& argc, char** argv)
     : application(new QApplication(argc, argv)), mainWindow(NULL) {
   fake_argv = NULL;
+#ifdef NICE_USELIB_GLUT
   glutInit(&argc, argv);
+#endif
+
 #ifndef WIN32
   std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
 #endif
