@@ -28,11 +28,13 @@ IF(WIN32)
 ELSE(WIN32)
   # On unix system, debug and release have the same name
   FIND_LIBRARY(CPPUNIT_LIBRARY cppunit
+               ${CPPUNIT_INCLUDE_DIR}/../lib64
                ${CPPUNIT_INCLUDE_DIR}/../lib
                /usr/local/lib
                /usr/lib)
   FIND_LIBRARY(CPPUNIT_DEBUG_LIBRARY cppunit
                ${CPPUNIT_INCLUDE_DIR}/../lib
+               ${CPPUNIT_INCLUDE_DIR}/../lib64
                /usr/local/lib
                /usr/lib)
 ENDIF(WIN32)

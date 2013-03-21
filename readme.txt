@@ -112,10 +112,32 @@ NICE_USELIB_JPG
 NICE_USELIB_LIBMAGICK
 
 #eigene definiton zum builden der sub-test-ordners
-NICE_BUILD_TESTS	 http://www.comp.nus.edu.sg/~cs3215/tools/cppunitAll.html
-running tests: <build ordner>: cmake
-running tests mit schönen übersicht: <build ordner>: cmake --output-on-failure
 
+--------------- CPPUNIT verwenden ---------------------
+1) installation
+1-a) linux
+  if not already in path then:
+    download source from http://sourceforge.net/projects/cppunit/files/cppunit/1.12.1/cppunit-1.12.1.tar.gz/download
+    unzip
+    create build_<pcname> dir
+    cd build_<pcname>
+    ../configure - -prefix=<path>/build_<pcname>/install
+    make 
+    make install
+    put <path>/build_<pcname>/install/include into system path variable, example in .bashrc:
+    PATH=/home/ruehle/libs/cppunit-1.12.1/build_sigma15/install/include/:$PATH
+
+1-b) Windows:
+  download http://www.comp.nus.edu.sg/~cs3215/tools/cppunitAll.html
+  build with visual studio
+  put path to generated lib in path variable (pointing to the */include path)
+2) enabling building cpp unit tests
+  NICE_BUILD_TESTS   
+  running tests: <build ordner>: cmake
+  make
+3) run the unit tests
+im <build ordner>: cmake --output-on-failure
+--------------------------------------------------------------
 
 NICE_BUILD_PROGS
 
