@@ -128,3 +128,5 @@ NICE_BUILD_PROGS
                    COMMAND "$<TARGET_FILE:${__testname}>"
                    COMMENT "Unit Tests...")
 	else()
+###
+installing boost:
