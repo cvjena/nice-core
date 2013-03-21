@@ -8,3 +8,6 @@ BUILD_*
 objrec-froehlichexp/
 slim-pkg-config/pkg-config
 setenv_local.sh
+*.vcxproj*
+*.dir
+*/CMakeFiles/*
