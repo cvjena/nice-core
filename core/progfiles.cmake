@@ -1,5 +1,5 @@
 # find . -name "*.cpp" -ipath "*progs*" > progfiles.cmake.t
-set(NICE_PROGFILES_SRC 
+set(nice_core_PROGFILES_SRC 
 ./image/progs/compareImages.cpp
 ./image/progs/convertImageNice.cpp
 ./image/progs/testApproxGaussFilter.cpp
@@ -18,5 +18,5 @@ set(NICE_PROGFILES_SRC
 ./vector/progs/testCholeskySpeed.cpp
 )
 
-set(NICE_PROGFILES_HDR
+set(nice_core_PROGFILES_HDR
 )

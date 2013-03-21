@@ -91,7 +91,7 @@ T ColorT<T>::gray() const
     #ifdef NICE_USELIB_FBASICS
       fthrow(Exception,"invalid channel number");
     #else
-      std::__throw_range_error("invalid channel number");
+      throw std::range_error("invalid channel number");
     #endif
   }
     // convert rgb to gray
@@ -102,7 +102,7 @@ T ColorT<T>::gray() const
     #ifdef NICE_USELIB_FBASICS
       fthrow(Exception,"invalid channel number");
     #else
-      std::__throw_range_error("invalid channel number");
+      throw std::range_error("invalid channel number");
     #endif
   }
 }

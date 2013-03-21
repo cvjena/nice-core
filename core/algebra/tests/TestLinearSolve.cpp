@@ -51,16 +51,28 @@ void TestLinearSolve::TestLinearSolveComputation()
     NICE::Matrix T(rows, cols, 0.0);
 
     // use a fixed seed, its a test case
+#ifdef WIN32
+	srand(0);
+#else
     srand48(0);
+#endif
 
     // generate random symmetric matrix
     for (uint i = 0 ; i < rows ; i++)
         for (uint j = i ; j < cols ; j++)
         {
             if (sparse_prob != 0.0)
+#ifdef WIN32
+            if (sparse_prob != 0.0)
+                if ( double( rand() ) / RAND_MAX < sparse_prob)
+                    continue;
+            T(i, j) = double( rand() ) / RAND_MAX;
+#else
+            if (sparse_prob != 0.0)
                 if (drand48() < sparse_prob)
                     continue;
             T(i, j) = drand48();
+#endif
             T(j, i) = T(i, j);
         }
     // use positive definite matrices
@@ -80,7 +92,11 @@ void TestLinearSolve::TestLinearSolveComputation()
     {
       NICE::Vector x ( rows );
       for ( uint j = 0 ; j < x.size(); j++ )
+#ifdef WIN32
+		x[j] = double( rand() ) / RAND_MAX;
+#else
         x[j] = drand48();
+#endif
       Vector yg;
       Vector ys;
       Tg.multiply ( yg, x );

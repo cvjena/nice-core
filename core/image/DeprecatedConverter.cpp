@@ -844,7 +844,7 @@ Image* DeprecatedConverter::filterY(const Image& src, const VectorT<int> &kernel
     return result;
   #else // NICE_USELIB_IPP
   /*
-#warning untested
+#pragma message NICE_WARNING("untested")
     int yend=src.height()-anchor;
     int xend=src.width();
     Image &d=*result;
@@ -903,7 +903,7 @@ Image* DeprecatedConverter::filter(const Image& src, const ImageT<int> &kernel, 
     }
   #else // NICE_USELIB_IPP
   /*
-#warning untested
+#pragma message NICE_WARNING("untested")
     int yend=src.height()-anchory;
     int xend=src.width()-anchorx;
     Image &d=*result;

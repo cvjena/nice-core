@@ -87,8 +87,8 @@ VectorT<T> *Arnoldi_MGS(const MatrixT<T> &A, size_t nr, VectorT<T> *v=NULL)
 
 }
 
-#ifdef __GNUC__
+//#ifdef __GNUC__
   #include <core/vector/Eigen.tcc>
-#endif
+//#endif
 
 #endif // EIGEN_H

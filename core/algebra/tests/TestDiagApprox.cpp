@@ -37,7 +37,11 @@ void TestDiagApprox::TestDiagApproxComputation()
     uint maxiterations =  20;
    
    // use a fixed seed, its a test case
+#ifdef WIN32
+	srand(0);
+#else
     srand48(0);
+#endif
  
     DiagonalMatrixApprox diagApprox ( true /*verbose*/ );
     
@@ -47,7 +51,11 @@ void TestDiagApprox::TestDiagApproxComputation()
    
     for (uint j = 0 ; j < rows ; j++)
     {
+#ifdef WIN32
+		 Tdiag(j, j) = double( rand() ) / RAND_MAX;
+#else
       Tdiag(j, j) = drand48();
+#endif
     }
  
     diagApprox.approx ( Tdiag, D );
@@ -70,7 +78,11 @@ void TestDiagApprox::TestDiagApproxComputation()
     for (uint i = 0 ; i < rows ; i++)
         for (uint j = i ; j < cols ; j++)
         {
+#ifdef WIN32
+		 T(i, j) = double( rand() ) / RAND_MAX;
+#else
             T(i, j) = drand48();
+#endif
             T(j, i) = T(i, j);
         }
 

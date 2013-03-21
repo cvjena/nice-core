@@ -22,8 +22,9 @@ ColorImageT<P>& ColorImageT<P>::operator=(const ColorT<P> &color)
   ippiSet_C3R(color.color(), this->getPixelPointer(), this->getStepsize(),
                 ippiSize);
 #else
-  Ipp8u* pos=reinterpret_cast<Ipp8u*>(this->getPixelPointer());
-  P *row[this->height()];
+  //Ipp8u* pos=reinterpret_cast<Ipp8u*>(this->getPixelPointer());
+  P* pos=reinterpret_cast<P*>(this->getPixelPointer());
+  P **row = new P*[this->height()];
     for(int y=0;y<this->height(); ++y) {
     row[y]=reinterpret_cast<P*>(pos);
     pos+=this->getStepsize();
@@ -37,6 +38,7 @@ ColorImageT<P>& ColorImageT<P>::operator=(const ColorT<P> &color)
         }
         }
   }
+	delete [] p;
 #endif
     return *this;
 }
@@ -50,7 +52,7 @@ ColorImageT<P>& ColorImageT<P>::operator=(const P c[3])
               ippiSize);
 #else
   Ipp8u* pos=reinterpret_cast<Ipp8u*>(this->getPixelPointer());
-  P *row[this->height()];
+  P *row = new P[this->height()];
   for(int y=0;y<this->height(); ++y) {
     row[y]=reinterpret_cast<P*>(pos);
     pos+=this->getStepsize();
@@ -64,6 +66,7 @@ ColorImageT<P>& ColorImageT<P>::operator=(const P c[3])
       }
     }
   }
+  delete [] p;
 #endif
   return *this;
 }

@@ -17,7 +17,7 @@
     #include <ipps.h>
     #include <ippm.h>
   #else
-    #warning "Not fully supported with IPP < 4"
+	#pragma message NICE_WARNING("Not fully supported with IPP < 4")
   #endif
 
 #else // NICE_USELIB_IPP

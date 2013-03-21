@@ -41,7 +41,7 @@ double Timer::getCurrentAbsoluteTime() const {
 	return getNow();
  #else
 	return -1.0;
-	#pragma message WARNING("Timer::getCurrentAbsoluteTime() : not yet ported to WIN32 plattform, returning -1")
+	#pragma message NICE_WARNING("Timer::getCurrentAbsoluteTime() : not yet ported to WIN32 plattform, returning -1")
  #endif
 #else
 #ifdef LIMUN_AIBO_MODE
@@ -93,7 +93,7 @@ double Timer::getNow()
 	return  diff.total_seconds();
  #else
 	return -1.0;
-	#pragma message WARNING("Timer::getNow() : not yet ported to WIN32 plattform, returning -1")
+	#pragma message NICE_WARNING("Timer::getNow() : not yet ported to WIN32 plattform, returning -1")
  #endif
 #else
 #ifdef LIMUN_AIBO_MODE
@@ -125,7 +125,7 @@ long int Timer::getMicroseconds() {
 	return getNow();
  #else
 	return -1.0;
-	#pragma message WARNING("Timer::getMicroseconds() : not yet ported to WIN32 plattform, returning -1")
+	#pragma message NICE_WARNING("Timer::getMicroseconds() : not yet ported to WIN32 plattform, returning -1")
  #endif
 #else
 
@@ -174,7 +174,7 @@ void Timer::reset() {
       return double ( time.tv_sec ) + double ( time.tv_usec ) * 1e-6;
 #else
 		return -1.0;
-		#pragma message WARNING("Timer::convertTime() : not yet ported to WIN32 plattform, returning -1")
+		#pragma message NICE_WARNING("Timer::convertTime() : not yet ported to WIN32 plattform, returning -1")
 #endif
     }
 

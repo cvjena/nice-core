@@ -246,7 +246,7 @@ inline bool isFinite(double x)
 	#ifdef NICE_BOOST_FOUND
 	    return boost::math::isfinite(x);
 	#else
-		ERROR("isFinite() not defined (and neither is boost found for compensation...)")
+		NICE_ERROR("isFinite() not defined (and neither is boost found for compensation...)")
 	#endif
 #else
 	return finite(x);

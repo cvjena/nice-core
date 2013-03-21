@@ -52,11 +52,11 @@ T Pixel<T>::gray() const
     if(this->size()==1) {
       return  this->constData[0]; 
     } else if(this->size()==0) {
-      this->__throw_range_error("invalid channel number"); 
+      throw std::range_error("invalid channel number"); 
     } else if(this->size()==3) {
-      this->__throw_range_error("not implemented yet"); 
+      throw std::range_error("not implemented yet"); 
     } else {
-      this->__throw_range_error("invalid channel number"); 
+      throw std::range_error("invalid channel number"); 
     }
 }
 

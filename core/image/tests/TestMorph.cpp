@@ -28,7 +28,7 @@ void TestMorph::testRanking()
         for(int i=1; i<=3; ++i)
             srcall.setPixelQuick(i,j, i+3*(j-1) );
     for(int i=1; i<=9; ++i) {
-        result = rank(srcall, 1,i);
+        result = NICE::rank(srcall, 1,i);
         CPPUNIT_ASSERT_EQUAL(i, static_cast<int>(result->getPixel(2,2)));
     }
 
@@ -40,32 +40,32 @@ void TestMorph::testRanking()
             src(x,y) = x+y;
 
     // test exceptions
-    CPPUNIT_ASSERT_THROW(rank(src,1,0), ImageException);
-    CPPUNIT_ASSERT_THROW(rank(src,1,10), ImageException);
+    CPPUNIT_ASSERT_THROW(NICE::rank(src,1,0), ImageException);
+    CPPUNIT_ASSERT_THROW(NICE::rank(src,1,10), ImageException);
 
     // test ranking operation
         // rank = min
-        result = rank(src, 1,1);
+        result = NICE::rank(src, 1,1);
         for(int j=1; j<height-1; ++j)
             for(int i=1; i<width-1; ++i)
                 CPPUNIT_ASSERT_EQUAL((i-1)+(j-1), static_cast<int>(result->getPixel(i,j)));
         // rank = 2
-        result = rank(src, 1,2,result);
+        result = NICE::rank(src, 1,2,result);
         for(int j=1; j<height-1; ++j)
             for(int i=1; i<width-1; ++i)
                 CPPUNIT_ASSERT_EQUAL(i+j-1      , static_cast<int>(result->getPixel(i,j)));
         // rank = median
-        result = rank(src, 1,5,result);
+        result = NICE::rank(src, 1,5,result);
         for(int j=1; j<height-1; ++j)
             for(int i=1; i<width-1; ++i)
                 CPPUNIT_ASSERT_EQUAL(i+j        , static_cast<int>(result->getPixel(i,j)));
         // rank = 7
-        result = rank(src, 1,7,result);
+        result = NICE::rank(src, 1,7,result);
         for(int j=1; j<height-1; ++j)
             for(int i=1; i<width-1; ++i)
                 CPPUNIT_ASSERT_EQUAL(i+j+1      , static_cast<int>(result->getPixel(i,j)));
         // rank = max
-        result = rank(src, 1,9,result);
+        result = NICE::rank(src, 1,9,result);
         for(int j=1; j<height-1; ++j)
             for(int i=1; i<width-1; ++i)
                 CPPUNIT_ASSERT_EQUAL((i+1)+(j+1), static_cast<int>(result->getPixel(i,j)));
@@ -73,7 +73,7 @@ void TestMorph::testRanking()
     // test IP ranking operation with the help of the testet ranking operation
 
         // rank = min
-        result = rank(src, 1,1);
+        result = NICE::rank(src, 1,1);
         temp   = new Image(src);
         rankingIP(*temp, 1);
 
@@ -81,7 +81,7 @@ void TestMorph::testRanking()
             for(int x=1; x<width-1; ++x)
                 CPPUNIT_ASSERT_EQUAL( static_cast<int>((*result)(x,y)), static_cast<int>((*temp)(x,y)) );
         // rank = 2
-        result = rank(src, 1,2,result);
+        result = NICE::rank(src, 1,2,result);
         temp   = new Image(src);
         rankingIP(*temp, 2);
         for(int y=1; y<height-1; ++y)
@@ -89,7 +89,7 @@ void TestMorph::testRanking()
                 CPPUNIT_ASSERT_EQUAL( static_cast<int>((*result)(x,y)), static_cast<int>((*temp)(x,y)) );
 
         // rank = median
-        result = rank(src, 1,5,result);
+        result = NICE::rank(src, 1,5,result);
         temp   = new Image(src);
         rankingIP(*temp, 5);
         for(int y=1; y<height-1; ++y)
@@ -97,7 +97,7 @@ void TestMorph::testRanking()
                 CPPUNIT_ASSERT_EQUAL( static_cast<int>((*result)(x,y)), static_cast<int>((*temp)(x,y)) );
 
         // rank = 7
-        result = rank(src, 1,7,result);
+        result = NICE::rank(src, 1,7,result);
         temp   = new Image(src);
         rankingIP(*temp, 7);
         for(int y=1; y<height-1; ++y)
@@ -105,7 +105,7 @@ void TestMorph::testRanking()
                 CPPUNIT_ASSERT_EQUAL( static_cast<int>((*result)(x,y)), static_cast<int>((*temp)(x,y)) );
 
         // rank = max
-        result = rank(src, 1,9,result);
+        result = NICE::rank(src, 1,9,result);
         temp   = new Image(src);
         rankingIP(*temp, 9);
         for(int y=1; y<height-1; ++y)
@@ -404,35 +404,35 @@ void TestMorph::testRankingWithStructure()
 
         // rank = 1
         rresult   = erode(src);
-        result    = rank(src, structure, 1);
+        result    = NICE::rank(src, structure, 1);
         for(int y=1; y<src.height()-1; ++y)
             for(int x=1; x<src.width()-1; ++x)
                 CPPUNIT_ASSERT_EQUAL( static_cast<int>((*rresult)(x,y)), static_cast<int>((*result)(x,y)) );
 
         // rank = 2
-        rresult   = rank(src, 1, 2, rresult);
-        result    = rank(src, structure, 2, result);
+        rresult   = NICE::rank(src, 1, 2, rresult);
+        result    = NICE::rank(src, structure, 2, result);
         for(int y=1; y<src.height()-1; ++y)
             for(int x=1; x<src.width()-1; ++x)
                 CPPUNIT_ASSERT_EQUAL( static_cast<int>((*rresult)(x,y)), static_cast<int>((*result)(x,y)) );
 
         // rank = median
         rresult   = median(src, rresult);
-        result    = rank(src, structure, 5, result);
+        result    = NICE::rank(src, structure, 5, result);
         for(int y=1; y<src.height()-1; ++y)
             for(int x=1; x<src.width()-1; ++x)
                 CPPUNIT_ASSERT_EQUAL( static_cast<int>((*rresult)(x,y)), static_cast<int>((*result)(x,y)) );
 
         // rank = 7
-        rresult   = rank(src, 1, 7, rresult);
-        result    = rank(src, structure, 7, result);
+        rresult   = NICE::rank(src, 1, 7, rresult);
+        result    = NICE::rank(src, structure, 7, result);
         for(int y=1; y<src.height()-1; ++y)
             for(int x=1; x<src.width()-1; ++x)
                 CPPUNIT_ASSERT_EQUAL( static_cast<int>((*rresult)(x,y)), static_cast<int>((*result)(x,y)) );
 
         // rank = 9
         rresult   = dilate(src, rresult);
-        result    = rank(src, structure, 9, result);
+        result    = NICE::rank(src, structure, 9, result);
         for(int y=1; y<src.height()-1; ++y)
             for(int x=1; x<src.width()-1; ++x)
                 CPPUNIT_ASSERT_EQUAL( static_cast<int>((*rresult)(x,y)), static_cast<int>((*result)(x,y)) );

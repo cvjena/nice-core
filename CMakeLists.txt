@@ -30,18 +30,15 @@ IF (Boost_FOUND)
     ADD_DEFINITIONS( "-DNICE_BOOST_FOUND" )
 ENDIF()
 
-if(WIN32)
-  set(CPPUNIT_INCLUDE_DIR "C:/Libraries/cppunit-1.12.1.VS2010/cppunit-1.12.1/include/")
-endif()
 FIND_PACKAGE(CppUnit)
 IF (CPPUNIT_FOUND)
 	message(STATUS "CppUnit-dir: ${CPPUNIT_INCLUDE_DIR}")
     INCLUDE_DIRECTORIES(${CPPUNIT_INCLUDE_DIR})
     ADD_DEFINITIONS( "-DNICE_USELIB_CPPUNIT" )
 else()
-  set(CPPUNIT_INCLUDE_DIR "/usr/include/") #can be found in  /usr/include/cppunit
-  ADD_DEFINITIONS( "-DNICE_USELIB_CPPUNIT" )
-  message(STATUS "CppUnit not found, but : ${CPPUNIT_INCLUDE_DIR}")
+  #set(CPPUNIT_INCLUDE_DIR "/usr/include/") #can be found in  /usr/include/cppunit
+ # ADD_DEFINITIONS( "-DNICE_USELIB_CPPUNIT" )
+  message(STATUS "CppUnit not found")
 ENDIF()
 
 find_package(OpenMP)
@@ -67,6 +64,7 @@ endif()
 
 FIND_PACKAGE(Qt4)# COMPONENTS Qt3Support QtOpenGl)
 SET(QT_USE_QTOPENGL TRUE)
+SET(QT_USE_QTXML TRUE)
 SET(QT_USE_QT3SUPPORT TRUE)
 if(QT_FOUND)
 #  ADD_DEFINITIONS("-DQT3_SUPPORT")
@@ -128,8 +126,12 @@ set(BUILD_CORE_BASICS ON)
 #set(BUILD_CORE_OPTIMIZATION ON)
 #set(BUILD_CORE_IMAGE ON)
 #set(BUILD_CORE_MATLABACCESS ON)
-set(BUILD_CORE_TESTS ON)
-set(BUILD_CORE_TESTS_PERFORM_AS_POSTBUILD_STEP OFF)
+if(CPPUNIT_FOUND)
+	set(BUILD_CORE_TESTS OFF)
+else()
+	set(BUILD_CORE_TESTS OFF)
+endif()
+	
 set(BUILD_CORE_PROGS OFF)
 
 if( BUILD_CORE_TESTS)
@@ -158,6 +160,7 @@ set(NICE_CURR_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 	# endif()
 # endforeach()
 ADD_SUBDIRECTORY(core)
+ADD_SUBDIRECTORY(vislearning)
   
 
 # doxygen support

@@ -418,7 +418,7 @@ ImageT<P>* DeprecatedConverter::filterX(const ImageT<P>& src, const VectorT<floa
     return result;
   #else // NICE_USELIB_IPP
 	/*
-#warning untested
+#pragma message NICE_WARNING("untested")
     int yend=src.height();
     int xend=src.width()-kernel.size()+anchor;
     ImageT<P> &d=*result;
@@ -723,6 +723,7 @@ VectorT<int>* DeprecatedConverter::histogram(const ColorImageT<P>& src, int min,
 template <class P>
 VectorT<int>* DeprecatedConverter::histogram(const ColorImageT<P>& src, VectorT<int> *histo, int  min, int max)
 {
+#ifdef NICE_USELIB_IPP
 	int	nolevels=histo->size()/3;
 	int levels[(nolevels+1)*3];
 	int pnolevels[3];
@@ -735,7 +736,7 @@ VectorT<int>* DeprecatedConverter::histogram(const ColorImageT<P>& src, VectorT<
 		pmax[i]=max;
 		pnolevels[i]=nolevels+1;
 	}
-  #ifdef NICE_USELIB_IPP
+ 
 	ippiHistogramEven_C3R(src.getPixelPointer(), src.getStepsize(), makeROIFullImage(src), phisto, plevels, pnolevels, pmin, pmax);
   #else // NICE_USELIB_IPP
     fthrow(ImageException,"Not yet supported without IPP.");

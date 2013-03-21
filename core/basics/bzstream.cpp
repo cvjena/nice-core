@@ -163,7 +163,7 @@ void bzstreambase::close() {
 } // namespace
 
 #else
-#pragma message WARNING("bzstream will not be compiled.")
+#pragma message NICE_WARNING("bzstream will not be compiled.")
 #endif
 
 // ============================================================================
