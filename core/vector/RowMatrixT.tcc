@@ -383,7 +383,7 @@ template<typename ElementType>
 bool RowMatrixT<ElementType>::containsNaN() const {
   for (unsigned int r = 0; r < rows(); r++) {
     for (unsigned int c = 0; c < cols(); c++) {
-      if (isNaN((*this)(r, c))) {
+      if (NICE::isNaN((*this)(r, c))) {
         return true;
       }
     }

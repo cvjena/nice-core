@@ -29,13 +29,13 @@
  * CppUnit macro asserting that \c b is NOT NaN (Not a Number)
  */
 #define CPPUNIT_ASSERT_NOT_NAN(b) \
-        CPPUNIT_ASSERT_MESSAGE("Value is NaN", !isNaN(b));
+        CPPUNIT_ASSERT_MESSAGE("Value is NaN", !NICE::isNaN(b));
 
 /**
  * CppUnit macro asserting that \c b IS NaN (Not a Number)
  */
 #define CPPUNIT_ASSERT_IS_NAN(b) \
-        CPPUNIT_ASSERT_MESSAGE("Value is not NaN", isNaN(b));
+        CPPUNIT_ASSERT_MESSAGE("Value is not NaN", NICE::isNaN(b));
 
 
 /**
@@ -44,7 +44,7 @@
 #define CPPUNIT_ASSERT_DOUBLES_EQUAL_NOT_NAN_STREAMABLE(a,b,c,s) \
   { \
     bool uaieuaieOK = true; \
-    if (!isZero(double(a) - double(b), double(c)) || isNaN(b)) { \
+    if (!isZero(double(a) - double(b), double(c)) || NICE::isNaN(b)) { \
       uaieuaieOK = false; \
     } \
     CPPUNIT_ASSERT_STREAMABLE(uaieuaieOK, \

@@ -23,7 +23,7 @@
     bool uaieuaieOK = true; \
     for (uint uiaeuiae = 0; uiaeuiae < (a).size(); ++uiaeuiae) { \
       if (!isZero((a)[uiaeuiae] - (b)[uiaeuiae], (c)) \
-          || isNaN((b)[uiaeuiae])) { \
+          || NICE::isNaN((b)[uiaeuiae])) { \
         uaieuaieOK = false; \
         break; \
       } \
@@ -51,7 +51,7 @@
     for (uint uiaeuiae = 0; uiaeuiae < (a).cols(); ++uiaeuiae) { \
       for (uint uiaeuiae2 = 0; uiaeuiae2 < (a).rows(); ++uiaeuiae2) { \
         if (!isZero((a)(uiaeuiae,uiaeuiae2) - (b)(uiaeuiae, uiaeuiae2), (c)) \
-            || isNaN((b)(uiaeuiae, uiaeuiae2))) {\
+            || NICE::isNaN((b)(uiaeuiae, uiaeuiae2))) {\
           uaieuaieOK = false; \
           break; \
         } \

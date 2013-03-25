@@ -673,7 +673,7 @@ MatrixT<ElementType>::operator _Op##= (const MatrixT<ElementType>& v) {   \
 		{
 			for (unsigned int r = 0; r < rows(); r++)
 			{
-				if (isNaN((*this)(r, c)))
+				if (NICE::isNaN((*this)(r, c)))
 				{
 					return true;
 				}
