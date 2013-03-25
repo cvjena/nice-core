@@ -448,7 +448,7 @@ void MultiChannelImageT<P>::calcIntegral( uint channel )
 }
 
 template<class P>
-P MultiChannelImageT<P>::getIntegralValue(int ulx, int uly, int lrx, int lry, int channel)
+P MultiChannelImageT<P>::getIntegralValue(int ulx, int uly, int lrx, int lry, int channel) const
 {
   ulx = std::max(ulx-1, -1);
   ulx = std::min(ulx, xsize-1);
