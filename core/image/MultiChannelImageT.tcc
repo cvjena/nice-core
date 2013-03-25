@@ -318,8 +318,8 @@ void MultiChannelImageT<P>::statistics( P & min, P & max, uint channel ) const
     if (( k == 0 ) || ( val < min ) ) min = val;
   }
   
-  assert(finite(max));
-  assert(finite(min));
+  assert(NICE::isFinite(max));
+  assert(NICE::isFinite(min));
 }
 
 template<class P>
