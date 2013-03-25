@@ -19,3 +19,59 @@ macro(nice_get_real_path VAR PATHSTR)
   endif()
 endmacro()
 
+
+macro(nice_build_library)
+  ADD_LIBRARY("nice_${the_library}" ${NICE_BUILD_LIBS_STATIC_SHARED} ${nice_${the_library}_HDR} ${nice_${the_library}_SRC})
+  TARGET_LINK_LIBRARIES("nice_${the_library}" ${nice_${the_library}_LINKING_DEPENDENCIES} ${Boost_LIBRARIES} ${OPENGL_LIBRARY} ${GLUT_LIBRARY} ${QT_LIBRARIES})
+  SET_PROPERTY(TARGET "nice_${the_library}" PROPERTY FOLDER "library")
+  INSTALL(TARGETS "nice_${the_library}" DESTINATION lib)
+endmacro()
+
+
+#using variables "the_library"
+#and subvariables ${nice_${the_library}_PROGFILES_SRC}
+macro(nice_add_progs)
+
+  if(BUILD_CORE_PROGS)
+    message(STATUS "building progs:")
+    
+    foreach(__progcpp ${nice_${the_library}_PROGFILES_SRC})
+      get_filename_component(__progname ${__progcpp} NAME_WE )
+      message(STATUS "progname: ${__progname} ${__progcpp}")
+    
+      set(prog_target_name "${the_library}_${__progname}")
+      ADD_EXECUTABLE( ${prog_target_name} ${__progcpp})
+      TARGET_LINK_LIBRARIES(${prog_target_name} "nice_${the_library}")
+      SET_TARGET_PROPERTIES(${prog_target_name} PROPERTIES OUTPUT_NAME "${__progname}")
+      
+      INSTALL(TARGETS ${prog_target_name} DESTINATION "bin/${the_library}")
+      
+      SET_PROPERTY(TARGET ${prog_target_name} PROPERTY FOLDER "programs/${the_library}")
+    
+    endforeach()
+  endif()
+
+endmacro()
+
+#using variables "the_library"
+#and subvariables ${nice_${the_library}_TESTFILES_SRC}
+macro(nice_add_unittests)
+
+  if(BUILD_CORE_TESTS)
+    INCLUDE_DIRECTORIES(${CPPUNIT_INCLUDE_DIR})
+    message(STATUS "building tests:")
+    foreach(__testcpp ${nice_${the_library}_TESTFILES_SRC})
+      get_filename_component(__testname ${__testcpp} NAME_WE )
+      message(STATUS "unittest: ${__testname} ${__testcpp}")
+      
+      ADD_EXECUTABLE( ${__testname} ../templates/cppUnitTestRunner.cpp ${__testcpp})
+      TARGET_LINK_LIBRARIES(${__testname} "nice_${the_library}" ${CPPUNIT_LIBRARIES} )
+
+      INSTALL(TARGETS ${__testname} DESTINATION "tests/${the_library}")
+      SET_PROPERTY(TARGET ${__testname} PROPERTY FOLDER "unittests/${the_library}")
+      ADD_TEST(${__testname} ${__testname})
+    endforeach()
+  endif()
+
+endmacro()
+
