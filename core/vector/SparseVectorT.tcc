@@ -443,7 +443,7 @@ bool SparseVectorT<I,V>::set ( I i , V newValue )
   {
     // behavior change (2/2/2012 by erik)
     if ( newValue > 1e-20 )
-      insert ( std::pair<I, V> ( i, newValue ) );
+      this->insert ( std::pair<I, V> ( i, newValue ) );
     //update our dimensions
     if ( i > dim ) //changed on 10-02-2012 by alex
       dim = i;
