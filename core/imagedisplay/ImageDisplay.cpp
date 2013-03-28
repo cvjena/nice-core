@@ -308,7 +308,7 @@ void ImageDisplay::paintGL() {
     glDisable ( GL_BLEND );
     glFlush();
 #else
-	  throw std::exception("GLUT lib not availabe, recompile using GLUT!");
+	 fthrow(Exception,"GLUT lib not availabe, recompile using GLUT!");
 #endif
   }
 
@@ -322,7 +322,7 @@ void ImageDisplay::setGLProjection ( void ) {
   glLoadIdentity();
   gluOrtho2D ( 0.0, ( GLdouble ) width(), 0.0, ( GLdouble ) height() );
 #else
-	  throw std::exception("GLUT lib not availabe, recompile using GLUT!");
+	  fthrow(Exception,"GLUT lib not availabe, recompile using GLUT!");
 #endif
 
 }
