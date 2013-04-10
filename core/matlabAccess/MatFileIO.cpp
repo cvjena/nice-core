@@ -30,7 +30,10 @@ namespace NICE {
       } 
       
       // Default destructor
-      MatFileIO::~MatFileIO() {}
+      MatFileIO::~MatFileIO() {
+        
+        Mat_Close(mat);
+      }
       
       //------------------------------------------------------
       // count number of stored variables
@@ -420,14 +423,14 @@ namespace NICE {
 	
 	if (matvar == NULL) {
 	  
-	  fthrow(Exception, "MatFileIO::getFeatureMatrixViaName(char * _name, feature_matrix_order order): variable with specified name does not exist");
+	  fthrow(Exception, "MatFileIO::getVectorViaName(NICE::Vector & vec, std::string _name): variable with specified name does not exist");
 	  return;
 	}
 	
 	// it can happen that a vector is treated as (N x 1) or (1 x N) matrix with two dimensions
 	if (matvar->rank > 2 || ( (matvar->rank == 2) && (matvar->dims[0] != 1) && (matvar->dims[1] != 1) ) ) {
 	  
-	  fthrow(Exception, "MatFileIO::getFeatureMatrixViaName(char * _name, feature_matrix_order order): dimension of variable > 1");
+	  fthrow(Exception, "MatFileIO::getVectorViaName(NICE::Vector & vec, std::string _name): dimension of variable > 1");
 	  return;
 	}  
 	
