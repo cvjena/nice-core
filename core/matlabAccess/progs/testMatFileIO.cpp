@@ -25,13 +25,21 @@ int main (int argc, char* argv[])
 #ifdef NICE_USELIB_MATIO	
   std::string filenameA = "/home/bodesheim/data/2012-01-09-testMatFileIO/sparse3x3matrixA.mat";
 
+#if defined(MAT73) && MAT73
+  printf("\nMAT73 defined \n");
+#endif  
+  
   // A
   MatFileIO matfileIOA = MatFileIO(filenameA,MAT_ACC_RDONLY);
   printf("\n%d \n", matfileIOA.getNumberOfVariables());
   
   sparse_t sparseA;
   matfileIOA.getSparseVariableViaName(sparseA,"A");
-  for (uint i = 0; i < sparseA.nzmax; i++) std::cout << ((double*)sparseA.data)[i]<< "  "; 
+  printf("\nget done\n");
+  printf("\n%d\n", (int) sparseA.nzmax);
+  printf("\n%d\n", (int) sparseA.ndata);
+  
+  for (uint i = 0; i < (int) sparseA.nzmax; i++) std::cout << ((double*)sparseA.data)[i]<< "  "; 
   std::cerr << std::endl;
   std::cerr << "now start reading imagenet-data" << std::endl;
   
@@ -71,27 +79,27 @@ int main (int argc, char* argv[])
   MatFileIO matfileIO = MatFileIO(filename,MAT_ACC_RDONLY);
   printf("\nnumber of variables: %d \n", matfileIO.getNumberOfVariables()); 
   
-  sparse_t *sparse;
-  matfileIO.getSparseVariableViaName(*sparse,variable1);
+  sparse_t sparse;
+  matfileIO.getSparseVariableViaName(sparse,variable1);
   
   printf("\nSparse Matrix \n"); 
 
   for ( int i = 0; i < 5; i++ ) {
-    for ( int j = sparse->jc[i]; j < sparse->jc[i+1] && j < sparse->ndata && j < sparse->jc[i]+5; j++ ) {
+    for ( int j = sparse.jc[i]; j < sparse.jc[i+1] && j < sparse.ndata && j < sparse.jc[i]+5; j++ ) {
                               
-	printf("\t\t(%d,%d)\t%f", sparse->ir[j]+1,i+1,((double*)sparse->data)[j]);
+	printf("\t\t(%d,%d)\t%f", sparse.ir[j]+1,i+1,((double*)sparse.data)[j]);
     }
     printf("\n");
   }
   
 //   int count = 0;
 //   
-//   for ( int i = 0; i < sparse->njc-1; i++ ) {
-//     for ( int j = sparse->jc[i]; j < sparse->jc[i+1] && j < sparse->ndata; j++ )
+//   for ( int i = 0; i < sparse.njc-1; i++ ) {
+//     for ( int j = sparse.jc[i]; j < sparse.jc[i+1] && j < sparse.ndata; j++ )
 //                          
 //       if (count < 15) {
 //       
-// 	printf("    (%d,%d)  %f\n", sparse->ir[j]+1,i+1, data[j]);
+// 	printf("    (%d,%d)  %f\n", sparse.ir[j]+1,i+1, data[j]);
 // 	count++;
 //       }     
 //   }
