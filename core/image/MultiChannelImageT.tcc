@@ -407,9 +407,9 @@ ColorImage MultiChannelImageT<P>::getColor() const
   for ( int y = 0 ; y < ysize; y++ )
     for ( int x = 0 ; x < xsize ; x++, k++ )
     {
-      img.setPixel( x, y, 0, ( int )( data( 0, k ) ) );
-      img.setPixel( x, y, 1, ( int )( data( 1, k ) ) );
-      img.setPixel( x, y, 2, ( int )( data( 2, k ) ) );
+      img.setPixel( x, y, 0, ( int )( data[0][k] ) );
+      img.setPixel( x, y, 1, ( int )( data[1][k] ) );
+      img.setPixel( x, y, 2, ( int )( data[2][k] ) );
     }
 
   //showImage(img);
@@ -448,7 +448,7 @@ void MultiChannelImageT<P>::calcIntegral( uint channel )
 }
 
 template<class P>
-P MultiChannelImageT<P>::getIntegralValue(int ulx, int uly, int lrx, int lry, int channel)
+P MultiChannelImageT<P>::getIntegralValue(int ulx, int uly, int lrx, int lry, int channel) const
 {
   ulx = std::max(ulx-1, -1);
   ulx = std::min(ulx, xsize-1);

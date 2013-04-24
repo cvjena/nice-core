@@ -126,27 +126,67 @@ void matrixToPseudoColor ( const NICE::MatrixT<P> & m, NICE::ColorImage & img )
 }
 
 template<class P>
-void imageToPseudoColor ( const NICE::ImageT<P> & m, NICE::ColorImage & img )
+void imageToPseudoColor ( const NICE::ImageT<P> & src, NICE::ColorImage & img )
 {
-  img.resize ( m.width(), m.height() );
+  img.resize ( src.width(), src.height() );
 
   // determine maximum and minimum value in the source image
   // for appropiate scaling
   double max = - std::numeric_limits<double>::max();
   double min = std::numeric_limits<double>::max();
-  for ( size_t x = 0 ; x < ( size_t ) m.width(); x++ )
-    for ( size_t y = 0 ; y < ( size_t ) m.height() ; y++ )
+  for ( size_t x = 0 ; x < ( size_t ) src.width(); x++ )
+    for ( size_t y = 0 ; y < ( size_t ) src.height() ; y++ )
     {
-      double v = m.getPixel ( x, y );
+      double v = src.getPixel ( x, y );
       if ( v > max ) max = v;
       if ( v < min ) min = v;
     }
 
-  for ( size_t y = 0 ; y < ( size_t ) m.height() ; y++ )
-    for ( size_t x = 0 ; x < ( size_t ) m.width(); x++ )
+  for ( size_t y = 0 ; y < ( size_t ) src.height() ; y++ )
+    for ( size_t x = 0 ; x < ( size_t ) src.width(); x++ )
     {
       // scale the grayvalue
-      double val = ( m.getPixel ( x, y ) - min ) / ( max - min );
+      double val = ( src.getPixel ( x, y ) - min ) / ( max - min );
+      double r, g, b;
+      // determine the RGB values
+      convertToPseudoColor ( val, r, g, b );
+      img.setPixel ( x, y, 0, ( int ) ( r*255 ) );
+      img.setPixel ( x, y, 1, ( int ) ( g*255 ) );
+      img.setPixel ( x, y, 2, ( int ) ( b*255 ) );
+    }
+}
+
+template<class P>
+void imageToPseudoColorWithRangeSpecification ( const NICE::ImageT<P> & src, NICE::ColorImage & img, const double & _min, const double & _max )
+{
+  img.resize ( src.width(), src.height() );
+
+  double max ( _max );
+  double min ( _min );
+
+  //consistency check
+  if (max < min )
+  {
+    min = max;
+    max = _min;
+  }
+  
+  //to avoid division by numerical zero
+  double rangeSpecified ( fabs(max - min) );
+  if ( rangeSpecified < 10e-10 )
+  { 
+    max = min + 10e-10;
+    rangeSpecified = fabs(max - min);
+  }
+
+  for ( size_t y = 0 ; y < ( size_t ) src.height() ; y++ )
+    for ( size_t x = 0 ; x < ( size_t ) src.width(); x++ )
+    {
+      // scale the grayvalue
+      double val = ( src.getPixel ( x, y ) - min );
+      val = std::max( val , min ); // check for lower bound
+      val = std::min( val , max ); //check for upper bound
+      val /= rangeSpecified; //appropriate scaling
       double r, g, b;
       // determine the RGB values
       convertToPseudoColor ( val, r, g, b );
