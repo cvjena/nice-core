@@ -121,6 +121,18 @@ template<class P> class ImageT;
     */
     template<class P>
     void imageToPseudoColor ( const NICE::ImageT<P> & src, NICE::ColorImage & dst );
+    
+    /**
+    * Convert the Image \c src into a RGB-ColorImage \c dst using pseudo colors.
+    * @param src source gray image
+    * @param dst result image
+    * @param _min desired lower bound (smaller initial values will be set to zero after conversion)
+    * @param _max desired upper bound (larger initial values will be set to 255 after conversion)
+    * @author Alexander Freytag
+    * @date 17-04-2013 (dd-mm-yyyy)
+    */    
+    template<class P>
+    void imageToPseudoColorWithRangeSpecification ( const NICE::ImageT<P> & src, NICE::ColorImage & img, const double & _min, const double & _max );    
 
     /**
     * Convert the matrix \c src into a RGB-ColorImage \c dst using pseudo colors.

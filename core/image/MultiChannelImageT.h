@@ -109,7 +109,7 @@ public:
    * @param channel channel
    * @return P mean value of given area
    **/
-  P getIntegralValue(int ulx, int uly, int lrx, int lry, int channel);
+  P getIntegralValue(int ulx, int uly, int lrx, int lry, int channel) const;
 
   /** convert to ice image */
   void convertToGrey( NICE::Image & img, uint channel = 0, bool normalize = true ) const;

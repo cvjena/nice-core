@@ -96,6 +96,63 @@ class FilterT
     * @return void
     **/
     static void gradientStrength ( const NICE::ImageT<SrcType> &src, NICE::ImageT<DstType> &dst );
+    
+    
+    /**
+    * Blurs Image \c src into the Image \c dst using a mean filter.
+    * @param src  source gray image
+    * @param size mean mask of size (2*\c size + 1) x (2*\c size + 1)
+    * @param dst  Optional buffer to be used as target.<br>
+    *             Create a new Image if \c dst == NULL.<br>
+    *             If \c dst != NULL then size must be equal to \c src 's size!
+    * @throw ImageException will be thrown if \c dst != NULL and the size of \c src and \c dst is not equal.
+    * @return Pointer to Image
+    */
+    ImageT<DstType> * filterMean ( const ImageT<SrcType>& src, const uint& size, ImageT<DstType>* dst = NULL );     
+    
+    /**
+      * Blurs Image \c src into the Image \c dst using a mean filter. This is the
+      * implementation of the filter with a runtime independent of the filter size.
+      * It is significantly faster for large filter sizes. An analysis can be done with the program
+      * testApproxGaussFilter.
+      * The second template parameter gives the type used to store sums of gray-values. The third template
+      * parameter specifies the data type of the temporary image used to handle the seperability of the mean filter.
+      * Boundary handling is done with a cropped filter if use_filtersize_independent_implementation is set to true, otherwise the borders of the image
+      * are ignored.
+      * @param src  source gray image
+      * @param size mean mask of size (2*\c size + 1) x (2*\c size + 1)
+      * @param dst  Optional buffer to be used as target.<br>
+      *             Create a new Image if \c dst == NULL.<br>
+      *             If \c dst != NULL then size must be equal to \c src 's size!
+      * @throw ImageException will be thrown if \c dst != NULL and the size of \c src and \c dst is not equal.
+      * @return Pointer to Image
+      */
+    ImageT<DstType> * filterMeanLargeFS ( const ImageT<SrcType>& src, const uint& size, ImageT<DstType>* dst = NULL );    
+      
+    /**
+    * @brief Blurs Image \c src into the Image \c dst by approximating a gauss filter with a specific standard deviation through multiple mean filters
+    * The size of the mean filters is automatically calculated
+    * The second template parameter gives the type used to store sums of gray-values. The third template parameter,
+    * which is only necessary if use_filtersize_independent_implementation
+    * is set to true, specifies the data type of the temporary image used to handle the seperability of the mean filter.
+    * Boundary handling is done with a cropped filter if use_filtersize_independent_implementation is set to true, otherwise the borders of the image
+    * are ignored.
+      * @param src  source gray image
+      * @param sigma standard deviation of the gauss filter
+      * @param dst  Optional buffer to be used as target.<br>
+      *             Create a new Image if \c dst == NULL.<br>
+      *             If \c dst != NULL then size must be equal to \c src 's size!
+    * @param use_filtersize_independent_implementation  if this flag is set to true, we use the implementation of the mean filter with a runtime
+    *  independent of the filter size. This is beneficial for large filter sizes. However, for small filter sizes (<10) the standard implementation is faster.
+    *  An analysis can be done with the program testApproxGaussFilter.
+      * @throw ImageException will be thrown if \c dst != NULL and the size of \c src and \c dst is not equal
+      *                       or an invalid size \c size is specified.
+      * @return Pointer to Image
+      */
+    NICE::ImageT<DstType> * filterGaussSigmaApproximate ( const NICE::ImageT<SrcType> &src, double sigma, NICE::ImageT<DstType> *dst = NULL,
+        bool use_filtersize_independent_implementation = true );  
+  
+ 
 };
 
 // float specializations using IPP
