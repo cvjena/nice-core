@@ -91,7 +91,7 @@ public:
   void set( int x, int y, P val, uint channel = 0 );
 
   /** set value */
-  void set( P val, uint channel = 0 );
+  void set( P val, uint channel);
 
   /** set value */
   void setAll( P val );
