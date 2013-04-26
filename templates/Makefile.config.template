@@ -16,16 +16,10 @@ LIBEXISTS=$(shell g++ $(2) -x c++ -c libtests/$(1) -o /dev/null >/dev/null 2>&1 
 # determine platform (32 or 64bit)
 PLATFORM:=$(shell uname -m)
 
-ifeq (x86_64,$(PLATFORM))
-  ifeq (1,$(shell test -f $(HOME)/DBVFAIL && echo "1"))
-    THIRD_BASE=nothirdbase
-    $(call CONFIGINFO,DBVEXT,0)
-  else
-    THIRD_BASE=/home/dbv/3rdparty64-gcc43
-    $(call CONFIGINFO,DBVEXT,1)
-  endif
+# THIRD_BASE=/home/dbv/3rdparty64-gcc43
 
-  ifeq (1,$(shell test -d $(THIRD_BASE) && echo "1"))
+ifeq (x86_64,$(PLATFORM))
+  ifdef THIRD_BASE
     # ICE
    ifndef ICEDIR
     ICEDIR=$(THIRD_BASE)/ice-for-limun/
@@ -62,9 +56,7 @@ ifeq (x86_64,$(PLATFORM))
   endif
 
 else
-  THIRD_BASE=/home/dbv/3rdparty32
-  
-  ifeq (1,$(shell test -d $(THIRD_BASE) && echo "1"))
+  ifdef THIRD_BASE
     # ICE
     ICEDIR=$(THIRD_BASE)/ice-for-limun/
     ICE_CFLAGS=-I$(ICEDIR)/src -DNICE_USELIB_ICE -DDONT_USE_ICE_NAMESPACE_BY_DEFAULT
