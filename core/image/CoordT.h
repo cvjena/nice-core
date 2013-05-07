@@ -2,7 +2,10 @@
 #define COORDT_H
 
 
+//STL
 #include <ostream>
+//core
+#include "core/vector/VectorT.h"
 
 namespace NICE {
   
@@ -125,6 +128,18 @@ class CoordT {
     CoordT<T> result(x,y);
     result/=v; 
     return result;
+  }
+  
+  NICE::VectorT<T> convertToNiceVector () const
+  {
+    //allocate memory
+     NICE::VectorT<T> vec ( 2 /*size*/, 0 /* initial values*/ );
+     
+     //copy data
+     vec[0] = this->x;
+     vec[1] = this->y;
+     
+     return vec;
   }
 };
 

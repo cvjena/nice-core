@@ -16,8 +16,14 @@
 
 
 namespace NICE {
+  
+    /**
+   * @class VVector
+   * @brief STL vector of NICE vectors
+   * @author Erik Rodner, Alexander Freytag
+   * @date 02/15/2008
+  */  
 
-/** STL vector of NICE vectors */
 class VVector : public std::vector<NICE::Vector>, public Persistent
 {
 
