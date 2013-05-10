@@ -15,6 +15,9 @@ include( testfiles.cmake)
 
 #add linkage dependencies to other libraries here
 set("nice_${the_library}_LINKING_DEPENDENCIES" "")
+if(MATIO_FOUND)
+  list(APPEND nice_${the_library}_LINKING_DEPENDENCIES ${MATIO_LIBRARIES})
+endif(MATIO_FOUND)
 
 #####################################################
 message(STATUS "adding library ${the_library}")

@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
   std::string sTestName = suite->getName();
   //std::string sTestName = runner.getName();
   sTestName.append( "_testresults.xml");
-  std::cout << sTestName <<std::endl;
+  //std::cout << sTestName <<std::endl;
   std::ofstream xmlFileOut(sTestName.c_str());
   CppUnit::XmlOutputter xmlOut(&result, xmlFileOut);
   xmlOut.write();

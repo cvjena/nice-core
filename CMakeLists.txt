@@ -12,7 +12,7 @@ include(cmake/NiceModules.cmake REQUIRED)
 
 # The version number.
 set(NICELibrary_VERSION_MAJOR 1)
-set(NICELibrary_VERSION_MINOR 0)
+set(NICELibrary_VERSION_MINOR 2)
 
 set(CMAKE_VERBOSE_MAKEFILE off) 
 
@@ -36,6 +36,7 @@ IF (CPPUNIT_FOUND)
 	message(STATUS "CppUnit-dir: ${CPPUNIT_INCLUDE_DIR}")
     INCLUDE_DIRECTORIES(${CPPUNIT_INCLUDE_DIR})
     ADD_DEFINITIONS( "-DNICE_USELIB_CPPUNIT" )
+    ADD_DEFINITIONS( "-DCPPUNIT_USE_TYPEINFO_NAME") #converting test class name into test name
 else()
   #set(CPPUNIT_INCLUDE_DIR "/usr/include/") #can be found in  /usr/include/cppunit
  # ADD_DEFINITIONS( "-DNICE_USELIB_CPPUNIT" )
@@ -53,6 +54,17 @@ endif()
 if (PNG_FOUND)
   INCLUDE_DIRECTORIES(${PNG_INCLUDE_DIRS})
   ADD_DEFINITIONS( "-DNICE_USELIB_PNG")
+endif()
+
+find_package(HDF5)
+if(HDF5_FOUND)
+  message(STATUS "HDF5-dir: ${HDF5_INCLUDE_DIR}")
+endif()
+find_package(MATIO)
+if(MATIO_FOUND)
+  message(STATUS "Matio-dir: ${MATIO_INCLUDE_DIR}")
+  ADD_DEFINITIONS( "-DNICE_USELIB_MATIO")
+  INCLUDE_DIRECTORIES(${MATIO_INCLUDE_DIR})
 endif()
 
 

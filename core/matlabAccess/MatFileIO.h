@@ -24,7 +24,7 @@
 
 #else //#ifdef NICE_USELIB_MATIO
 
-#include <matio/matio.h>
+#include <matio.h>
 
 
 namespace NICE {
