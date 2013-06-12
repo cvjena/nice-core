@@ -35,6 +35,10 @@ Known Issues
 => sudo ln -s /usr/lib/libg2c.so.0 /usr/lib/libg2c.so
    sudo ln -s /usr/lib64/libg2c.so.0 /usr/lib64/libg2c.so
 
+- problems with linking against ICE library
+=> in older version, subroutines of ICE where used. Currently, the system is working independent from ICE. However, if ICEDIR is set on your machine, it will try to link against some methods and classes.
+=> unset ICEDIR (perhaps also in your bashrc)
+
 Requirements
 ============
 
