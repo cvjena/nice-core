@@ -28,6 +28,18 @@ cd ../nice/ (goto NICE path)
 git clone /home/dbv/git/nice/vislearning/
 
 
+Enable/Disable code optimization
+================================
+Activation:
+export OPTIMIZE
+
+De-Activation:
+unset OPTIMIZE
+
+Explanation:
+After writing (and debugging) your code, you can enable the optimization to obtain source code that usually runs up to several times faster compared to the non-optimized version. However,
+compilation time will be longer and debugging with gdb or similar tools will be almost impossible after this.
+
 Known Issues
 ============
 
