@@ -71,6 +71,17 @@ macro(nice_add_unittests)
       SET_PROPERTY(TARGET ${__testname} PROPERTY FOLDER "unittests/${the_library}")
       ADD_TEST(${__testname} ${__testname})
     endforeach()
+
+#     INCLUDE_DIRECTORIES(${CPPUNIT_INCLUDE_DIR})
+#     message(STATUS "building tests:")
+# 
+#       ADD_EXECUTABLE( "cppunits_${the_library}" ../templates/cppUnitTestRunner.cpp ${nice_${the_library}_TESTFILES_SRC})
+#       TARGET_LINK_LIBRARIES("cppunits_${the_library}" "nice_${the_library}" ${CPPUNIT_LIBRARIES} )
+# 
+#       INSTALL(TARGETS "cppunits_${the_library}" DESTINATION "tests/${the_library}")
+#       SET_PROPERTY(TARGET "cppunits_${the_library}" PROPERTY FOLDER "unittests/${the_library}")
+#       ADD_TEST("cppunits_${the_library}" "cppunits_${the_library}")
+
   endif()
 
 endmacro()
