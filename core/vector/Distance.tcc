@@ -17,7 +17,7 @@ template<class T>
 T EuclidianDistance<T>::doCalculate(const VectorT<T>& v1, const VectorT<T>& v2) const {
 
     if(v1.size()!=v2.size())
-        _THROW_EVector("Input vectors must have the same size.");
+        _THROW_EVector("Input vectors must have the same size. v1: ");
 
     T dist = T(0);
 

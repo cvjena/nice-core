@@ -25,7 +25,11 @@
 #else //#ifdef NICE_USELIB_MATIO
 
 #include <matio.h>
+#include <matio/matio_private.h>
 
+#ifndef sparse_t
+#define sparse_t mat_sparse_t
+#endif
 
 namespace NICE {
   
@@ -39,7 +43,7 @@ namespace NICE {
 
       //------------------------------------------------------
       // several constructors and destructors
-      //------------------------------------------------------
+      //----------------------------------------------------
 
       /** 
       * @brief Default constructor
@@ -130,9 +134,8 @@ namespace NICE {
       * @param _name name of the variable
       * @param vec result: vector with name _name in format NICE::Vector 
       */ 
-      void getVectorViaName(NICE::Vector & vec, std::string _name);
-      
-      
+      void getVectorViaName(NICE::Vector & vec, std::string _name);  
+            
   }; // class
   
 } // namespace

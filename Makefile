@@ -175,7 +175,7 @@ endif
 # if you add an implicit rule however.
 
 allbin:$(ALL_BINARIES)
-	$(VERBOSE2)find ./core/ -name moc*.cpp -delete
+	
 
 alllib:$(ALL_LIBRARIES)
 
@@ -190,6 +190,7 @@ clean:
 	$(VERBOSE2)rm -f $(ALL_OBJS) $(ALL_OBJS:%.o=%.d)
 	$(VERBOSE2)rm -f $(ALL_BINARIES) $(ALL_BINARIES:%=%.bd)
 	$(VERBOSE2)rm -f $(ALL_LIBRARIES) $(ALL_CHECKS)
+	$(VERBOSE2)find ./core/ -name moc*.cpp -delete
 
 #TODO: does not remove moc_*.C (created with QT-moc from .h files)
 #alternative solution is to just rm -rf BUILD

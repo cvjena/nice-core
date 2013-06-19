@@ -26,11 +26,23 @@ int main(int argc, char* argv[])
 	std::string logfilename;
 	
 	if ( argc < 2 )
-	  logfilename = "/home/bodesheim/testILS-CGM.log";
-	else
+  {
+    std::cerr << "Warning: you have to specify a log-file with write-access. Program will be closed." << std::endl;
+    return -1;
+  }
+  else
+  {
 	  logfilename = argv[1];
+  }
 	
 	logfile = fopen(logfilename.c_str(), "w");
+  
+  //is the given logfile writable
+  if (logfile == NULL) 
+  {
+    std::cerr << "Error opening file" << std::endl;
+    return -1;
+  }
 	
 	// generate matrix A
 	Matrix A(mySize,mySize,0.0);

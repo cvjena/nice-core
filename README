@@ -28,12 +28,28 @@ cd ../nice/ (goto NICE path)
 git clone /home/dbv/git/nice/vislearning/
 
 
+Enable/Disable code optimization
+================================
+Activation:
+export OPTIMIZE
+
+De-Activation:
+unset OPTIMIZE
+
+Explanation:
+After writing (and debugging) your code, you can enable the optimization to obtain source code that usually runs up to several times faster compared to the non-optimized version. However,
+compilation time will be longer and debugging with gdb or similar tools will be almost impossible after this.
+
 Known Issues
 ============
 
 - fixing the -lg2c problem
 => sudo ln -s /usr/lib/libg2c.so.0 /usr/lib/libg2c.so
    sudo ln -s /usr/lib64/libg2c.so.0 /usr/lib64/libg2c.so
+
+- problems with linking against ICE library
+=> in older version, subroutines of ICE where used. Currently, the system is working independent from ICE. However, if ICEDIR is set on your machine, it will try to link against some methods and classes.
+=> unset ICEDIR (perhaps also in your bashrc)
 
 Requirements
 ============

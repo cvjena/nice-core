@@ -31,7 +31,10 @@ namespace NICE {
       } 
       
       // Default destructor
-      MatFileIO::~MatFileIO() {}
+      MatFileIO::~MatFileIO() {
+        
+        Mat_Close(mat);
+      }
       
       //------------------------------------------------------
       // count number of stored variables
@@ -60,17 +63,14 @@ namespace NICE {
       
       matvar_t * MatFileIO::getVariableViaName(std::string _name) {
       
-// 	std::cout << "MatFileIO::getVariableViaName: method entered" << std::endl;
-	char * cString = new char[256];
-// 	std::cout << "MatFileIO::getVariableViaName: cString init done" << std::endl;
-	return Mat_VarRead(mat,strcpy(cString,_name.c_str()));
+        return Mat_VarRead(mat,_name.c_str());
 	
       }
       
       void MatFileIO::getSparseVariableViaName(sparse_t & sparseVariable, std::string _name) {
 	
 	matvar_t * matvar = getVariableViaName(_name);
-	
+
 	if (matvar == NULL) {
 	  
 	  fthrow(Exception, "MatFileIO::getSparseVariableViaName(sparse_t & sparseVariable, std::string _name): variable with specified name does not exist");
@@ -79,12 +79,17 @@ namespace NICE {
 
 	if (matvar->class_type != MAT_C_SPARSE) {
 	  
+          Mat_VarFree(matvar);
 	  fthrow(Exception, "MatFileIO::getSparseVariableViaName(sparse_t & sparseVariable, std::string _name): format of variable is not sparse");
 	  return;
 	}
 	
-	sparseVariable = *((sparse_t*)matvar->data);
-	sparseVariable.data = (double*) sparseVariable.data;
+	sparse_t * sparse_ptr = (sparse_t*) matvar->data;
+	sparse_ptr->data = (double*) sparse_ptr->data;
+        sparseVariable = *sparse_ptr;
+        matvar->data = NULL;
+        Mat_VarFree(matvar);
+        free(sparse_ptr);
       }
 
       
@@ -100,6 +105,7 @@ namespace NICE {
 	
 	if (matvar->rank != 2) {
 	  
+          Mat_VarFree(matvar);
 	  fthrow(Exception, "MatFileIO::getFeatureMatrixViaName(char * _name, feature_matrix_order order): dimension of variable != 2");
 	  return;
 	}
@@ -409,10 +415,12 @@ namespace NICE {
           
 	} else {
 	  
+          Mat_VarFree(matvar);
 	  fthrow(Exception, "MatFileIO::getFeatureMatrixViaName(char * _name, feature_matrix_order order): wrong feature_matrix_order specified");
 	  return;
 	}	
 	
+	Mat_VarFree(matvar);
       }
       
       void MatFileIO::getVectorViaName(NICE::Vector & vec, std::string _name) {
@@ -421,14 +429,15 @@ namespace NICE {
 	
 	if (matvar == NULL) {
 	  
-	  fthrow(Exception, "MatFileIO::getFeatureMatrixViaName(char * _name, feature_matrix_order order): variable with specified name does not exist");
+	  fthrow(Exception, "MatFileIO::getVectorViaName(NICE::Vector & vec, std::string _name): variable with specified name does not exist");
 	  return;
 	}
 	
 	// it can happen that a vector is treated as (N x 1) or (1 x N) matrix with two dimensions
 	if (matvar->rank > 2 || ( (matvar->rank == 2) && (matvar->dims[0] != 1) && (matvar->dims[1] != 1) ) ) {
 	  
-	  fthrow(Exception, "MatFileIO::getFeatureMatrixViaName(char * _name, feature_matrix_order order): dimension of variable > 1");
+          Mat_VarFree(matvar);
+	  fthrow(Exception, "MatFileIO::getVectorViaName(NICE::Vector & vec, std::string _name): dimension of variable > 1");
 	  return;
 	}  
 	
@@ -653,7 +662,8 @@ namespace NICE {
 	  
 	}
 	
-	vec = NICE::Vector(v);	
+	vec = NICE::Vector(v);
+        Mat_VarFree(matvar);
       }
 }
 
