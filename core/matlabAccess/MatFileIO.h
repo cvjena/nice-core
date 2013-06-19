@@ -25,7 +25,7 @@
 #else //#ifdef NICE_USELIB_MATIO
 
 #include <matio.h>
-#include <matio/matio_private.h>
+#include <matio_private.h>
 
 #ifndef sparse_t
 #define sparse_t mat_sparse_t
