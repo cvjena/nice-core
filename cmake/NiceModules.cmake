@@ -32,7 +32,7 @@ endmacro()
 #and subvariables ${nice_${the_library}_PROGFILES_SRC}
 macro(nice_add_progs)
 
-  if(BUILD_CORE_PROGS)
+  if(BUILD_PROGRAMS)
     message(STATUS "building progs:")
     
     foreach(__progcpp ${nice_${the_library}_PROGFILES_SRC})
@@ -57,7 +57,7 @@ endmacro()
 #and subvariables ${nice_${the_library}_TESTFILES_SRC}
 macro(nice_add_unittests)
 
-  if(BUILD_CORE_TESTS)
+  if(BUILD_UNITTESTS)
     INCLUDE_DIRECTORIES(${CPPUNIT_INCLUDE_DIR})
     message(STATUS "building tests:")
     foreach(__testcpp ${nice_${the_library}_TESTFILES_SRC})
