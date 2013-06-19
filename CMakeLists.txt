@@ -194,6 +194,11 @@ endforeach()
 # FIND_PATH(WITH_ZLIBINC "include/zlib.h" "${dcmtk_SOURCE_DIR}/../zlib-1.2.3")
 
 
+SET(CPACK_GENERATOR "RPM")
+SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Jojo R") #required
+ 
+INCLUDE(CPack)
+
 
 # add the install targets
 #install (TARGETS ImageLabeler DESTINATION bin)
