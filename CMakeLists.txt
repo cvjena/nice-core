@@ -96,11 +96,9 @@ if(WITH_QT)
   SET(QT_USE_QTXML TRUE)
   SET(QT_USE_QT3SUPPORT TRUE)
   if(QT_FOUND)
-  #  ADD_DEFINITIONS("-DQT3_SUPPORT")
     message(STATUS "QTfound ${QT_QT3SUPPORT_INCLUDE_DIR}")
     set(CMAKE_AUTOMOC TRUE) #see doc: http://blogs.kde.org/2011/11/01/cool-new-stuff-cmake-286-automoc
     INCLUDE(${QT_USE_FILE})
-    #INCLUDE(${QT_QT3SUPPORT_INCLUDE_DIR})
     ADD_DEFINITIONS(${QT_DEFINITIONS})
     ADD_DEFINITIONS( "-DNICE_USELIB_QT")
   endif()
@@ -139,12 +137,6 @@ else()
 	endif()
 endif()
 
-#find_package(ImageMagick COMPONENTS Magick++)
-#if(ImageMagick_FOUND)
-#  INCLUDE_DIRECTORIES(${ImageMagick_INCLUDE_DIRS})
-#  ADD_DEFINITIONS( "-DNICE_USELIB_LIBMAGICK")
-#endif()
-
 if(MSVC)
   #enable solution folders
   SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -174,7 +166,6 @@ set(OPENCV_LIB_INSTALL_PATH lib)
 INCLUDE_DIRECTORIES(".")
 INCLUDE_DIRECTORIES(core)
 
-#set(the_module "libnice")
 set(the_module "nice")
 
 set(NICE_CURR_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -196,40 +187,11 @@ foreach(_curSublib ${__listSubLibs})
   endif()
 endforeach()
 
-#ADD_SUBDIRECTORY(core)
-#ADD_SUBDIRECTORY(vislearning)
-  
-
 # doxygen support
 #FIND_PROGRAM(DOXYGEN_EXECUTABLE "doxygen")
-
-
-#cmake code from: https://github.com/hmeyer/dcmtk/blob/master/CMakeLists.txt
-# libxml support
-# OPTION(WITH_LIBXML "Build with libxml support." OFF)
-# FIND_PATH(WITH_LIBXMLINC "include/libxml/parser.h" "${dcmtk_SOURCE_DIR}/../libxml2-2.6.26")
-# # libpng support
-# OPTION(WITH_LIBPNG "Build with libpng support." ON)
-# FIND_PATH(WITH_LIBPNGINC "include/png.h" "${dcmtk_SOURCE_DIR}/../libpng-1.2.8")
-# # libtiff support
-# OPTION(WITH_LIBTIFF "Build with libtiff support." ON)
-# FIND_PATH(WITH_LIBTIFFINC "include/tiff.h" "${dcmtk_SOURCE_DIR}/../tiff-3.7.4")
-# # openssl support
-# OPTION(WITH_OPENSSL "Build with openssl support." OFF)
-# FIND_PATH(WITH_OPENSSLINC "include/openssl/ssl.h" "${dcmtk_SOURCE_DIR}/../openssl-0.9.8a")
-# # zlib support
-# OPTION(WITH_ZLIB "Build with zlib support." ON)
-# FIND_PATH(WITH_ZLIBINC "include/zlib.h" "${dcmtk_SOURCE_DIR}/../zlib-1.2.3")
-
 
 SET(CPACK_GENERATOR "RPM")
 SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Johannes R.") #required
 SET(CPACK_PACKAGE_NAME "NICE New Image Library")
 SET(CPACK_PACKAGE_VENDOR "Computer Vision Group Jena, University of Jena")
 INCLUDE(CPack)
-
-
-# add the install targets
-#install (TARGETS ImageLabeler DESTINATION bin)
-#install (FILES "${PROJECT_BINARY_DIR}/TutorialConfig.h"        
-#         DESTINATION include)
