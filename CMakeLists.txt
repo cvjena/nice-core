@@ -223,8 +223,9 @@ endforeach()
 
 
 SET(CPACK_GENERATOR "RPM")
-SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Jojo R") #required
- 
+SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Johannes R.") #required
+SET(CPACK_PACKAGE_NAME "NICE New Image Library")
+SET(CPACK_PACKAGE_VENDOR "Computer Vision Group Jena, University of Jena")
 INCLUDE(CPack)
 
 
