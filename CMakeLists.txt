@@ -190,6 +190,7 @@ endforeach()
 # doxygen support
 #FIND_PROGRAM(DOXYGEN_EXECUTABLE "doxygen")
 
+include (InstallRequiredSystemLibraries) # This module will include any runtime libraries that are needed by the project for the current platform
 SET(CPACK_GENERATOR "RPM")
 SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Johannes R.") #required
 SET(CPACK_PACKAGE_NAME "NICE New Image Library")
