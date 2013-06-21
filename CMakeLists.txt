@@ -13,6 +13,7 @@ include(cmake/NiceModules.cmake REQUIRED)
 # The version number.
 set(NICELibrary_VERSION_MAJOR 1)
 set(NICELibrary_VERSION_MINOR 2)
+set(NICE_VERSION ${NICELibrary_VERSION_MAJOR}.${NICELibrary_VERSION_MINOR})
 
 OCV_OPTION(CMAKE_VERBOSE "Verbose mode" OFF )
 if(CMAKE_VERBOSE)
@@ -189,6 +190,12 @@ endforeach()
 
 # doxygen support
 #FIND_PROGRAM(DOXYGEN_EXECUTABLE "doxygen")
+
+
+##############################################################################################
+configure_file(cmake/templates/NICELibraryConfigVersion.cmake.in "${PROJECT_BINARY_DIR}/NICELibraryConfigVersion.cmake" @ONLY)
+
+##############################################################################################
 
 include (InstallRequiredSystemLibraries) # This module will include any runtime libraries that are needed by the project for the current platform
 SET(CPACK_GENERATOR "RPM")
