@@ -426,11 +426,6 @@ MatrixT<ElementType>::operator _Op##= (const MatrixT<ElementType>& v) {   \
     {
       _THROW_EMatrix("Matrix setRow: row does not specify a proper row index.");
     }
-
-    if ( cols() > v.size() )
-    {
-      cerr<<"Warning: Matrix setRow: row is longer than vector."<<endl;
-    }
     
     // FIXME use IPP?
     for (unsigned int j = 0; j < v.size(); j++)
