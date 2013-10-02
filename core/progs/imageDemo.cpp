@@ -26,10 +26,14 @@ int main ( int argc, char **argv )
 	ColorImage srcColor ( argv[1] );
 
   // show the image and wait for the window being closed manually
+#ifdef NICE_USELIB_GLUT
 #ifdef NICE_USELIB_QT
   showImage ( srcColor );
 #else
   cerr << "Visualization disabled: no QT library available" << endl;
+#endif
+#else 
+  cerr << "Visualization disabled: no GLUT library available" << endl;
 #endif
 
   // simple grayvalue image
@@ -48,8 +52,10 @@ int main ( int argc, char **argv )
   ColorImage gradientColor;
   imageToPseudoColor ( gradient, gradientColor );
 
+#ifdef NICE_USELIB_GLUT
 #ifdef NICE_USELIB_QT
   showImage ( gradientColor );
+#endif
 #endif
 
 
