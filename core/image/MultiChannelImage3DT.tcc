@@ -376,12 +376,17 @@ void MultiChannelImage3DT<P>::correctShading( uint channel ) const
       for ( int x = 0; x < xsize; x++ )
       {
         P tmp = data [channel][x + y*xsize + z*xsize*ysize];
-        double newVal = maxVal * ( (double) tmp / (double) meanVals[z] );
+        double newVal = maxVal * ( (double) tmp / meanVals[z] );
         if ( ( P ) newVal > newMax )
           newMax = ( P ) newVal;
         data [channel][x + y*xsize + z*xsize*ysize] = newVal;
       }
     }
+  }
+  
+  for ( long k = 0 ; k < xsize*ysize*zsize ; k++ )
+  {
+    data [channel][k] = data [channel][k] / newMax * maxVal;
   }
 }
 
