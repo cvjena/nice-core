@@ -899,7 +899,7 @@ void MultiChannelImage3DT<P>::setPixelFloat( int x, int y, int z, int channel, d
   throw( "this type is not implemented\n" );
 }
 
-#define SET_FUNCS_PROTO_MACRO(MYTYPE) \
+#define SET_FUNCS_PROTO_MACRO3D(MYTYPE) \
 template<>\
 int MultiChannelImage3DT<MYTYPE>::getPixelInt(int x, int y, int z, int channel) const;\
 template<>\
@@ -909,11 +909,11 @@ void MultiChannelImage3DT<MYTYPE>::setPixelInt(int x, int y, int z, int channel,
 template<>\
 void MultiChannelImage3DT<MYTYPE>::setPixelFloat(int x, int y, int z, int channel, double pixel);
 
-SET_FUNCS_PROTO_MACRO( double )
-SET_FUNCS_PROTO_MACRO( int )
-SET_FUNCS_PROTO_MACRO( long int )
-SET_FUNCS_PROTO_MACRO( float )
-SET_FUNCS_PROTO_MACRO( unsigned int )
+SET_FUNCS_PROTO_MACRO3D( double )
+SET_FUNCS_PROTO_MACRO3D( int )
+SET_FUNCS_PROTO_MACRO3D( long int )
+SET_FUNCS_PROTO_MACRO3D( float )
+SET_FUNCS_PROTO_MACRO3D( unsigned int )
 
 } // namespace
 

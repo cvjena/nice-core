@@ -318,11 +318,11 @@ inline obinstream& operator<<(obinstream &s, const LinAl::MatrixC<Tp> &A) {
   return s;
 }
 
-#else
-#ifndef LINAL_WARNING
-#warning LinAl addons will not be compiled.
-#define LINAL_WARNING
-#endif
+// #else
+// #ifndef LINAL_WARNING
+// #warning LinAl addons will not be compiled.
+// #define LINAL_WARNING
+// #endif
 #endif
 
  
