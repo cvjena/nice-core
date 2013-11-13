@@ -1,0 +1,2 @@
+set(nice_${the_library}_LINKING_DEPENDENCIES ${PROJECT_BINARY_DIR}/lib/libnice_${the_library}.a;${nice_${the_library}_LINKING_DEPENDENCIES})
+set(nice_${the_library}_INCLUDE_DIRS ${CMAKE_SOURCE_DIR})
