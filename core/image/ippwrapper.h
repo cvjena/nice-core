@@ -203,7 +203,7 @@
   typedef struct ipcvMorphGrayState_32f IppiMorphGrayState_32f;
 
   struct OptFlowPyrLK;
-  typedef struct IppiOptFlowPyrLK;
+  typedef struct OptFlowPyrLK IppiOptFlowPyrLK;
   typedef IppiOptFlowPyrLK IppiOptFlowPyrLK_8u_C1R;
   typedef IppiOptFlowPyrLK IppiOptFlowPyrLK_16u_C1R;
   typedef IppiOptFlowPyrLK IppiOptFlowPyrLK_32f_C1R;
