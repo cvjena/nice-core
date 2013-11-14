@@ -23,22 +23,15 @@ ColorImageT<P>& ColorImageT<P>::operator=(const ColorT<P> &color)
                 ippiSize);
 #else
   //Ipp8u* pos=reinterpret_cast<Ipp8u*>(this->getPixelPointer());
-  P* pos=reinterpret_cast<P*>(this->getPixelPointer());
-  P **row = new P*[this->height()];
-    for(int y=0;y<this->height(); ++y) {
-    row[y]=reinterpret_cast<P*>(pos);
-    pos+=this->getStepsize();
-  }
     P *p;
     for(int y=0;y<this->height(); ++y) {
-        p=row[y];
+        p = this->getPixelPointerY(y);
         for(int x=0;x<this->width(); ++x) {
             for(int chan=0;chan<3; ++chan,p++) {
           *p=color[chan];
         }
-        }
+    }
   }
-	delete [] p;
 #endif
     return *this;
 }
@@ -51,22 +44,15 @@ ColorImageT<P>& ColorImageT<P>::operator=(const P c[3])
   ippiSet_C3R(c, this->getPixelPointer(), this->getStepsize(),
               ippiSize);
 #else
-  Ipp8u* pos=reinterpret_cast<Ipp8u*>(this->getPixelPointer());
-  P *row = new P[this->height()];
-  for(int y=0;y<this->height(); ++y) {
-    row[y]=reinterpret_cast<P*>(pos);
-    pos+=this->getStepsize();
-  }
   P *p;
   for(int y=0;y<this->height(); ++y) {
-    p=row[y];
+    p = this->getPixelPointerY(y);
     for(int x=0;x<this->width(); ++x) {
       for(int chan=0;chan<3; ++chan,p++) {
         *p=c[chan];
       }
     }
   }
-  delete [] p;
 #endif
   return *this;
 }

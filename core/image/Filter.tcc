@@ -59,7 +59,7 @@ ImageT<P>* filterY ( const ImageT<P>& src, const FloatVector& kernel,
                      ImageT<P>* dst, const int& anchor )
 {
   ImageT<P>* result = createResultBuffer ( src, dst );
-  uint kernelanch       = ( anchor < 0 ) ? ( kernel.size() / 2 ) : anchor;
+  int kernelanch       = ( anchor < 0 ) ? ( kernel.size() / 2 ) : anchor;
 
 #ifdef NICE_USELIB_IPP
   IppiSize ippiSize = {src.width(), src.height() - ( kernel.size() - 1 ) };
@@ -79,8 +79,6 @@ ImageT<P>* filterY ( const ImageT<P>& src, const FloatVector& kernel,
   const P* pSrcStart = src.getPixelPointerXY ( 0, kernelanch );
   P*       pDstStart = result->getPixelPointerXY ( 0, kernelanch );
 
-  int i;
-
   const P* pSrc;
   P*       pDst;
   for ( uint y = kernelanch; y < src.height() - ( kernel.size() - 1 - kernelanch ); ++y ) {
@@ -90,11 +88,27 @@ ImageT<P>* filterY ( const ImageT<P>& src, const FloatVector& kernel,
     for ( int x = 0; x < src.width(); ++x, ++pSrc, ++pDst ) {
       sum = 0;
 
-      i = kernel.size() - 1;
-      do {
-        sum += * ( pSrc - ( kernelanch - i ) * ss ) * kernel[ks-i];
-        --i;
-      } while ( i >= 0 );
+      /////
+      for(int i = 0; i < kernel.size(); i++)
+      {
+          const P* pSrcPix = pSrc - ( kernelanch - i ) * ss;
+          // pointer to coordinates
+          // pSrc -> (x,y)
+          // pSrc - (kernelanch -i ) * ss  -> (x, y-kernelanch+i)
+          // the old code used the wrong upper bound, because
+          // the maximum value of y-kernelanch + i is
+          // height() - kernel.size() + 1 + kernelanch - 1 - kernelanch + kernel.size() - 1
+          // = height()
+          // the minimum value of y - kernelanch + i
+          sum +=  (*pSrcPix) * kernel[i];
+      }
+      ////
+//      i = kernel.size() - 1;
+//      do {
+//        const P* pSrcPix = pSrc - ( kernelanch - i ) * ss;
+//        sum += (*pSrcPix) * kernel[ks-i];
+//        --i;
+//      } while ( i >= 0 );
 
       *pDst = static_cast<P> ( sum );
     }
