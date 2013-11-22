@@ -417,11 +417,16 @@ MatrixT<ElementType>::operator _Op##= (const MatrixT<ElementType>& v) {   \
   template<typename ElementType>
   void MatrixT<ElementType>::setRow(const uint & row, const NICE::VectorT<ElementType> & v)
   {
-    if (rows() < v.size() )
+    if (cols() < v.size() )
     {
       _THROW_EMatrix("Matrix setRow: target matrix too small.");
     }
-
+    
+    if (row >= rows() )
+    {
+      _THROW_EMatrix("Matrix setRow: row does not specify a proper row index.");
+    }
+    
     // FIXME use IPP?
     for (unsigned int j = 0; j < v.size(); j++)
     {
