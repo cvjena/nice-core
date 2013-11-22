@@ -115,7 +115,8 @@ Image* And ( const Image& src0, const Image& src1, Image *dst )
 
 #else // NICE_USELIB_IPP
   int bwidth = src0.width() / sizeof ( Ipp32u );
-  int bwidthr = src0.width() - bwidth;
+  int bwidth_remainder = src0.width() % sizeof ( Ipp32u );
+  //int bwidthr = src0.width() - bwidth;
 
   for ( int y = 0; y < src0.height(); ++y )
   {
@@ -130,7 +131,7 @@ Image* And ( const Image& src0, const Image& src1, Image *dst )
     const Ipp8u *ps2 = ( const Ipp8u* ) ( --s2 );
     Ipp8u *pd = ( Ipp8u* ) ( --d );
 
-    for ( int x = 0; x < bwidthr; ++x, ++ps1, ++ps2, ++pd )
+    for ( int x = 0; x < bwidth_remainder; ++x, ++ps1, ++ps2, ++pd )
       *pd = *ps1 & *ps2;
   }
 #endif // NICE_USELIB_IPP
@@ -155,7 +156,7 @@ ColorImage* And ( const ColorImage& src0, const ColorImage& src1, ColorImage* ds
 
 #else // NICE_USELIB_IPP
   int bwidth = ( src0.width() * 3 ) / sizeof ( Ipp32u );
-  int bwidthr = ( src0.width() * 3 ) - bwidth;
+  int bwidth_remainder = ( src0.width() * 3 ) % sizeof ( Ipp32u );
 
   for ( int y = 0; y < src0.height(); ++y )
   {
@@ -170,7 +171,7 @@ ColorImage* And ( const ColorImage& src0, const ColorImage& src1, ColorImage* ds
     const Ipp8u *ps2 = ( const Ipp8u* ) ( --s2 );
     Ipp8u *pd = ( Ipp8u* ) ( --d );
 
-    for ( int x = 0; x < bwidthr; ++x, ++ps1, ++ps2, ++pd )
+    for ( int x = 0; x < bwidth_remainder; ++x, ++ps1, ++ps2, ++pd )
       *pd = *ps1 & *ps2;
   }
 #endif // NICE_USELIB_IPP
