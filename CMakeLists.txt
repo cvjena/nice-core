@@ -57,6 +57,34 @@ else()
   message(STATUS "CppUnit not found")
 ENDIF()
 
+OCV_OPTION(WITH_DBV_LIBRARIES "Build with DBV extern librares" OFF)
+if(WITH_DBV_LIBRARIES)
+
+  set(NICE_DBV_LIBRARIES_DIR "/home/dbv/3rdparty64-gcc43/")
+  if(EXISTS "${NICE_DBV_LIBRARIES_DIR}")
+    message(STATUS "using DBV extern librares in ${NICE_DBV_LIBRARIES_DIR}")
+
+    OCV_OPTION(WITH_IPP "Build with Intel IPP support" ON)
+    if(WITH_IPP)
+      set(ENV{IPPROOT} "${NICE_DBV_LIBRARIES_DIR}ipp53/")
+
+      include("cmake/NiceFindIPP.cmake")
+      if(IPP_FOUND)
+        #message(STATUS "ipp link dir: ${IPP_LIBRARY_DIRS}")
+        #message(STATUS "ipp link libs: ${IPP_LIBRARIES}")
+        ADD_DEFINITIONS( "-DNICE_USELIB_IPP=5" )
+        INCLUDE_DIRECTORIES(${IPP_INCLUDE_DIRS})
+        
+      else()
+        message(STATUS "IPP library not found")
+      endif()
+    endif()
+  else()
+    message( SEND_ERROR "trying to use DBV extern library dir, but couldn't be found ${NICE_DBV_LIBRARIES_DIR}. Switch off DBV Usage to continue.") #unsetting dbv libraries path
+    unset(WITH_DBV_LIBRARIES) #unsetting, since dbv dir not found
+  endif()
+endif()
+
 OCV_OPTION(WITH_OPENMP "Build with OpenMP support" ON)
 if(WITH_OPENMP)
   find_package(OpenMP)
