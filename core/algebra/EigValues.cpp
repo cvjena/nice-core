@@ -18,15 +18,29 @@ void
 EVArnoldi::getEigenvalues ( const GenericMatrix & data, Vector & eigenvalues,
                             Matrix & eigenvectors, uint k )
 {
+  /////////////////////////////////////  
+  ///////// check input arguments /////
+  /////////////////////////////////////
 
   if ( data.rows () != data.cols () )
   {
     throw ( "EVArnoldi: matrix has to be quadratic" );
   }
+  
   if ( k <= 0 )
   {
     throw ( "EVArnoldi: please use k>0." );
   }
+  
+  // did we specify more eigenvalues than the matrix can actually have?
+  if ( k <= data.rows() )
+  {
+    throw ( "EVArnoldi: specified k is larger then dimension of matrix! Aborting..." );
+  }  
+  
+  //////////////////////////////////////
+  ///////// initialize variables ///////
+  //////////////////////////////////////
 
   if ( verbose )
     cerr << "Initialize Matrices";
@@ -48,6 +62,10 @@ EVArnoldi::getEigenvalues ( const GenericMatrix & data, Vector & eigenvalues,
 //       rmatrix ( j, i ) = 0.5;
       //TODO the random initialization might help, but it is bad for reproducibility :(
 
+  ////////////////////////////////////
+  ///////// start computation  ///////
+  ////////////////////////////////////      
+      
   //reduceddim
   double delta = 1.0;
   uint iteration = 0;
