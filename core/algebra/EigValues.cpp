@@ -71,7 +71,9 @@ EVArnoldi::getEigenvalues ( const GenericMatrix & data, Vector & eigenvalues,
   uint iteration = 0;
   while ( delta > mindelta && iteration < maxiterations )
   {
-    NICE::Vector rold ( rmatrix.getColumn ( k - 1 ) );
+    //replace Vector rold by matrix rold to check for convergence of all eigenvectors
+    //NICE::Vector rold ( rmatrix.getColumn ( k - 1 ) );
+    NICE::Matrix rold(rmatrix);
     // meta-comment: i is an index for the iteration, j is an index for the basis
     // element (1 <= j <= k)
     for ( uint reduceddim = 0; reduceddim < k; reduceddim++ )
@@ -96,9 +98,19 @@ EVArnoldi::getEigenvalues ( const GenericMatrix & data, Vector & eigenvalues,
           ( qmatrix.getColumn ( j ).
             scalarProduct ( rmatrix.getColumn ( reduceddim ) ) );
     }
-    //convergence stuff
-    NICE::Vector diff = rold - rmatrix.getColumn ( k - 1 );
-    delta = diff.normL2 ();
+    //convergence stuff (replaced by checking all eigenvectors instead of a single one
+    //NICE::Vector diff = rold - rmatrix.getColumn ( k - 1 );
+    //delta = diff.normL2 ();
+    NICE::Vector tmpDiff;
+    double norm_tmpDiff;
+    delta = 0.0;
+    for ( uint j = 0; j < k; j++ )
+    {
+      tmpDiff = rold.getColumn(j) - rmatrix.getColumn(j);
+      norm_tmpDiff = tmpDiff.normL2();
+      if (norm_tmpDiff > delta)
+        delta = norm_tmpDiff;
+    }
     iteration++;
 
     if ( verbose )
