@@ -33,7 +33,7 @@ EVArnoldi::getEigenvalues ( const GenericMatrix & data, Vector & eigenvalues,
   }
   
   // did we specify more eigenvalues than the matrix can actually have?
-  if ( k <= data.rows() )
+  if ( k > data.rows() )
   {
     throw ( "EVArnoldi: specified k is larger then dimension of matrix! Aborting..." );
   }  
