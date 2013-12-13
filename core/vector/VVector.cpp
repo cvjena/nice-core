@@ -1,7 +1,7 @@
 /** 
  * @file VVector.h
  * @brief vector of vector
- * @author Erik Rodner
+ * @author Erik Rodner, Alexander Freytag
  * @date 02/15/2008
  */
 
@@ -297,28 +297,84 @@ void VVector::sort ( size_t index )
 	
 void VVector::toMatrix ( NICE::Matrix & M, bool rowOriented ) const
 {
-	if ( size() > 0 ) {
-		// check if there is a constant dimension
-		int dimension = -1;
-		for ( VVector::const_iterator i = begin(); i != end(); i++ )
-			if ( dimension < 0 )
-				dimension = i->size();
-			else if ( (int)(i->size()) != dimension )
-				fthrow(Exception, "Non-constant dimension inside of VVector, unable to convert this structure into a Matrix" );
+  if ( size() > 0 ) {
+    // check if there is a constant dimension
+    int dimension = -1;
+    for ( VVector::const_iterator i = begin(); i != end(); i++ )
+      if ( dimension < 0 )
+        dimension = i->size();
+      else if ( (int)(i->size()) != dimension )
+        fthrow(Exception, "Non-constant dimension inside of VVector, unable to convert this structure into a Matrix" );
 
-		if ( rowOriented ) 
-			M.resize ( size(), dimension );
-		else
-			M.resize ( dimension, size() );
-		uint k = 0;
-		for ( VVector::const_iterator i = begin(); i != end(); i++,k++ )
-		{
-			const Vector & x = *i;
-			for ( int l = 0 ; l < dimension; l++ )
-				if ( rowOriented )
-					M ( k, l ) = x[l];
-				else
-					M ( l, k ) = x[l];
-		}
-	}
+    if ( rowOriented ) 
+      M.resize ( size(), dimension );
+    else
+      M.resize ( dimension, size() );
+    uint k = 0;
+    for ( VVector::const_iterator i = begin(); i != end(); i++,k++ )
+    {
+      const Vector & x = *i;
+      for ( int l = 0 ; l < dimension; l++ )
+        if ( rowOriented )
+          M ( k, l ) = x[l];
+        else
+          M ( l, k ) = x[l];
+    }
+  }
+}
+
+void VVector::append ( const NICE::VVector & _2ndVec, const bool & _copyData )
+{
+ 
+  if ( _copyData )
+  {
+    //copy every single entry of the second VVector
+    for ( NICE::VVector::const_iterator it = _2ndVec.begin(); it != _2ndVec.end(); it++)
+    {
+       this->push_back( *it );
+    }
+  }
+  else //only re-direct this->end()
+  {
+    //fetch my current end
+    std::vector<NICE::Vector>::iterator myEnd = this->end();    
+    
+    this->insert(myEnd, _2ndVec.begin(), _2ndVec.end() );
+//     //re-direct it to the beginnign of the second vector
+//     myEnd = _2ndVec.begin();
+  }
+ 
+}
+
+bool VVector::isEqual ( const NICE::VVector & _B, const double & _tolerance )
+{
+  bool result(true);
+  
+  NICE::VVector::const_iterator itA = this->begin();
+  NICE::VVector::const_iterator itB = _B.begin();
+  
+  while ( (itA != this->end()) && ( itB != _B.end()) )
+  {
+    if (itA->size() != itB->size())
+    {
+      result = false;
+      break;
+    } 
+    
+    for(uint i = 0; (i < itA->size()) && (i < itB->size()); i++)
+    {
+      if (fabs((*itA)[i] - (*itB)[i]) > _tolerance)
+      {
+        result = false;
+        break;        
+      }
+    }
+
+    if (result == false)
+          break;        
+    itA++;
+    itB++;
+  }
+  
+  return result;  
 }

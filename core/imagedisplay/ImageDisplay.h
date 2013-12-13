@@ -123,7 +123,12 @@ public:
   inline void setDrawSelectionRect(bool draw) {
     drawSelectionRect = draw;
   }
-
+  
+  NICE::ColorImage * getColorImageBuffer()
+  {
+    return this->colorImageBuffer;
+  }
+ 
   /**
    * Draw the selection rectangle?
    * @return The current setting

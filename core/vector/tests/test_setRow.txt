@@ -1,0 +1,16 @@
+MatrixT<double> a(1,2,4.5);
+MatrixT<double> b(2,1,4.5);
+MatrixT<double> c(1,3,4.5);
+VectorT<double> v(2,1.0);
+
+a.setRow(0,v);
+//a(0,0) and a(0,1) should now be 1.0 and not 4.5
+
+a.setRow(1,v)
+//should fail, because this row is non-existent
+
+b.setRow(0,v)
+//should fail, because vector is too long 
+
+c.setRow(0,v)
+//should give a warning, because vector is shorter than one complete row 

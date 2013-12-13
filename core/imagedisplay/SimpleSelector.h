@@ -120,10 +120,11 @@ private:
  * @param maximum number of colors
  */
 template <class ImageType>
-void selectColoredRectangles (  const ImageType & image, std::vector<NICE::RectT<double> > & rectangles, 
-			    std::vector<int> & colors,
-			 const std::string & title,
-			 const int maxColors) 
+void selectColoredRectangles (  const ImageType & image,
+                                std::vector<NICE::RectT<double> > & rectangles, 
+                                std::vector<int> & colors,
+                                const std::string & title,
+                                const int maxColors) 
 {
   if (qApp == NULL) {
     QtFramework::instance();
@@ -167,10 +168,11 @@ void selectRectangles (  const ImageType & image, std::vector<NICE::RectT<double
  * @param maximum number of colors
  */
 template <class ImageType>
-void selectColoredPoints (  const ImageType & image, std::vector<NICE::CoordT<double> > & points, 
-			    std::vector<int> & colors,
-			 const std::string & title,
-			 const int maxColors) 
+void selectColoredPoints (  const ImageType & image,
+                            std::vector<NICE::CoordT<double> > & points, 
+                            std::vector<int> & colors,
+                            const std::string & title,
+                            const int maxColors) 
 {
   if (qApp == NULL) {
     QtFramework::instance();
@@ -187,10 +189,12 @@ void selectColoredPoints (  const ImageType & image, std::vector<NICE::CoordT<do
   colors = display->getColors();
 
   points.clear();
-  for ( std::vector<NICE::RectT<double> >::const_iterator i = rectangles.begin();
-	i != rectangles.end(); i++ )
-      points.push_back ( CoordT<double> ( i->left, i->top ) ); 
+  for ( std::vector<NICE::RectT<double> >::const_iterator i = rectangles.begin(); i != rectangles.end(); i++ )
+  {
+      points.push_back ( NICE::CoordT<double> ( i->left, i->top ) ); 
+  }
 
+  //don't waste memory
   delete display;
 }
 
@@ -202,8 +206,9 @@ void selectColoredPoints (  const ImageType & image, std::vector<NICE::CoordT<do
  * @param title window title
  */
 template <class ImageType>
-void selectPoints (  const ImageType & image, std::vector<NICE::CoordT<double> > & points,
-			 const std::string & title)
+void selectPoints (  const ImageType & image,
+                     std::vector<NICE::CoordT<double> > & points,
+                     const std::string & title)
 {
     std::vector<int> colors;
     selectColoredPoints ( image, points, colors, title, 1 );

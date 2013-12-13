@@ -25,3 +25,8 @@ This error occurs when the link to libbz2 is not set properly
 64bit: ln -s /lib64/libbz2.so.1 /lib64/libbz2.so
 
 The bz2 lib check successfully detects this mistake, however, Magick++-config uses -lbz2 anyway.
+
+(4)  compilation problems when ICE library is available somewhere in your system
+=> in older version, subroutines of ICE where used. Currently, the system is working independent from ICE. However, if ICEDIR is set on your machine, it will try to link against some methods and classes.
+=> unset ICEDIR (perhaps also in your bashrc)
+
