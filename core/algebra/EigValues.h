@@ -1,7 +1,7 @@
 /**
 * @file EigValues.h
 * @brief Computing eigenvalues and eigenvectors
-* @author Michael Koch,Erik Rodner
+* @author Michael Koch,Erik Rodner, Alexander Freytag
 * @date 08/19/2008
 
 */
@@ -44,12 +44,14 @@ class EVArnoldi : public EigValues
     uint maxiterations;
     double mindelta;
     bool verbose;
+    bool b_verifyDecreasingOrder;
 
   public:
-    EVArnoldi ( bool verbose = false, uint _maxiterations = 100, double _mindelta = 0.01 )
+    EVArnoldi ( bool verbose = false, uint _maxiterations = 100, double _mindelta = 0.01, bool b_verifyDecreasingOrder = true)
         : maxiterations ( _maxiterations ), mindelta ( _mindelta )
     {
       this->verbose = verbose;
+      this->b_verifyDecreasingOrder = b_verifyDecreasingOrder;
     };
 
     /**

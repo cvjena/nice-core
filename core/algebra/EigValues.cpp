@@ -117,7 +117,7 @@ EVArnoldi::getEigenvalues ( const GenericMatrix & data, Vector & eigenvalues,
       cerr << "EVArnoldi: [" << iteration << "] delta=" << delta << endl;
   }
   eigenvectors = rmatrix;
-
+  
   for ( uint i = 0; i < k; i++ )
   {
     NICE::Vector tmp;
@@ -125,4 +125,47 @@ EVArnoldi::getEigenvalues ( const GenericMatrix & data, Vector & eigenvalues,
     data.multiply ( tmp, eigenvectors.getColumn ( i ) );
     eigenvalues[i] = tmp.scalarProduct ( eigenvectors.getColumn ( i ) );
   }
+  
+  
+  
+  // post-processing: ensure that eigenvalues are in correct order!
+  
+  if ( this->b_verifyDecreasingOrder && (k > 1) )
+  {
+    NICE::VectorT< int > ewPermutation;
+    eigenvalues.sortDescend ( ewPermutation );
+    
+    NICE::Vector tmpRow;
+    int tmpIdx (-1);
+    for ( uint i = 0; i < k; i++ )
+    { 
+      if ( i == ewPermutation[i] )
+      {
+        //identity - nothing to do here
+      }
+      else
+      {
+        if ( tmpIdx == -1 )
+        {
+          tmpIdx = i;
+          tmpRow = eigenvectors.getColumn ( i );
+          eigenvectors.getColumnRef ( i ) = eigenvectors.getColumn ( ewPermutation[i] );
+        }
+        else
+        {
+          if ( tmpIdx != ewPermutation[i] )
+          {
+            eigenvectors.getColumnRef ( i ) = eigenvectors.getColumn ( ewPermutation[i] );
+          }
+          else // tmpIdx == ewPermutation[i]
+          {
+            eigenvectors.getColumnRef ( i ) = tmpRow;
+            tmpIdx = -1;
+          }
+        }
+      }
+    }
+    
+  }// sorting is only useful if we compute more then 1 ew
+  
 }
