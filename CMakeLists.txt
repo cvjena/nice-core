@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8.6) #version 2.8.6 at least required because o
 project (NICELibrary)
 
 include(CheckSymbolExists)
+include(CheckIncludeFiles)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
@@ -171,6 +172,13 @@ else()
 	  include_directories( ${GLUT_INCLUDE_DIR} )
 	  ADD_DEFINITIONS(-DNICE_USELIB_GLUT)
 	endif()
+
+  #check for available regex stuff
+  CHECK_INCLUDE_FILES(regex.h HAVE_REGEX_H)
+  if(HAVE_REGEX_H)
+    ADD_DEFINITIONS(-DNICE_USELIB_REGEX)  #regular expressions are available per default under linux
+    message(STATUS "Regex found")
+  endif()
 endif()
 
 if(MSVC)

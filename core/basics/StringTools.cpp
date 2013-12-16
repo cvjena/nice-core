@@ -16,8 +16,7 @@
 
 #include "StringTools.h"
 
-//#define USE_REGEX_LIB
-#ifdef USE_REGEX_LIB
+#ifdef NICE_USELIB_REGEX
 #include <regex.h>
 #endif
 
@@ -148,7 +147,7 @@ std::string StringTools::chomp(string s)
 
 bool StringTools::regexSubstitute ( std::string & s, const std::string & regex, const std::string & subst )
 {
-#ifdef USE_REGEX_LIB
+#ifdef NICE_USELIB_REGEX
     vector<string> submatches;
     std::ostringstream os_regex;
     
@@ -180,7 +179,7 @@ bool StringTools::regexSubstitute ( std::string & s, const std::string & regex, 
 
 bool StringTools::regexMatch ( const string & s, const string & regex )
 {
-#ifdef USE_REGEX_LIB
+#ifdef NICE_USELIB_REGEX
     vector<string> submatches;
     return regexMatch ( s, regex, submatches );
 #else
@@ -191,7 +190,7 @@ bool StringTools::regexMatch ( const string & s, const string & regex )
 bool StringTools::regexMatch ( const string & s, const string & regex, 
 			 vector<string> & submatches )
 {
-#ifdef USE_REGEX_LIB
+#ifdef NICE_USELIB_REGEX
 	submatches.clear();
 
     int    status;
