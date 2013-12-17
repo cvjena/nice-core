@@ -18,9 +18,10 @@ set(NICE_VERSION ${NICELibrary_VERSION_MAJOR}.${NICELibrary_VERSION_MINOR})
 
 OCV_OPTION(NICE_BUILD_DEBUG "NICE Debug Build for debugging" OFF )
 if(NICE_BUILD_DEBUG)
-  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
+  message(STATUS "NICE debug build enabled")
+  set (CMAKE_BUILD_TYPE Debug)
 else()
-  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall")
+  set (CMAKE_BUILD_TYPE Release)
 endif()
 
 OCV_OPTION(CMAKE_VERBOSE "Verbose mode" OFF )
