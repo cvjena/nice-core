@@ -33,8 +33,6 @@ set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
 
 set(NICE_BUILD_LIBS_STATIC_SHARED STATIC)
 
-set(NICE_BUILD_PROGS 1)
-
 OCV_OPTION(WITH_BOOST "Build with Boost support" OFF)
 if(WITH_BOOST)
   set(Boost_USE_STATIC_LIBS ON)
@@ -119,10 +117,12 @@ endif()
 
 OCV_OPTION(WITH_IMAGEMAGICK "Build with ImageMagick++" OFF)
 if(WITH_IMAGEMAGICK)
-  find_package(ImageMagick COMPONENTS Magick++)
+  find_package(ImageMagick COMPONENTS Magick++ MagickCore)
   if(ImageMagick_FOUND)
 	  message(STATUS "imagemagick found: ${ImageMagick_LIBRARIES}")
-	  else()
+    ADD_DEFINITIONS( "-DNICE_USELIB_LIBMAGICK")
+    INCLUDE_DIRECTORIES(${ImageMagick_INCLUDE_DIRS})
+	else()
 	  message(STATUS "imagemagick not found")
   endif()
 endif()
@@ -203,8 +203,6 @@ if( BUILD_UNITTESTS)
 endif()
 
 OCV_OPTION(BUILD_PROGRAMS "Build all programs" ON)
-
-
 
 set(OPENCV_LIB_INSTALL_PATH lib)
 

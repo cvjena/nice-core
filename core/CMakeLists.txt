@@ -14,7 +14,7 @@ include( progfiles.cmake)
 include( testfiles.cmake)	
 
 #add linkage dependencies to other libraries here
-set("nice_${the_library}_LINKING_DEPENDENCIES"  ${Boost_LIBRARIES} ${OPENGL_LIBRARY} ${GLUT_LIBRARY} ${QT_LIBRARIES} ${IPP_LIBRARIES})
+set("nice_${the_library}_LINKING_DEPENDENCIES"  ${Boost_LIBRARIES} ${OPENGL_LIBRARY} ${GLUT_LIBRARY} ${QT_LIBRARIES} ${IPP_LIBRARIES} ${ImageMagick_LIBRARIES})
 if(MATIO_FOUND)
   list(APPEND nice_${the_library}_LINKING_DEPENDENCIES ${MATIO_LIBRARIES})
 endif(MATIO_FOUND)
