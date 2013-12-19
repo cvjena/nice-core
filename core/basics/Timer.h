@@ -197,7 +197,7 @@ class Timer {
      * (00:00:00 UTC, January 1, 1970)
      * @return double value of time in seconds
      */
-    static inline double convertTime ( const struct timeval &time );
+    static double convertTime ( const struct timeval &time );
 
     /**
      * Date string from time since Epoch (00:00:00 UTC, January 1, 1970),

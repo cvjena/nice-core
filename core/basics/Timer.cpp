@@ -169,7 +169,7 @@ void Timer::reset() {
   sumAbsolute = 0.0;
 }
 
- inline double Timer::convertTime ( const struct timeval &time ) {
+double Timer::convertTime ( const struct timeval &time ) {
 #ifndef WIN32
       return double ( time.tv_sec ) + double ( time.tv_usec ) * 1e-6;
 #else
