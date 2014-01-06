@@ -126,6 +126,42 @@ class Persistent {
     {
       save ( s, format );
     }
+    
+    virtual inline std::string createStartTag( const std::string & s_varName ) const 
+    {
+      return "<" + s_varName + ">";
+    }
+    
+    virtual inline std::string createEndTag( const std::string & s_varName ) const 
+    {
+      return "</" + s_varName + ">";
+    }
+    
+    virtual inline std::string removeStartTag( const std::string & s_varName ) const 
+    {
+      return s_varName.substr( 1, s_varName.length() -2 );
+    }
+    
+    virtual inline std::string removeEndTag( const std::string & s_varName ) const 
+    {
+      return s_varName.substr( 2, s_varName.length() -3 );
+    }
+
+    virtual inline bool isStartTag( const std::string & s_varName,  const std::string & s_matchingVarName ) const 
+    {
+      return (    ( s_varName.length() > 2 ) &&   // min length
+                  ( s_varName.substr( 0, 1 ).compare( "<" ) == 0 ) &&  // proper beginning of a start-tag
+                  ( removeStartTag(s_varName).compare(s_matchingVarName) == 0 ) // start tag matches given section name
+             );
+    }     
+    
+    virtual inline bool isEndTag( const std::string & s_varName,  const std::string & s_matchingVarName ) const 
+    {
+      return (    ( s_varName.length() > 3 ) &&   // min length
+                  ( s_varName.substr( 0, 2 ).compare( "</" ) == 0 ) &&  // proper beginning of an end-tag
+                  ( removeEndTag(s_varName).compare(s_matchingVarName) == 0 ) // end tag matches given section name
+             );
+    }    
 
 };
 

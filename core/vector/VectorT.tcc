@@ -742,21 +742,32 @@ void VectorT<ElementType>::sortDescend() {
 }
 
 /**
- * @brief sort elements in an descending order.
+ * @brief sort elements in an descending order. Permutation is only correct if all elements are different.
  */
 template<typename ElementType>
 void VectorT<ElementType>::sortDescend(VectorT<int> & permutation) {
-//	VectorT<ElementType> tmp_cp(*this);
-	ippsSortDescend_I(getDataPointer(), this->dataSize);
-//	permutation.resize(this->size());
-//	for (int i = 0; i < this->size(); i++)
-//	{
-//		ElementTyp entry((*this)[i]);
-//		for (int i = 0; i < this->size(); i++)
-//		{
-//			
-//		}
-//	}
+  //copy elements to extract ordering information lateron
+  VectorT<ElementType> tmp_cp(*this);
+
+  // sort the elements
+  ippsSortDescend_I(getDataPointer(), this->dataSize);
+  
+  //compute permutation
+  permutation.resize(this->size());
+
+  int idxSelf ( 0 );
+  for (VectorT<ElementType>::const_iterator itSelf = (*this).begin(); itSelf != (*this).end(); itSelf++, idxSelf++)
+  {
+    int idxOrig ( 0 );
+    for ( VectorT<ElementType>::const_iterator itOrig = tmp_cp.begin(); itOrig != tmp_cp.end(); itOrig++, idxOrig++)
+    {
+      if ( *itOrig == *itSelf )
+      {
+        permutation[idxOrig] = idxSelf;
+        break;
+      }
+    }
+  }
 }
 
 template<typename ElementType>

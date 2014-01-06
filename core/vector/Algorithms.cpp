@@ -105,7 +105,21 @@ void choleskySolveMatrixLargeScale ( const Matrix & G, Matrix & B )
 	#pragma message NICE_WARNING("LinAl is not installed: choleskyInvertLargeScale will not be optimized.")
   #define CHOLESKYLINAL_WARNING
   #endif
-	choleskyInvert ( G, B );
+  if (G.rows() != G.cols())
+    fthrow(Exception, "Matrix G is not quadratic !");
+  if ( G.rows() != B.rows() )
+    fthrow(Exception, "Matrices sizes do not fit together.");
+  if (B.rows() == B.cols())
+    choleskyInvert ( G, B );
+  else
+  {
+    Vector b(B.rows(),0.0);
+    for (size_t i=0;i<B.cols();i++)
+    {
+      choleskySolveLargeScale (G, B.getColumn(i), b);
+      B.getColumnRef(i) = b;
+    }
+  }
 #endif
 }
 

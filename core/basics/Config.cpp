@@ -232,6 +232,7 @@ void Config::restore (istream & is, int format)
         continue;
 
       line = StringTools::chomp ( line );
+      len = line.size();
 
   #if defined DEBUGCONFIG
       DEBUGPRINT ("Config: (%d) '%s' (len = %d) / %s\n", (int)count, line.c_str(), (int)len,
@@ -274,7 +275,7 @@ void Config::restore (istream & is, int format)
       while ( (line[p]!='=') && (p<len) ) p++;
       if ( (p >= len-1) || (p<=i) ) continue;
       key = line.substr( i, p-i );
-      value = line.substr( p+1, len-p );
+      value = line.substr( p+1 ); // with only one argument, substr copies from the specified position until the end of the string
 
       StringTools::normalize_string(value);
       StringTools::normalize_string(key);

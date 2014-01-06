@@ -390,7 +390,7 @@ public:
     inline void sortDescend();
 	 
     /**
-    * @brief sort elements in an descending order.
+    * @brief sort elements in an descending order. Permutation is only correct if all elements are different.
     */
     inline void sortDescend(VectorT<int> & permutation);
 

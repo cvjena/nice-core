@@ -136,8 +136,29 @@ void StringTools::trimbounds ( std::string & value, char trimChar )
 /** @author Matti Bickel */
 std::string StringTools::trim(string s, const std::string& drop)
 {
-    std::string r=s.erase(s.find_last_not_of(drop)+1);
-    return r.erase(0,r.find_first_not_of(drop));
+    size_t findLastIndex = s.find_last_not_of(drop);
+    if ( findLastIndex < s.size() )
+    {
+      std::string r=s.erase(findLastIndex+1);
+      
+      size_t findFirstIndex = r.find_first_not_of(drop);
+      
+      if ( findFirstIndex > 0 )
+        return r.erase(0,findFirstIndex);
+      else
+        return r;
+      
+    } else
+    {
+      size_t findFirstIndex = s.find_first_not_of(drop);
+
+      if ( findFirstIndex > 0 )
+        return s.erase(0,findFirstIndex);
+      else
+        return s;
+      
+    }
+      
 }
 
 std::string StringTools::chomp(string s)
