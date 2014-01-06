@@ -43,9 +43,13 @@ EVArnoldi::getEigenvalues ( const GenericMatrix & data, Vector & eigenvalues,
   //////////////////////////////////////
 
   if ( verbose )
-    cerr << "Initialize Matrices";
+    cerr << "Initialize Matrices" << std::endl;
 
   uint n = data.cols ();
+  
+  if ( verbose )
+    std::cerr << "EVArnoldi: n: " << n << " k: " << k << std::endl;
+  
   NICE::Matrix rmatrix ( n, k, 0 ); //=eigenvectors
   NICE::Matrix qmatrix ( n, k, 0 ); //saves data =eigenvectors
   eigenvalues.resize ( k );
@@ -65,6 +69,8 @@ EVArnoldi::getEigenvalues ( const GenericMatrix & data, Vector & eigenvalues,
   ////////////////////////////////////
   ///////// start computation  ///////
   ////////////////////////////////////      
+  if ( verbose )
+    std::cerr << "EVArnoldi: start main computation" << std::endl;    
       
   //reduceddim
   double delta = 1.0;
@@ -74,6 +80,10 @@ EVArnoldi::getEigenvalues ( const GenericMatrix & data, Vector & eigenvalues,
     //replace Vector rold by matrix rold to check for convergence of all eigenvectors
     //NICE::Vector rold ( rmatrix.getColumn ( k - 1 ) );
     NICE::Matrix rold(rmatrix);
+    
+    if ( verbose )
+      std::cerr << "EVArnoldi: start for loop over reduced dims" << std::endl;
+    
     // meta-comment: i is an index for the iteration, j is an index for the basis
     // element (1 <= j <= k)
     for ( uint reduceddim = 0; reduceddim < k; reduceddim++ )
@@ -98,6 +108,10 @@ EVArnoldi::getEigenvalues ( const GenericMatrix & data, Vector & eigenvalues,
           ( qmatrix.getColumn ( j ).
             scalarProduct ( rmatrix.getColumn ( reduceddim ) ) );
     }
+    
+    if ( verbose )
+      std::cerr << "EVArnoldi: ended for loop over reduced dims" << std::endl;
+    
     //convergence stuff (replaced by checking all eigenvectors instead of a single one
     //NICE::Vector diff = rold - rmatrix.getColumn ( k - 1 );
     //delta = diff.normL2 ();
@@ -116,6 +130,10 @@ EVArnoldi::getEigenvalues ( const GenericMatrix & data, Vector & eigenvalues,
     if ( verbose )
       cerr << "EVArnoldi: [" << iteration << "] delta=" << delta << endl;
   }
+  
+  if ( verbose )
+    std::cerr << "EVArnoldi: while-loop done" << std::endl;
+  
   eigenvectors = rmatrix;
   
   for ( uint i = 0; i < k; i++ )
@@ -125,8 +143,7 @@ EVArnoldi::getEigenvalues ( const GenericMatrix & data, Vector & eigenvalues,
     data.multiply ( tmp, eigenvectors.getColumn ( i ) );
     eigenvalues[i] = tmp.scalarProduct ( eigenvectors.getColumn ( i ) );
   }
-  
-  
+
   
   // post-processing: ensure that eigenvalues are in correct order!
   
@@ -166,6 +183,5 @@ EVArnoldi::getEigenvalues ( const GenericMatrix & data, Vector & eigenvalues,
       }
     }
     
-  }// sorting is only useful if we compute more then 1 ew
-  
+  }// sorting is only useful if we compute more then 1 ew  
 }

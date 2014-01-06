@@ -139,7 +139,6 @@ class Persistent {
     
     virtual inline std::string removeStartTag( const std::string & s_varName ) const 
     {
-      std::cerr << "removeStartTag of string " << s_varName << " with size " << s_varName.length() << std::endl;
       return s_varName.substr( 1, s_varName.length() -2 );
     }
     
@@ -147,6 +146,14 @@ class Persistent {
     {
       return s_varName.substr( 2, s_varName.length() -3 );
     }
+
+    virtual inline bool isStartTag( const std::string & s_varName,  const std::string & s_matchingVarName ) const 
+    {
+      return (    ( s_varName.length() > 2 ) &&   // min length
+                  ( s_varName.substr( 0, 1 ).compare( "<" ) == 0 ) &&  // proper beginning of a start-tag
+                  ( removeStartTag(s_varName).compare(s_matchingVarName) == 0 ) // start tag matches given section name
+             );
+    }     
     
     virtual inline bool isEndTag( const std::string & s_varName,  const std::string & s_matchingVarName ) const 
     {
