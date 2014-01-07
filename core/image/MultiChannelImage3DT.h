@@ -4,6 +4,7 @@
 #include <core/image/MultiChannelImageAccess3D.h>
 #include <core/image/ImageT.h>
 #include <core/image/MultiChannelImageT.h>
+#include <core/image/Histogram.h>
 
 #include <vector>
 #include <fstream>
@@ -157,8 +158,13 @@ public:
   /** calculate image statistics */
   void statistics( P & min, P & max, uint channel = 0 ) const;
 
-  /** correct inhomogeneous illuminations (shading) between the image slices **/
+  /** correct inhomogeneous illuminations between the image slices
+   *  ! Deprecated, use 'equalizeHistogram' instead !
+   */
   void correctShading( uint channel = 0 ) const;
+
+  /** do a histogram equalization */
+  void equalizeHistogram( uint channel = 0 ) const;
   
   /** dump all data to RAW format: xsize, ysize, numChannels, <data> */
   void store( std::string filename ) const;

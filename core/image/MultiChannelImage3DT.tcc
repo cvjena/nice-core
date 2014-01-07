@@ -37,17 +37,10 @@ P & MultiChannelImage3DT<P>::operator() (int x, int y, int z, uint channel)
 }
 
 template<class P>
-MultiChannelImageT<P> MultiChannelImage3DT<P>::operator[] (uint c)
+MultiChannelImageT<P> MultiChannelImage3DT<P>::operator[] (uint z)
 {
-  // This was our first idea ... but it creates a real copy
-  // ImageT<P> tmp ( data[c], xsize, ysize, xsize*sizeof(P), GrayColorImageCommonImplementation::noAlignment );
-  // This is the correct version. The funny thing about this is that shallowCopy
-  // is not an enum parameter, but an instance of ShallowCopyMode, which is a class.
-  // This fancy trick was done in older to prevent automatic conversion between enum types
-  // as done implicitly by C++.
-  
   MultiChannelImageT<P> img;
-  for( int z = 0; z < zsize; z++ )
+  for( int c = 0; c < numChannels; c++ )
   {
     P * datatmp = data[c];
     ImageT<P> tmp ( &datatmp[z*(xsize*ysize)], xsize, ysize, xsize*sizeof(P), GrayColorImageCommonImplementation::shallowCopy );
@@ -352,6 +345,7 @@ void MultiChannelImage3DT<P>::correctShading( uint channel ) const
 {
   assert( channel < numChannels );
   
+  // some sort of correction trick hardly understandable :-)
   std::vector<double> meanVals;
   for( int z = 0; z < zsize; z++ )
   {
@@ -365,10 +359,12 @@ void MultiChannelImage3DT<P>::correctShading( uint channel ) const
     }
     sumVal /= (xsize*ysize);
     meanVals.push_back( sumVal );
+
   }
 
   P newMax = std::numeric_limits<P>::min();
-  short int maxVal = 255;
+
+  const short int maxVal = 255;
   for ( int z = 0; z < zsize; z++ )
   {
     for ( int y = 0; y < ysize; y++ )
@@ -391,6 +387,35 @@ void MultiChannelImage3DT<P>::correctShading( uint channel ) const
 }
 
 template<class P>
+void MultiChannelImage3DT<P>::equalizeHistogram( uint channel ) const
+{
+  assert(channel < numChannels );
+
+  for( int z = 0; z < zsize; z++ )
+  {
+    NICE::Image img = getChannel(z, channel );
+    NICE::Histogram hist(img,0,255,256);
+
+    NICE::IntVector *histVec = NULL;
+    histVec = hist.cumulative();
+    for ( int i = 0; i < (int)histVec->size(); i++)
+    {
+      histVec->set(i, histVec->get(i) * 255 / (double)histVec->get(histVec->size()-1));
+    }
+
+    for ( int y = 0; y < ysize; y++ )
+    {
+      for ( int x = 0; x < xsize; x++ )
+      {
+        data [channel][x + y*xsize + z*xsize*ysize] = histVec->get( img.getPixel(x,y) );
+      }
+    }
+
+    delete histVec;
+  }
+}
+
+template<class P>
 Image MultiChannelImage3DT<P>::getChannel( int z, uint channel ) const
 {
   assert( channel < numChannels );
@@ -407,6 +432,7 @@ ImageT<P> MultiChannelImage3DT<P>::getChannelT( int z, uint channel ) const
   assert( channel < numChannels );
 
   NICE::ImageT<P> img;
+  // TODO do not convert to grey since we are using a template class image
   convertToGrey( img, z, channel, false );
   
   P min, max;
