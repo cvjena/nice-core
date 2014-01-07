@@ -75,7 +75,7 @@ macro(nice_add_unittests)
 
       INSTALL(TARGETS ${__testname} DESTINATION "tests/${the_library}")
       SET_PROPERTY(TARGET ${__testname} PROPERTY FOLDER "unittests/${the_library}")
-      ADD_TEST(${__testname} ${__testname} WORKING_DIRECTORY ${__testname_dir})
+      ADD_TEST(NAME ${__testname} WORKING_DIRECTORY ${__testname_dir} COMMAND ${__testname})
     endforeach()
 
 #     INCLUDE_DIRECTORIES(${CPPUNIT_INCLUDE_DIR})
