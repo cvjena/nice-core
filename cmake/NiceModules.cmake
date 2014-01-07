@@ -65,6 +65,9 @@ macro(nice_add_unittests)
     message(STATUS "building tests:")
     foreach(__testcpp ${nice_${the_library}_TESTFILES_SRC})
       get_filename_component(__testname ${__testcpp} NAME_WE )
+      nice_get_real_path(__testname_abspath ${__testcpp})
+      get_filename_component(__testname_dir ${__testname_abspath} DIRECTORY)
+
       message(STATUS "unittest: ${__testname} ${__testcpp}")
       
       ADD_EXECUTABLE( ${__testname} ../templates/cppUnitTestRunner.cpp ${__testcpp})
@@ -72,7 +75,7 @@ macro(nice_add_unittests)
 
       INSTALL(TARGETS ${__testname} DESTINATION "tests/${the_library}")
       SET_PROPERTY(TARGET ${__testname} PROPERTY FOLDER "unittests/${the_library}")
-      ADD_TEST(${__testname} ${__testname})
+      ADD_TEST(${__testname} ${__testname} WORKING_DIRECTORY ${__testname_dir})
     endforeach()
 
 #     INCLUDE_DIRECTORIES(${CPPUNIT_INCLUDE_DIR})
