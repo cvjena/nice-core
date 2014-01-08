@@ -258,7 +258,8 @@ moc_%.cpp:%.h
 $(BUILDDIR)%.a:
 	@$(MKOUTPUTDIR)
 	$(VERBOSE)echo "+++ linking library $@"
-	$(VERBOSE2)$(AR) cr $@ $(filter %.o,$^)
+	$(VERBOSE2)test -n "$(filter %.o,$^)" && $(AR) -crs $@ $(filter %.o,$^); echo;
+	$(VERBOSE2)test -f "$@" || (touch emptysource.cpp; gcc -c emptysource.cpp; $(AR) -crs $@ emptysource.o; rm emptysource.*); echo
 	@touch $@
 	@$(call MKOUTPUTDIR2,$(LIBSYMLINKDIR))
 	$(VERBOSE2)cd $(LIBSYMLINKDIR);$(SYMLINK) ../$(@:$(BUILDDIR)%=%) $(@F)

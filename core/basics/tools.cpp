@@ -5,6 +5,8 @@
  */
 #include <core/basics/tools.h>
 
+typedef unsigned int uint;
+
 namespace NICE {
 
 void writeLatexTabular(std::ostream& out,

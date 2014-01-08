@@ -13,6 +13,8 @@
 #include <core/basics/Exception.h>
 #include <core/basics/Streamable.h>
 
+typedef unsigned int uint;
+
 namespace NICE {
 
 // check if endptr is empty string (except for whitespaces)

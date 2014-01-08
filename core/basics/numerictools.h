@@ -7,7 +7,7 @@
  */
 
 #include <cmath>
-// #include <math.h>
+#include <math.h>
 #include <stdlib.h>
 #include <limits>
 #include <string>
@@ -204,7 +204,7 @@ inline double cubeRoot(const double& t) {
  */
 inline bool isNaN(double x) {
 #if (__GNUC__ > 3)
-  return isnan(x);
+  return std::isnan(x);
 #else
   return x != x;
 #endif
@@ -215,7 +215,7 @@ inline bool isNaN(double x) {
  */
 inline bool isNaN(float x) {
 #if (__GNUC__ > 3)
-  return isnan(x);
+  return std::isnan(x);
 #else
   return x != x;
 #endif
