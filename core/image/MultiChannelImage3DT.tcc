@@ -431,13 +431,18 @@ ImageT<P> MultiChannelImage3DT<P>::getChannelT( int z, uint channel ) const
 {
   assert( channel < numChannels );
 
-  NICE::ImageT<P> img;
-  // TODO do not convert to grey since we are using a template class image
-  convertToGrey( img, z, channel, false );
-  
-  P min, max;
-  statistics ( min, max, channel );
-  fprintf (stderr, "MultiChannelImage3DT<>::showChannel: max %f min %f\n", (double)max, (double)min );
+  //  P min, max;
+  //  statistics ( min, max, channel );
+  //  fprintf (stderr, "MultiChannelImage3DT<>::showChannel: max %f min %f\n", (double)max, (double)min );
+
+  NICE::ImageT<P> img(xsize,ysize);
+
+  long k = 0;
+  for ( int y = 0; y < ysize; y++ )
+    for( int x = 0; x < xsize; x++, k++ )
+    {
+      img.setPixel( x, y, data[channel][z*xsize*ysize + k] );
+    }
 
   return img;
 }
@@ -450,10 +455,8 @@ void MultiChannelImage3DT<P>::convertToGrey( NICE::Image & img, int z, uint chan
 
   P min, max;
 
-  if ( normalize ) {
+  if ( normalize )
     statistics( min, max, channel );
-    fprintf( stderr, "MultiChannelImage3DT<>::showChannel: max %f min %f\n", ( double )max, ( double )min );
-  }
 
   bool skip_assignment = false;
 
@@ -462,56 +465,10 @@ void MultiChannelImage3DT<P>::convertToGrey( NICE::Image & img, int z, uint chan
   if ( normalize )
     if ( max - min < std::numeric_limits<double>::min() )
     {
+      fprintf( stderr, "MultiChannelImage3DT<>::showChannel: max %f min %f\n", ( double )max, ( double )min );
       img.set( max );
       skip_assignment = true;
-      fprintf( stderr, "MultiChannelImage3DT::showChannel: image is uniform! (%f)\n", ( double )max );
-    }
-
-
-  if ( ! skip_assignment )
-  {
-    long k = 0;
-
-    for ( int y = 0 ; y < ysize; y++ )
-    {
-      for ( int x = 0 ; x < xsize ; x++, k++ )
-      {
-        if ( normalize )
-        {
-          img.setPixel( x, y, ( int )(( data[channel][z*xsize*ysize + k] - min ) * 255 / ( max - min ) ) );
-        }
-        else
-        {
-          img.setPixel( x, y, ( int )( data[channel][z*xsize*ysize + k] ) );
-        }
-      }
-    }
-  }
-}
-
-/** convert to ice image template */
-template<class P>
-void MultiChannelImage3DT<P>::convertToGrey( NICE::ImageT<P> & img, int z, uint channel,  bool normalize ) const
-{
-  assert( channel < numChannels );
-
-  P min, max;
-
-  if ( normalize ) {
-    statistics( min, max, channel );
-    fprintf( stderr, "MultiChannelImage3DT<>::showChannel: max %f min %f\n", ( double )max, ( double )min );
-  }
-
-  bool skip_assignment = false;
-
-  img.resize( xsize, ysize );
-
-  if ( normalize )
-    if ( max - min < std::numeric_limits<double>::min() )
-    {
-      img.set( max );
-      skip_assignment = true;
-      fprintf( stderr, "MultiChannelImage3DT::showChannel: image is uniform! (%f)\n", ( double )max );
+      fprintf( stderr, "MultiChannelImage3DT<>::showChannel: image is uniform! (%f)\n", ( double )max );
     }
 
 

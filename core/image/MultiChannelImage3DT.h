@@ -140,9 +140,6 @@ public:
   /** convert to ice image */
   void convertToGrey( NICE::Image & img, int z, uint channel = 0, bool normalize = true ) const;
 
-	/** convert to ice image template */
-  void convertToGrey( NICE::ImageT<P> & img, int z, uint channel = 0, bool normalize = false ) const;
-	
   /** convert to ice colorimage */
   void convertToColor( NICE::ColorImage & img, int z, const int chan1 = 0, const int chan2 = 1, const int chan3 = 2 ) const;
 
