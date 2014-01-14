@@ -5,9 +5,13 @@
  */
 #include "core/basics/numerictools.h"
 
+// STL includes
 #include <errno.h>
 #include <sstream>
+#include <iomanip>
 #include <clocale>
+
+// NICE-core includes
 #include <core/basics/Log.h>
 #include <core/basics/Timer.h>
 #include <core/basics/Exception.h>
@@ -81,6 +85,13 @@ std::string intToString(const int i) {
   s << i;
   return s.str();
 }
+
+std::string intToString(const int i, const uint & length) {
+  std::stringstream s;
+  s << std::setw( length ) << std::setfill('0') << i;
+  return s.str();
+}
+
 
 std::string doubleToString(const double d, const unsigned int digits,
                            const bool fixedPoint) {

@@ -622,6 +622,7 @@ FILE_PATTERNS          = *.doxy \
 *.cxx \
 *.cpp \
 *.c++ \
+*.tcc \
 *.d \
 *.java \
 *.ii \
