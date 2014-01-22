@@ -1,11 +1,12 @@
+// STL includes
 #include <assert.h>
-
 #include <fstream>
 
-#include "Config.h"
-#include "ossettings.h"
-
-#include "StringTools.h"
+// nice-core includes
+#include "core/basics/Exception.h"
+#include "core/basics/Config.h"
+#include "core/basics/ossettings.h"
+#include "core/basics/StringTools.h"
 
 using namespace NICE;
   
@@ -335,13 +336,15 @@ std::string Config::gS(const std::string & key) const
 std::string Config::gS(const std::string & block, const std::string & key) const
 {
     std::string v ("");
-    if ( confS.find(block, key, v) ) {
-		return v;
-    } else {
-		fprintf (stderr, "Config: setting %s::%s not found !\n", block.c_str(), key.c_str() );
-		fprintf (stderr, "Config: %s\n", help(block, key).c_str() );
-		exit(-1);
-		return ""; // never reached
+    if ( confS.find(block, key, v) )
+    {
+      return v;
+    }
+    else
+    {
+      std::string errorMessage = "Config: setting " + block + "::" + key + " not found !\n";
+      errorMessage += "\n \n Config: " + help(block, key) + "\n";
+      throw NICE::Exception( errorMessage );
     }
 
 }
