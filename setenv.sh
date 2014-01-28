@@ -24,6 +24,9 @@ for MYNICEDIR in $POSSIBLE_NICE_DIRECTORIES; do
 done
 echo Configuring NICE framework in $NICEHOME
 
+#export NICEHOME to have it accessible in child processes, e.g., in programs started on this shell aiming to read local settings, relative file names, or stuff like that
+export NICEHOME
+
 # Set the PKG_CONFIG_PATH to include the nice-core pc-files
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/lib64/pkgconfig/:/usr/lib/pkgconfig/:/usr/lib/pkgconfig/:/usr/local/lib/pkgconfig/:$NICEHOME/BUILD_`uname -m`$NICE_BUILD/pkgconfig/
 
