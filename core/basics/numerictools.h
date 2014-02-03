@@ -8,13 +8,13 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #ifdef WIN32
-	#include <math.h>
+#   include <math.h>
 #endif
 
 #include "CrossplatformDefines.h"
 
 #ifdef NICE_BOOST_FOUND
-#include <boost/math/special_functions/fpclassify.hpp> // isnan
+#   include <boost/math/special_functions/fpclassify.hpp> // isnan
 #endif
 
 #include <stdlib.h>
@@ -212,13 +212,11 @@ inline double cubeRoot(const double& t) {
  * Check if a floating point value is NaN
  */
 inline bool isNaN(double x) {
-	
-
 #ifdef NICE_BOOST_FOUND
 	return  boost::math::isnan(x);
 #else
 	#if (__GNUC__ > 3)
-	  return isnan(x);
+	  return std::isnan(x);
 	#else
 	  return x != x;
 	#endif
@@ -233,7 +231,7 @@ inline bool isNaN(float x) {
 	return  boost::math::isnan(x);
 #else
 	#if (__GNUC__ > 3)
-	  return isnan(x);
+	  return std::isnan(x);
 	#else
 	  return x != x;
 	#endif
@@ -248,6 +246,8 @@ inline bool isFinite(double x)
 	#else
 		NICE_ERROR("isFinite() not defined (and neither is boost found for compensation...)")
 	#endif
+#if (__GNUC__ > 3)
+  return std::isnan(x);
 #else
 	return finite(x);
 #endif
@@ -433,9 +433,20 @@ inline long stringToInt(std::string s) {
 }
 
 /**
- * Convert an integer into a string.
+ * @brief Convert an integer into a string
  */
 std::string intToString(const int i);
+
+/**
+ * @brief Convert an integer into a string of fixed length, add leading zeros if needed.
+ * @author Alxander Freytag
+ * @date 13-01-2014 (dd-mm-yyyy)
+ * 
+ * @param i - number to convert
+ * @param length - resulting length of string including leading zeros
+ * @return string
+ */
+std::string intToString(const int i, const uint & length);
 
 /**
  * Convert a double into a string.
@@ -455,6 +466,31 @@ inline int roundInt(double d) {
  */
 inline int roundInt(float d) {
   return int(roundf(d));
+}
+
+
+/**
+ * @brief Compute number of digits (including sign) of a given number w.r.t. a specified base (ONLY USEFUL FOR INT-LIKE VARIABLES)
+ * @author Alexander Freytag
+ * @date 13-01-2014 (dd-mm-yyyy)
+ *
+ * @param number 
+ * @param base  ( default is 10).
+ * @return int
+ **/
+template <class T>
+int getNumDigits(T number, T base = 10 )
+{
+    int digits ( 0 );
+    
+    // note: only possible, because we call it using call-by-value!
+    while ( number )
+    {
+        number /= base;
+        digits++;
+    }
+    
+    return digits;
 }
 
 } // namespace

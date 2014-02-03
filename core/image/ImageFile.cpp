@@ -136,52 +136,88 @@ void ImageFile::readerPNG(GrayColorImageCommonImplementationT<Ipp32f> *image)
 	
     }
 
-    template<>
-    void ImageFile::writerMagick(const GrayColorImageCommonImplementationT<unsigned char> *image) const
+template<>
+void ImageFile::writerMagick(const GrayColorImageCommonImplementationT<unsigned char> *image) const
+{
+  if ( image->channels() == 1 ) // gray image
+  {
+      Magick::Image magick_image;
+    // checking whether we have not a simple aligned image (block in memory)
+    if ( image->rowStepsize() != image->width() )
     {
-	if ( image->channels() == 1 ) {
-	    Magick::Image magick_image;
-		// checking whether we have not a simple aligned image (block in memory)
-		if ( image->rowStepsize() != image->width() ) {
-			// this means that we have a sub image or an IPP image
-			// (i.e. some pixels are skipped in each row)
-			// The Blob interface of ImageMagick is not flexible enough to handle this case
-			//
-			// Solution: we have to copy the image :(
-			// We do this by creating an empty NICE image
-			ImageT<unsigned char> image_noalignment;
-			// Setting the memory alignment and copying from image
-			image_noalignment.copyFrom ( *image, GrayColorImageCommonImplementation::noAlignment );
-			// and doing the conversion to a Magick image
-			// the alternative would be to directly copy from image to magick_image without memory
-			// operations, but this could be slower
-			Magick::Blob blob ( image_noalignment.getPixelPointer(), image_noalignment.width()*image_noalignment.height() );
-	    	magick_image.magick ("GRAY");
+      // this means that we have a sub image or an IPP image
+      // (i.e. some pixels are skipped in each row)
+      // The Blob interface of ImageMagick is not flexible enough to handle this case
+      //
+      // Solution: we have to copy the image :(
+      // We do this by creating an empty NICE image
+      ImageT<unsigned char> image_noalignment;
+      // Setting the memory alignment and copying from image
+      image_noalignment.copyFrom ( *image, GrayColorImageCommonImplementation::noAlignment );
+      // and doing the conversion to a Magick image
+      // the alternative would be to directly copy from image to magick_image without memory
+      // operations, but this could be slower
+      Magick::Blob blob ( image_noalignment.getPixelPointer(), image_noalignment.width()*image_noalignment.height() );
+        magick_image.magick ("GRAY");
             magick_image.read ( blob, Magick::Geometry ( image_noalignment.width(), image_noalignment.height() ), 8 );
-	    	magick_image.write ( filename );
-		} else {
-        	Magick::Blob blob ( image->getPixelPointer(), image->width()*image->height() );
-	    	magick_image.magick ("GRAY");
-            magick_image.read ( blob, Magick::Geometry ( image->width(), image->height() ), 8 );
-	    	magick_image.write ( filename );
-		}
-	} else {
-		// see above, the same problems occur for RGB images
-		if ( image->rowStepsize() != image->width() ) {
-			ColorImageT<unsigned char> image_noalignment;
-			image_noalignment.copyFrom ( *image, GrayColorImageCommonImplementation::noAlignment );
-			Magick::Image magick_image ( image_noalignment.width(), image_noalignment.height(),
-				"RGB", Magick::CharPixel, image_noalignment.getPixelPointer() );
-	    	magick_image.write ( filename );
-
-		} else {
-			// we do not need the Blob definition here (somehow strange)
-		    Magick::Image magick_image ( image->width(), image->height(),
-				"RGB", Magick::CharPixel, image->getPixelPointer() );
-	    	magick_image.write ( filename );
-		}
-	}
+        magick_image.write ( filename );
     }
+    else
+    {
+        Magick::Blob blob ( image->getPixelPointer(), image->width()*image->height() );
+        
+        magick_image.magick ("GRAY");
+        magick_image.read ( blob, Magick::Geometry ( image->width(), image->height() ), 8 );
+        
+        magick_image.write ( filename );
+    }
+  }
+  else // color image
+  {
+    // see above, the same problems occur for RGB images
+    if ( image->rowStepsize() != image->width() )
+    {
+      ColorImageT<unsigned char> image_noalignment;
+      
+      image_noalignment.copyFrom ( *image, GrayColorImageCommonImplementation::noAlignment );
+      Magick::Image magick_image ( image_noalignment.width(), image_noalignment.height(),
+        "RGB", Magick::CharPixel, image_noalignment.getPixelPointer() );
+      
+      std::string pngEnding ( ".png" );
+      // do we currently want to write a png file?
+      // if so, adapt writing parameters accordingly 
+      //
+      // needed for compatibility with png writer
+      if ( filename.compare( filename.length() - pngEnding.length(), pngEnding.length(), pngEnding) == 0)
+      {
+        magick_image.defineValue( "png", "bit-depth", "8");
+        magick_image.defineValue( "png", "format", "png8");
+      }
+      
+      magick_image.write ( filename );
+
+    }
+    else
+    {
+      // we do not need the Blob definition here (somehow strange)
+      Magick::Image magick_image ( image->width(), image->height(),
+      "RGB", Magick::CharPixel, image->getPixelPointer() );
+        
+      std::string pngEnding ( ".png" );
+      // do we currently want to write a png file?
+      // if so, adapt writing parameters accordingly 
+      //
+      // needed for compatibility with png writer
+      if ( filename.compare( filename.length() - pngEnding.length(), pngEnding.length(), pngEnding) == 0)
+      {
+        magick_image.defineValue( "png", "bit-depth", "8");
+        magick_image.defineValue( "png", "format", "png8");
+      }
+      
+      magick_image.write ( filename );
+    }
+  }
+}
 #endif
 
 ImageFile::Format ImageFile::name2Format(const std::string &filename)

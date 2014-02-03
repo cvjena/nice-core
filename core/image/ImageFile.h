@@ -4,8 +4,10 @@
  * See file License for license information.
  */
 /*****************************************************************************/
-/*! \file ImageFile.h 
-    \brief ImageFile class declaration
+/** @file ImageFile.h 
+    @brief ImageFile class declaration
+    @author Michael Koch, Erik Rodner, Alexander Freytag
+    @date 22-01-2014 (dd-mm-yyyy)
  */
 /*****************************************************************************/
 /*
@@ -230,6 +232,10 @@ class ImageFile
 /*****************************************************************************/
 /*
  *  $Log: ImageFile.h,v $
+ * 
+ *  Revision 1.6  22-01-2014 (dd-mm-yyyy) freytag
+ *  changed png writing with ImageMagick to be comparable to libPNG
+ * 
  *  Revision 1.5  2009/08/03 15:23:49  koch
  *  deleted unnecessary .h
  *

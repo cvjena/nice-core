@@ -4,6 +4,7 @@
 #include <core/image/MultiChannelImageAccess3D.h>
 #include <core/image/ImageT.h>
 #include <core/image/MultiChannelImageT.h>
+#include <core/image/Histogram.h>
 
 #include <vector>
 #include <fstream>
@@ -139,9 +140,6 @@ public:
   /** convert to ice image */
   void convertToGrey( NICE::Image & img, int z, uint channel = 0, bool normalize = true ) const;
 
-	/** convert to ice image template */
-  void convertToGrey( NICE::ImageT<P> & img, int z, uint channel = 0, bool normalize = false ) const;
-	
   /** convert to ice colorimage */
   void convertToColor( NICE::ColorImage & img, int z, const int chan1 = 0, const int chan2 = 1, const int chan3 = 2 ) const;
 
@@ -157,8 +155,13 @@ public:
   /** calculate image statistics */
   void statistics( P & min, P & max, uint channel = 0 ) const;
 
-  /** correct inhomogeneous illuminations (shading) between the image slices **/
+  /** correct inhomogeneous illuminations between the image slices
+   *  ! Deprecated, use 'equalizeHistogram' instead !
+   */
   void correctShading( uint channel = 0 ) const;
+
+  /** do a histogram equalization */
+  void equalizeHistogram( uint channel = 0 ) const;
   
   /** dump all data to RAW format: xsize, ysize, numChannels, <data> */
   void store( std::string filename ) const;
