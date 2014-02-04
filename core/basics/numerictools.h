@@ -246,7 +246,7 @@ inline bool isFinite(double x)
 	#else
 		NICE_ERROR("isFinite() not defined (and neither is boost found for compensation...)")
 	#endif
-#if (__GNUC__ > 3)
+#elif (__GNUC__ > 3)
   return std::isnan(x);
 #else
 	return finite(x);
