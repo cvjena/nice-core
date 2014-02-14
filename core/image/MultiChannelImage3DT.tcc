@@ -328,10 +328,11 @@ template<class P>
 void MultiChannelImage3DT<P>::statistics( P & min, P & max, uint channel ) const
 {
   assert( channel < numChannels );
+  P val = 0;
 
   for ( long k = 0 ; k < xsize*ysize*zsize ; k++ )
   {
-    P val = data [channel][k];
+    val = data [channel][k];
     if (( k == 0 ) || ( val > max ) ) max = val;
     if (( k == 0 ) || ( val < min ) ) min = val;
   }
@@ -420,7 +421,7 @@ Image MultiChannelImage3DT<P>::getChannel( int z, uint channel ) const
 {
   assert( channel < numChannels );
 
-  NICE::Image img;
+  NICE::Image img(xsize, ysize);
   convertToGrey( img, z, channel, true );
 
   return img;
@@ -611,50 +612,6 @@ void MultiChannelImage3DT<P>::calcIntegral( uint channel )
 }
 
 template<class P>
-void MultiChannelImage3DT<P>::calcGLCM( std::vector<std::vector<double> > & mat, const std::vector<int> dis, uint channel )
-{
-  assert( channel < numChannels );
-  assert( data[channel] != NULL );
-  assert( dis.size() > 2 );
-  
-  P min, max;
-  statistics( min, max, channel );
-  
-  long k = 0;
-
-  mat = std::vector<std::vector<double> > ( max+1, std::vector<double> ( max+1, 0.0 ) );
-  
-  for (int z = 0; z < zsize; z++ )
-  {
-    for (int y = 0; y < ysize; y++ )
-    {
-      for (int x = 0; x < xsize; x++)
-      {
-        if ( (x+dis[0]>=0) && (x+dis[0]<xsize)
-          && (y+dis[1]>=0) && (y+dis[1]<ysize)
-          && (z+dis[2]>=0) && (z+dis[2]<zsize) )
-        {
-          P val = get( x, y, z, channel );
-          P dval = get( x+dis[0], y+dis[1], z+dis[2], channel );
-          mat[val][dval]++;
-          mat[dval][val]++;   // symmetry
-          k += 2;
-        }
-      }
-    }
-  }
-  
-  for (int i = 0; i <= max; i++)
-  {
-    for (int j = 0; j <= max; j++)
-    {
-      mat[i][j] /= k;
-    }
-  }
-
-}
-
-template<class P>
 void MultiChannelImage3DT<P>::calcVariance( uint srcchan, uint tarchan )
 {
   assert( srcchan < tarchan );
@@ -739,7 +696,7 @@ P MultiChannelImage3DT<P>::getIntegralValue(int ulfx, int ulfy, int ulfz, int lr
   lrbz = std::max(lrbz, 0);
   lrbz = std::min(lrbz, zsize-1);
   
-  P val1, val2, val3, val4, val5, val6, val7, val8;
+  double val1, val2, val3, val4, val5, val6, val7, val8;
   val1 = get(lrbx, lrby, lrbz, channel);
   if( ulfz > -1 )
     val2 = get(lrbx, lrby, ulfz, channel);
@@ -770,9 +727,13 @@ P MultiChannelImage3DT<P>::getIntegralValue(int ulfx, int ulfy, int ulfz, int lr
   else
     val8 = 0;
   
-  P volume = abs((P)(lrbx-ulfx)*(lrby-ulfy)*(lrbz-ulfz));
+  P volume = abs((lrbx-ulfx)*(lrby-ulfy)*(lrbz-ulfz));
   P val = val1 - val2 - val3 + val4 - ( val5 - val6 - val7 + val8 );
-  return val/volume;
+
+  if (volume != 0)
+    return val/volume;
+  else
+    return 0.0;
 }
 
 template<class P>
