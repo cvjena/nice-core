@@ -109,14 +109,6 @@ public:
   void calcIntegral( uint channel = 0 );
   
   /** 
-   * @brief calculate the gray level co-occurence matrix of a channel
-   * @param max Co-occurence Matrix
-   * @param dis displacement vector
-   * @param channel channel
-   */
-  void calcGLCM( std::vector<std::vector<double> > & mat, const std::vector<int> dis, uint channel = 0 );
-  
-  /** 
    * @brief calculate the variance image map of a channel
    * @param srcchan source channel with raw data
    * @param tarchan target channel for the variance map
