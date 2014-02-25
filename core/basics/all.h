@@ -21,7 +21,7 @@
 #include <core/basics/Observable.h>
 #include <core/basics/Observer.h>
 //#include <core/basics/vectorio.h>
-#include <core/basics/assert.h>
+//#include <core/basics/assert.h>
 // #include <core/basics/ransac.h>
 #include <core/basics/deprecated.h>
 #include <core/basics/types.h>

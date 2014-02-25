@@ -13,13 +13,15 @@ if ( !defined($@) || (length($@) == 0) ) {
 	$persistence_support = 0;
 }
 
+my $defaultsearchpaths = "/usr/lib/pkgconfig:/usr/lib64/pkgconfig";
+
 
 ####### search_pc_files () // code date : 21.07.09 ######
 sub search_pc_files
 {
     my $search_paths = $ENV{'PKG_CONFIG_PATH'};
     if (!defined($search_paths)) {
-	$search_paths = "";
+	    $search_paths = $defaultsearchpaths;
     }
     $search_paths .= ":.";
 
@@ -257,11 +259,13 @@ my $print_libs = 0;
 my $print_modversion = 0;
 my $eval_exists = 0;
 my $print_version = 0;
+my $print_all_packages = 0;
 my ( $cache, $use_cache, $rebuild_cache ) = ( "", 0, 0);
 my $result = GetOptions ("libs"   => \$print_libs,      
 			 "cflags"  => \$print_cflags,
 			 "cppflags"  => \$print_cflags,
 			 "cxxflags"  => \$print_cflags,
+			 "list-all"  => \$print_all_packages,
 			 "modversion" => \$print_modversion,
 			 "exists" => \$eval_exists,
 			 "version" => \$print_version,
@@ -270,7 +274,7 @@ my $result = GetOptions ("libs"   => \$print_libs,
 
 if ( $print_version )
 {
-	print "slim-pkg-config 0.1beta (c) Erik Rodner\n";
+	print "slim-pkg-config 0.2 (c) Erik Rodner\n";
 	exit;
 }
 
@@ -293,7 +297,7 @@ if ( $use_cache ) {
 }
 
 if ( !$use_cache || $rebuild_cache ) {
-	$data{'locations'} = search_pc_files ();
+  $data{'locations'} = search_pc_files ();
 }
 
 if ( $eval_exists ) {
@@ -306,6 +310,23 @@ if ( $eval_exists ) {
 	}
     }
     exit(0);
+}
+
+if ( $print_all_packages )
+{
+  print "Package list\n";
+  for my $pkg ( keys %{ $data{'locations'} } )
+  {
+    my $pcdata = parse_pc_file($data{'locations'}->{$pkg});
+    my $d = "";
+    if ( exists($pcdata->{'Description'}) )
+    {
+      $d = $pcdata->{'Description'};
+    }
+    printf ("%-40s %-60s %s\n", $pkg, $d, $data{'locations'}->{$pkg});
+
+  }
+  exit(0);
 }
 
 
@@ -355,6 +376,7 @@ if ( $print_cflags || $print_libs )
 
     print "\n";
 }
+
 
 if ( $rebuild_cache ) {
     # save tree
