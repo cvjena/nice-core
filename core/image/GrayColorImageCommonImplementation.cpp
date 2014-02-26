@@ -12,7 +12,9 @@
 namespace NICE {
 //Note: You must define the static instance, not just declare it. The definition creates the actual object you refer to. Without this line
 //Visual Studio returns an undefined reference error
+#ifdef WIN32
 const GrayColorImageCommonImplementation::ShallowCopyMode GrayColorImageCommonImplementation::shallowCopy;
+#endif
 
 GrayColorImageCommonImplementation::GrayColorImageCommonImplementation() {
   m_memoryLayout = internal__foreignPointer;
