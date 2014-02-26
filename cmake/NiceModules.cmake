@@ -75,7 +75,7 @@ macro(nice_get_source_files)
     set(nice_${the_library}_SRC"")
     
 
-    message(STATUS "CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
+    #message(STATUS "CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
     file(GLOB_RECURSE list_tmp1 RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" *.cpp *.tcc *.c)
     #message(STATUS "list_tmp1: ${list_tmp1}")
     foreach( t_SrcFile ${list_tmp1})
@@ -101,8 +101,8 @@ macro(nice_get_source_files)
       list( REMOVE_ITEM nice_${the_library}_TESTFILES_SRC ${list_exclude_from_build_SRC} )  
     endif()      
 
-    message(STATUS "globallyrecusive_tests: ${nice_${the_library}_TESTFILES_SRC}")
-    message(STATUS "globallyrecusive_progs: ${nice_${the_library}_PROGFILES_SRC}")
+    #message(STATUS "globallyrecusive_tests: ${nice_${the_library}_TESTFILES_SRC}")
+    #message(STATUS "globallyrecusive_progs: ${nice_${the_library}_PROGFILES_SRC}")
 
     ### Get all header files recursively
     file(GLOB_RECURSE nice_${the_library}_HDR RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.h)

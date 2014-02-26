@@ -153,30 +153,34 @@ if(WITH_OPENGL)
     include_directories( ${OPENGL_INCLUDE_DIRS} )
     ADD_DEFINITIONS( "-DNICE_USELIB_OPENGL")
   endif()
+
+  #try using GLUT
+  if(WIN32)
+  	message(STATUS "find GLUT for win32")
+  	set(GLUT_INCLUDE_DIR "C:/Libraries/freeglut-MSVC-2.8.0-1.mp/freeglut/include/")# , where to find GL/glut.h, etc.
+  	set(GLUT_ROOT_PATH "C:/Libraries/freeglut-MSVC-2.8.0-1.mp/freeglut/") #  GLUT_LIBRARIES
+  	set(tmp_OPENGL_LIBRARY_DIR "${OPENGL_LIBRARY_DIR}") #temporarily store opengl_lib path
+  	set(OPENGL_LIBRARY_DIR "${GLUT_ROOT_PATH}lib")
+  	find_package(GLUT)
+  	if(GLUT_FOUND)
+  	  message(STATUS "GLUT found")
+  	  include_directories( ${GLUT_INCLUDE_DIR} )
+  	  ADD_DEFINITIONS( -DNICE_USELIB_GLUT)
+  	  #ADD_DEFINITIONS(-DBUILD_VTI -DFREEGLUT_STATIC) with static seems not to work
+  	endif()
+  	set(OPENGL_LIBRARY_DIR "${tmp_OPENGL_LIBRARY_DIR}") #reset opengl lib path
+  else()
+  	find_package(GLUT)
+  	if(GLUT_FOUND)
+  	  message(STATUS "GLUT found")
+  	  include_directories( ${GLUT_INCLUDE_DIR} )
+  	  ADD_DEFINITIONS(-DNICE_USELIB_GLUT)
+  	endif()
+  endif()
+
 endif()
 
-if(WIN32)
-	message(STATUS "find GLUT for win32")
-	set(GLUT_INCLUDE_DIR "C:/Libraries/freeglut-MSVC-2.8.0-1.mp/freeglut/include/")# , where to find GL/glut.h, etc.
-	set(GLUT_ROOT_PATH "C:/Libraries/freeglut-MSVC-2.8.0-1.mp/freeglut/") #  GLUT_LIBRARIES
-	set(tmp_OPENGL_LIBRARY_DIR "${OPENGL_LIBRARY_DIR}") #temporarily store opengl_lib path
-	set(OPENGL_LIBRARY_DIR "${GLUT_ROOT_PATH}lib")
-	find_package(GLUT)
-	if(GLUT_FOUND)
-	  message(STATUS "GLUT found")
-	  include_directories( ${GLUT_INCLUDE_DIR} )
-	  ADD_DEFINITIONS( -DNICE_USELIB_GLUT)
-	  #ADD_DEFINITIONS(-DBUILD_VTI -DFREEGLUT_STATIC) with static seems not to work
-	endif()
-	set(OPENGL_LIBRARY_DIR "${tmp_OPENGL_LIBRARY_DIR}") #reset opengl lib path
-else()
-	find_package(GLUT)
-	if(GLUT_FOUND)
-	  message(STATUS "GLUT found")
-	  include_directories( ${GLUT_INCLUDE_DIR} )
-	  ADD_DEFINITIONS(-DNICE_USELIB_GLUT)
-	endif()
-
+if(NOT WIN32)
   #check for available regex stuff
   CHECK_INCLUDE_FILES(regex.h HAVE_REGEX_H)
   if(HAVE_REGEX_H)
