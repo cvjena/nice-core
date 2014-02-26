@@ -127,16 +127,22 @@ void EpipolarGeometryDisplay::mousePressEvent ( QMouseEvent* event )
 }
 
 void EpipolarGeometryDisplay::setGLProjection ( void ) {
+#ifdef NICE_USELIB_OPENGL
   glViewport ( 0, 0, width(), height() );
   glMatrixMode ( GL_PROJECTION );
   glLoadIdentity();
-#ifdef NICE_USELIB_GLUT
+#   ifdef NICE_USELIB_GLUT
   gluOrtho2D ( 0.0, ( GLdouble ) width(), 0.0, ( GLdouble ) height() );
+#   else
+  fthrow(Exception,"GLUT lib not availabe, recompile using GLUT!");
+#   endif
+#else
+  fthrow(Exception,"OpenGL lib not availabe, recompile using OpenGL!");
 #endif
 }
 
 void EpipolarGeometryDisplay::paintGLObjects ( void ) {
-
+#ifdef NICE_USELIB_OPENGL
   if ( m_points->size() > 0 ) {
     glPointSize ( 3 );
     glBegin ( GL_POINTS );
@@ -168,6 +174,9 @@ void EpipolarGeometryDisplay::paintGLObjects ( void ) {
     }
     glFlush();
   }
+#else
+  fthrow(Exception,"OpenGL lib not availabe, recompile using OpenGL!");
+#endif
 }
 
 void EpipolarGeometryDisplay::contextMenuEvent ( QContextMenuEvent* event ) {

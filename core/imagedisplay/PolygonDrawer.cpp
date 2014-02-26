@@ -26,6 +26,7 @@ PolygonDrawer::~PolygonDrawer() {
 }
 
 void PolygonDrawer::paintGLObjects(void) {
+#ifdef NICE_USELIB_OPENGL
 	if (m_points.size() > 0) {
 		glPointSize(5);
 		glBegin(GL_POINTS);
@@ -51,6 +52,9 @@ void PolygonDrawer::paintGLObjects(void) {
 		glEnd();
 		glFlush();
 	}
+#else
+  fthrow(Exception,"OpenGL lib not availabe, recompile using OpenGL!");
+#endif
 };
 
 void PolygonDrawer::mousePressEvent(QMouseEvent* event) {

@@ -71,6 +71,7 @@ void SimpleSelector::setCurrentColor ( int color )
 
 void SimpleSelector::paintGLObjects(void)
 {
+#ifdef NICE_USELIB_OPENGL
     int index = 0;
     for ( vector<RectT<double> >::const_iterator i = m_rectangles.begin();
 	    i != m_rectangles.end(); i++,index++ )
@@ -111,7 +112,9 @@ void SimpleSelector::paintGLObjects(void)
 			glFlush();
 		}
     }
-
+#else
+  fthrow(Exception,"OpenGL lib not availabe, recompile using OpenGL!");
+#endif
 }
 
 SimpleSelector::~SimpleSelector ()

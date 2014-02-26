@@ -223,6 +223,7 @@ void ImageDisplay::repaint() {
 }
 
 void ImageDisplay::paintGL() {
+#ifdef NICE_USELIB_GLUT
   setGLProjection();
   if ( image != NULL ) {
     glPixelStorei ( GL_PACK_ALIGNMENT, 1 );
@@ -284,7 +285,6 @@ void ImageDisplay::paintGL() {
   }
 
   if ( texts.size() > 0 ) {
-#ifdef NICE_USELIB_GLUT
 	  glEnable ( GL_BLEND );
     glBlendFunc ( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
@@ -307,10 +307,10 @@ void ImageDisplay::paintGL() {
 
     glDisable ( GL_BLEND );
     glFlush();
-#else
-	 fthrow(Exception,"GLUT lib not availabe, recompile using GLUT!");
-#endif
   }
+#else
+     fthrow(Exception,"GLUT lib not availabe, recompile using GLUT!");
+#endif
 
   paintGLObjects();
 }

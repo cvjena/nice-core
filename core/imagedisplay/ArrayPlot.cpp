@@ -10,6 +10,7 @@
 //
 //
 
+#include "core/basics/Exception.h"
 #include "ArrayPlot.h"
 #include <iostream>
 #include <core/basics/numerictools.h>
@@ -53,12 +54,13 @@ ArrayPlot::~ArrayPlot() {
 }
 
 void ArrayPlot::paintGL ( void ) {
+#ifdef NICE_USELIB_OPENGL
   glViewport ( 0, 0, width(), height() );
   glMatrixMode ( GL_PROJECTION );
   glLoadIdentity();
-#ifdef NICE_USELIB_GLUT
+#   ifdef NICE_USELIB_GLUT
   gluOrtho2D ( 0.0, ( GLdouble ) width(), 0.0, ( GLdouble ) height() );
-#endif
+#   endif
 
   double quadWidth = width() / ( double ) ( m_width );
   double quadHeight = height() / ( double ) ( m_height );
@@ -95,6 +97,9 @@ void ArrayPlot::paintGL ( void ) {
 
   glFlush();
 
+#else
+  fthrow(Exception,"OpenGL lib not availabe, recompile using OpenGL!");
+#endif
 };
 
 void ArrayPlot::mousePressEvent ( QMouseEvent* event )
