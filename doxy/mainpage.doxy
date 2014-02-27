@@ -1,7 +1,8 @@
 /** \mainpage NICE Documentation
  * \authors
- * core: Erik Rodner, Ferid Bajramovic, Frank Mattern, Marcel Brückner, Thomas Zimmerman, Alexander Freytag, Paul Bodesheim, Björn Fröhlich \n
+ * core: Erik Rodner, Ferid Bajramovic, Frank Mattern, Marcel Brückner, Thomas Zimmerman, Alexander Freytag, Paul Bodesheim, Björn Fröhlich, Johannes Rühle, Sven Sickert \n
  * Makefiles: Erik Rodner, Olaf Kaehler
+ * CMake: Johannes Rühle
  *
  * \section intro Introduction
  * This is the documentation of NICE (New Image C++ Extension library)
