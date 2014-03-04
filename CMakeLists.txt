@@ -1,5 +1,5 @@
 #cmake_minimum_required(VERSION 2.8.6) #version 2.8.6 at least required because of command set(CMAKE_AUTOMOC TRUE) for qt moc-ing (see below)
-cmake_minimum_required(VERSION 2.8.11) #version 2.8.12 at least required because of command  get_filename_component(__testname_dir ${__testname_abspath} DIRECTORY) (getting directory path of filename)
+cmake_minimum_required(VERSION 2.8.6)
 project (NICELibrary)
 
 include(CheckSymbolExists)

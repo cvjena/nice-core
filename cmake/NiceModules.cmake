@@ -187,7 +187,7 @@ macro(nice_add_unittests)
     foreach(__testcpp ${nice_${the_library}_TESTFILES_SRC})
       get_filename_component(__testname ${__testcpp} NAME_WE )
       nice_get_real_path(__testname_abspath ${__testcpp})
-      get_filename_component(__testname_dir ${__testname_abspath} DIRECTORY)
+      get_filename_component(__testname_dir ${__testname_abspath} PATH)
 
       message(STATUS "unittest: ${__testname} ${__testcpp}")
       
