@@ -29,8 +29,6 @@ endif()
 
 set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
 
-set(NICE_BUILD_LIBS_STATIC_SHARED STATIC)
-
 set(NICE_SOURCEFILES_FIND_GLOBALLYRECURSIVE ON CACHE STRING "Scan a sublibraries directory for source files instead of using an explicit src file list")
 
 NICE_OPTION(WITH_BOOST "Build with Boost support" OFF)
