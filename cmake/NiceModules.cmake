@@ -127,6 +127,11 @@ macro(nice_build_library)
   SET_PROPERTY(TARGET "nice_${the_library}" PROPERTY FOLDER "library")
   INSTALL(TARGETS "nice_${the_library}" DESTINATION lib)
 
+  install(DIRECTORY ./ DESTINATION "include/${the_library}"
+          FILES_MATCHING 
+          PATTERN "*.h"
+          PATTERN "*.tcc")
+
   configure_file( ../cmake/niceConfig.cmake.in "${PROJECT_BINARY_DIR}/lib/nice_${the_library}Config.cmake" )
 endmacro()
 

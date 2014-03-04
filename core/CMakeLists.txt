@@ -56,9 +56,6 @@ nice_add_unittests()
     ARCHIVE DESTINATION ${OPENCV_LIB_INSTALL_PATH} COMPONENT main
     )
 
-  install(DIRECTORY ./ DESTINATION include
-    FILES_MATCHING PATTERN "*.h")
- 
 #   # only "public" headers need to be installed
 #   if(OPENCV_MODULE_${the_module}_HEADERS AND ";${OPENCV_MODULES_PUBLIC};" MATCHES ";${the_module};")
 #     foreach(hdr ${OPENCV_MODULE_${the_module}_HEADERS})
