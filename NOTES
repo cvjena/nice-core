@@ -1,12 +1,22 @@
 ## Wichtigere Sachen
-*Für die generischen Klassen müssen wir uns etwas überlegen*. Die Implementationen müssen mit in die Header, aber wir können die Lib so "von außen" nicht benutzen, weil wir beim Kompilieren der Templates die NICE_USELIB.. aus unserem Buildsystem brauchen und damit auch noch beim Benutzer Abhängigkeiten erzeugen, die vermeidbar wären.
+*Für die generischen Klassen müssen wir uns etwas überlegen*. Die Implementationen müssen mit in die Header, aber wir können die Lib so "von außen" nicht benutzen, weil wir beim Kompilieren der Templates definitiv unser Buildsystem brauchen (die ganzen Makros, Libs...). Das macht eine Distribution von Binaries quasi unmöglich.
 
 ```
 $ grep --include={*.h,*.tcc} -rnw ./ -e ".*def.*USELIB.*" | wc -l
 185
 
 ```
-In den meisten Fällen können wir wohl die Template-Funktion explizit instantiieren und in den Header nur noch "extern template..." angeben.
+
+Daher mein Vorschlag:
+
+1. Wir schränken für jede betroffene Klasse die möglichen Instanzen ein und kompilieren alle davon explizit mit. Ein Beispiel habe ich in den Ordner "ignore" gepackt.
+Vorteile:
+	* Benutzer braucht nur noch die Header einzubinden und mit nice_core zu linken -> er muss nice_core nicht kompilieren, sondern kann einfach Binaries und Header installieren.
+	* Je nach Lizenzen können wir einige Libraries statisch reinlinken, dabei fallen die nicht benutzten Funktionen raus und die Benutzer muss nicht einmal die sos der Abhängigkeiten installieren.
+	* Wenn wir in der Implementierung eine weitere Abhängigkeit einbauen, machen wir dem Benutzer seinen Buildprozess nicht kaputt.
+Nachteile:
+	* Für Containertypen eher unbrauchbar.
+	* Speicher?
 
 ## Buildsystem
 -- WITH_QT OFF verhindert nicht das Kompilieren von libimagedisplay, die hängt aber von Qt ab.
