@@ -40,3 +40,5 @@ Sometimes it can be useful to access metadata without reading the whole image in
 Note that _ImageFile_ attemtps to determine the file format by looking at the file name. You can override this behaviour by providing the __type__ parameter using the _Format_ enumeration.
 
 Supported file formats include PGM/PPM out of the box and those provided by libpng, libjpeg and libimagemagick++.
+
+The sample images do not need any additional libraries.
