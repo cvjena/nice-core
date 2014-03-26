@@ -3,7 +3,7 @@
  * Sample Implementation
  *
  * @file 02_grayscale.cpp
- * @brief Sample implementation for tutorial 01
+ * @brief Sample implementation for tutorial 02
  * @date 09.03.2014
  * @author Clemens-A. Brust
  */
