@@ -39,6 +39,7 @@ file.reader(&image_in_memory);
 ```
 
 After making our changes to the image (in memory), we can write them to the file:
+
 ```c++
 file.writer(&image_in_memory);
 ```
