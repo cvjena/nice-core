@@ -73,6 +73,46 @@ void FilterT<SrcType, CalcType, DstType>::filterY ( const ImageT<SrcType>& src, 
 }
 
 template<class SrcType, class CalcType, class DstType>
+void FilterT<SrcType, CalcType, DstType>::filter(const ImageT<SrcType>& src,
+		const MatrixT<CalcType>& kernel, ImageT<DstType>& result,
+		const int& anchorx, const int& anchory) {
+
+	if (result.width() != src.width() || result.height() != src.height()) {
+		result.resize(src.width(), src.height());
+	}
+
+	IppiPoint anchor;
+	anchor.x = (anchorx < 0) ? (kernel.cols() / 2) : anchorx;
+	anchor.y = (anchory < 0) ? (kernel.rows() / 2) : anchory;
+
+	unsigned int kernel_rows = kernel.rows() - 1;
+	unsigned int kernel_cols = kernel.cols() - 1;
+
+	int runs = 0;
+
+	for (unsigned int y = anchor.y; y < src.height() - (kernel_rows - anchor.y);
+			y++) {
+		for (unsigned int x = anchor.x; x < src.width() - (kernel_cols - anchor.x);
+				x++) {
+			CalcType sum = 0;
+
+			for (int j = -anchor.y; j <= ((int)kernel_rows - anchor.y); j++) {
+				for (int i = -anchor.x; i <= ((int)kernel_cols - anchor.x); i++) {
+					sum += static_cast<CalcType>(src(x + i, y + j))
+							* kernel(kernel_cols - (anchor.x + i),
+									kernel_rows - (anchor.y + j));
+				}
+			}
+
+			result(x, y) = static_cast<DstType>(sum);
+
+		}
+	}
+
+	return;
+}
+
+template<class SrcType, class CalcType, class DstType>
 void FilterT<SrcType, CalcType, DstType>::sobelX ( const NICE::ImageT<SrcType> &src, NICE::ImageT<DstType> &dst)
 {
   if(dst.width() != src.width() || dst.height() != src.height() )
