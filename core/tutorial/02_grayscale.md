@@ -38,3 +38,16 @@ To calculate an image's histogram, use the constructor:
 ``` c++
 NICE::Histogram histogram(image, 0, 256);
 ```
+
+### Equalization
+The sample code uses the pattern from the beginning and the _Histogram_ class to
+optimize the source image's contrast.
+
+The transformation works by computing the cumulative histogram like this:
+
+```c++
+NICE::IntVector* cumulative_histogram = histogram.cumulative();
+```
+
+It is then scaled down to make it a homogenuos transform from [0,255] to [0,255].
+The histogram of the resulting image *should* resemble a uniform distribution.
