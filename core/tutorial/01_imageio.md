@@ -8,7 +8,17 @@ If you need support for a specific image file format other than PGM/PPM, you hav
 The sample code for this tutorial does not have any dependencies other than nice-core. You can find it in the tutorial/progs subfolder.
 
 ## Images in memory
-NICE provides a common generic interface for grayscale and multi-channel images. The corresponding classes are _ImageT_ and _ColorImageT_, both subclasses of _GrayColorImageCommonImplementationT_ which contains the most basic image access methods. Those are used by many of the other modules. You can find typical use cases in the next tutorials.
+NICE provides a common generic interface for grayscale and multi-channel
+images.
+The corresponding classes are _ImageT_ and _ColorImageT_, both subclasses of
+_GrayColorImageCommonImplementationT_ which contains the most basic image
+access methods.
+Those are used by many of the other modules.
+You can find typical use cases in the next tutorials.
+
+Note that NICE does not have generic implementations of every function.
+We recommend using 8-bit images for most applications and also
+provide a shorthand typedef called _Image_.
 
 ## Image files
 In NICE, instances of _ImageT_ or _ColorImageT_ do not have to exist on disk. Files are different, completely independent objects. The _ImageFile_ class serves as a pointer to a file in the file system.
