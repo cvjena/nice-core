@@ -51,7 +51,7 @@ NICE::ColorImage my_rgb_image = NICE::hsvToRGB(my_hsv_image);
 // Specify your own!
 NICE::ColorImage my_yuv_image(my_hsv_image.width(), my_hsv_image.height());
 NICE::rgbToYUV(my_rgb_image, my_yuv_image);
-``
+```
 
 ### Pseudocolors
 While not strictly a conversion, you can enhance a gray image with pseudocolors using the
