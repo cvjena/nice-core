@@ -46,7 +46,7 @@ const unsigned int size = 3;
 NICE::Filter::filterMean(image, size, result);
 ```
 
-The __size__ parameter describes the radius of the neighbourhood
+The __size__ parameter describes the radius of the neighborhood
 (not including the center)
 used as a filter kernel. For size = 3, you get a 7x7 mean filter.
 
@@ -77,7 +77,7 @@ NICE::Filter::filter(image, kernel, result);
 
 If your filter kernel is separable, you can get better performance by applying
 two one-dimensional convolutions.
-Instead of _MatrixT<>_, you supply to _VectorT<>_ instances.
+Instead of _MatrixT<>_, you supply two _VectorT<>_ instances.
 As with _Matrix_, there's a typedef _Vector_ for _VectorT<double>_.
 
 You need to call two methods in this case:
