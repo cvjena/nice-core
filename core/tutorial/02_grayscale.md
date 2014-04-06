@@ -5,7 +5,7 @@ After reading your image from a file into memory, you may want to optimize its h
 ## Pattern for gray value transforms
 You can use the following pattern for your gray value transforms.
 
-``` c++
+```c++
 template <class P> void MyTransform(NICE::ImageT<P>& image)
 {
 	for(int x = 0; x < image.width(); x++) {
