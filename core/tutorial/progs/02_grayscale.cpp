@@ -11,7 +11,9 @@
 #include <iostream>
 #include <string>
 #include <core/image/ImageT.h>
+#include <core/image/ImageFile.h>
 #include <core/image/Histogram.h>
+#include <core/vector/VectorT.h>
 
 /*
  * Entry point
@@ -28,10 +30,8 @@ int main(int argc, char** argv) {
 	std::string input_path(argv[1]);
 	std::string output_path(argv[2]);
 
-	// Read file header and display header information
-	NICE::ImageFile source_file(input_path);
-
 	// Read image into memory
+	NICE::ImageFile source_file(input_path);
 	NICE::Image image;
 	source_file.reader(&image);
 
@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
 	NICE::IntVector* cumulative_histogram = histogram.cumulative();
 
 	// The largest value in the cumulative histogram is the total pixel count
-	// of the source image. We need to scale this down to 255 to match to pixel
+	// of the source image. We need to scale this down to 255 to match the pixel
 	// format of the image.
 	double factor = 255.0/(double)(image.width()*image.height());
 
@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
 	for(int x = 0; x < image.width(); x++) {
 		for(int y=0; y < image.height(); y++) {
 			// This is the old gray value
-			Ipp8s pixel = image.getPixelQuick(x, y);
+			Ipp8u pixel = image.getPixelQuick(x, y);
 
 			// We use it as and index into the cumulative histogram to
 			// computer the new one. This has to be scaled appropriately
@@ -58,10 +58,11 @@ int main(int argc, char** argv) {
 
 			// The pixel format is 8-bit integer, so we have to convert
 			// the result
-			Ipp8s new_pixel = (Ipp8s)(new_pixel_f * 255.0);
+			Ipp8u new_pixel = static_cast<Ipp8u>(new_pixel_f + 0.5);
 
 			// ..and save it
 			image.setPixelQuick(x, y, new_pixel);
+
 		}
 	}
 
