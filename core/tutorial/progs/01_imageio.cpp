@@ -11,6 +11,7 @@
 #include <iostream>
 #include <string>
 #include <core/image/ImageT.h>
+#include <core/image/ImageFile.h>
 
 /*
  * Entry point
