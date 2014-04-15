@@ -2,7 +2,7 @@
 
 ## Architecture
 As mentioned in tutorial 01, color images in memory are represented by instances of
-_ColorImageT<>_
+_ColorImageT<>_.
 
 ## File input/output
 Because _ImageT<>_ and _ColorImageT<>_ are both subclasses of 
@@ -64,4 +64,63 @@ NICE::ColorImage color_image(image.width(), image.height());
 
 // Convert to pseudocolor image
 NICE::imageToPseudoColor(image, color_image);
-``
+```
+
+# Sample code
+The sample program for this chapter follows the input-transform-output pattern
+of the previous examples. Because conversions between color spaces are
+very easy to do with NICE-core, but also very hard to visualize, we will
+show you how to work with _ColorImageT<>_ by coloring a grayscale input
+using pseudocolors.
+
+## Includes and file names
+You can find the pseudocolor and conversion functions in __Convert.h_.
+_ColorImageT<>_ has its own header file.
+
+```c++
+#include <iostream>
+#include <string>
+#include <core/image/ImageT.h>
+#include <core/image/ColorImageT.h>
+#include <core/image/ImageFile.h>
+#include <core/image/Convert.h>
+```
+
+We also need to check the command line for arguments and store them
+if there are enough:
+
+```c++
+// Check if enough parameters were supplied
+if (argc < 3) {
+	std::cout << "USAGE: " << argv[0] << " <input image> <output image>\n";
+	return -1;
+}
+
+// These are our file names
+std::string input_path(argv[1]);
+std::string output_path(argv[2]);
+```
+
+## Pseudocolors
+The next step is reading the file into an _Image_ and calling the
+_imageToPseudoColor_ method to perform the colorization. This methods needs
+a destination _ColorImage_ of similar dimensions.
+
+```c++
+// Read image into memory
+NICE::ImageFile source_file(input_path);
+NICE::Image image;
+source_file.reader(&image);
+
+// Calculate pseudocolors
+NICE::ColorImage pseudo_image(image.width(), image.height());
+NICE::imageToPseudoColor(image, pseudo_image);
+```
+
+After this is done, we write __pseudo_image__ to disk so we can look at it:
+
+```c++
+NICE::ImageFile dest_image(output_path);
+dest_image.writer(&pseudo_image);
+return 0;
+```

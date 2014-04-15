@@ -8,11 +8,12 @@
  * @author Clemens-A. Brust
  */
  
- #include <iostream>
- #include <core/image/ImageT.h>
- #include <core/image/ColorImageT.h>
- #include <core/image/ImageFile.h>
- #include <core/image/Convert.h>
+#include <iostream>
+#include <string>
+#include <core/image/ImageT.h>
+#include <core/image/ColorImageT.h>
+#include <core/image/ImageFile.h>
+#include <core/image/Convert.h>
 
 /*
  * Entry point
@@ -28,15 +29,14 @@ int main(int argc, char** argv) {
 	std::string input_path(argv[1]);
 	std::string output_path(argv[2]);
 
-	// Read file header and display header information
-	NICE::ImageFile source_file(input_path);
-
 	// Read image into memory
+	NICE::ImageFile source_file(input_path);
 	NICE::Image image;
 	source_file.reader(&image);
 
+	// Calculate pseudocolors
 	NICE::ColorImage pseudo_image(image.width(), image.height());
-	imageToPseudoColor(image, pseudo_image);
+	NICE::imageToPseudoColor(image, pseudo_image);
 
 	// Write image to disk
 	NICE::ImageFile dest_image(output_path);
