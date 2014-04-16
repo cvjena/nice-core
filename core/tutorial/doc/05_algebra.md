@@ -90,7 +90,7 @@ NICE::MatrixT<double> simple_matrix(5,6,1);
 ### Data access
 _MatrixT<>_ provides different methods for read and write access to fit as
 many applications as possible.
-See the following snippets for important use cases:
+See the following snippet for important use cases:
 
 ```c++
 // This is our matrix
@@ -132,7 +132,12 @@ _MatrixT<>_ exports basic calculations and methods as operators:
     - Scalar multiplication and division (\*=,/=)
 
 ### Methods
-[...]
+More advanced calculations are available as member functions:
 
-# Sample code
-[...]
+* Set the matrix to a multiple of the identity matrix or
+  add to the existing matrix: __setIdentity__, __addIdentity__
+* Add a vector's elements as a diagonal matrix: __addDiagonal__
+* Calculate the tensor product of two vectors and store it
+  or add it to the matrix: __tensorProduct__, __addTensorProduct__
+* Store the result of a matrix multiplication: __multiply__
+* Check if a floating point matrix contains a NaN element: __containsNaN__
