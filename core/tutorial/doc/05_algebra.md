@@ -63,8 +63,74 @@ Just like vectors, matrices have a generic representation in NICE.
 The class is called _MatrixT<>_ and is not related to _VectorT<>_ in that it
 is not a construct like _VectorT<VectorT<>>_.
 
+### Construction
+_MatrixT<>_ has a large number of constructors for different use cases.
+The default constructor creates a _MatrixT<>_ of dimensions 0x0 and should
+only be used for RAII purposes because resizing a _MatrixT<>_ is a very
+inefficient operation.
+
+```c++
+// Construction and expansion
+NICE::MatrixT<double> empty_matrix();
+empty_matrix.resize(5,4);
+```
+
+Instead, you can specifiy the dimensions and an optional default element.
+When no default element is given to the constructor, the matrix will not
+be initialized contains unpredictable data.
+
+```c++
+// 4x5 matrix - no initialization
+NICE::MatrixT<double> undefined_matrix(4,5);
+
+// 5x6 matrix - default element: 1
+NICE::MatrixT<double> simple_matrix(5,6,1);
+```
+
+### Data access
+_MatrixT<>_ provides different methods for read and write access to fit as
+many applications as possible.
+See the following snippets for important use cases:
+
+```c++
+// This is our matrix
+NICE::MatrixT<double> matrix(3,3);
+
+// At this point, the elements are unknown, so let's set them all to zero.
+matrix.set(0);
+
+// Now, create a vector
+NICE::VectorT<double> vector(3);
+vector[0]=1, vector[1]=2, vector[2]=3;
+
+// We can use this vector with the setRow method
+matrix.setRow(0, vector);
+
+// Set the center element to 5
+matrix(1,1)=5;
+
+// How can we set a column using a VectorT?
+matrix.getColumnRef(2)=vector;
+```
+
 ### Operators
-[...]
+_MatrixT<>_ exports basic calculations and methods as operators:
+
+* Unary operators:
+    - Unchecked read or reference access to element (())
+
+* Binary operators:
+    - Matrix addition and subtraction (+,-)
+    - Matrix-scalar multiplication (\*)
+    - Matrix-vector multiplication (\*)
+    - Matrix multiplication (\*)
+
+* Combined assignment operators:
+    - Matrix addition and subtraction (+=,-=)
+    - Matrix multiplication and division - element-wise (\*=,/=)
+    - Scalar addition and subtraction (+=,-=)
+    - Scalar multiplication and division (\*=,/=)
+
 ### Methods
 [...]
 
