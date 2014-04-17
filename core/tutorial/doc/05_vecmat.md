@@ -1,4 +1,4 @@
-# Tutorial 05 - Linear Algebra
+# Tutorial 05 - Vectors and Matrices
 ## Vectors
 NICE provides the generic _VectorT<>_ class for vector data storage and
 calculations.
