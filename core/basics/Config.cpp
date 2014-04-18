@@ -1,6 +1,10 @@
 // STL includes
 #include <assert.h>
 #include <fstream>
+#include <map>
+#include <vector>
+#include <string>
+#include <set>
 
 // nice-core includes
 #include "core/basics/Exception.h"
@@ -9,12 +13,18 @@
 #include "core/basics/StringTools.h"
 #include "core/basics/FileName.h"
 
-using namespace NICE;
-  
-using namespace std;
+using ::std::endl;
+using ::std::vector;
+using ::std::string;
+using ::std::istream;
+using ::std::ostream;
+using ::std::ios;
+using ::std::map;
 
 #undef DEBUGCONFIG
 #define DEBUGPRINT printf
+
+namespace NICE {
 
 Config::Config ()
 {
@@ -174,8 +184,6 @@ void Config::readFromArguments ( int argc, char **argv )
 		addArgBoolean ( section, key );
 }
 
-// refactor-nice.pl: check this substitution
-// old: void Config::addArgBoolean ( const string & section, const string & key )
 void Config::addArgBoolean ( const std::string & section, const std::string & key )
 {
     vector<string> submatches;
@@ -239,7 +247,7 @@ void Config::restore (istream & is, int format)
       len = line.size();
 
   #if defined DEBUGCONFIG
-      DEBUGPRINT ("Config: (%d) '%s' (len = %d) / %s\n", (int)count, line.c_str(), (int)len,
+      DEBUGPRINT ("Config: (%d) '%s' (len = %d) / %s\n", static_cast<int>(count), line.c_str(), static_cast<int>(len),
         block.c_str());
   #endif
 
@@ -297,12 +305,10 @@ void Config::restore (istream & is, int format)
 
 #if defined DEBUGCONFIG
     DEBUGPRINT ("Config: successfully loaded.\n" );
-    DEBUGPRINT ("Config: %d double values\n", (int)confD.size() );
-    DEBUGPRINT ("Config: %d integer values\n", (int)confI.size() );
-    DEBUGPRINT ("Config: %d bool values\n", (int)confB.size() );
-    // refactor-nice.pl: check this substitution
-    // old: DEBUGPRINT ("Config: %d string values\n", (int)confS.size() );
-    DEBUGPRINT ("Config: %d std::string values\n", (int)confS.size() );
+    DEBUGPRINT ("Config: %d double values\n", static_cast<int>(confD.size()) );
+    DEBUGPRINT ("Config: %d integer values\n", static_cast<int>(confI.size()) );
+    DEBUGPRINT ("Config: %d bool values\n", static_cast<int>(confB.size()) );
+    DEBUGPRINT ("Config: %d std::string values\n", static_cast<int>(confS.size()) );
 #endif
 }
       
@@ -352,12 +358,8 @@ std::string Config::gS(const std::string & block, const std::string & key) const
 
 }
 
-// refactor-nice.pl: check this substitution
-// old: string Config::gS(const string & block, const string & key, const string & defv) const
 std::string Config::gS(const std::string & block, const std::string & key, const std::string & defv) const
 {
-    // refactor-nice.pl: check this substitution
-    // old: string v ("");
     std::string v ("");
     if ( confS.find(block, key, v) ) {
 		return v;
@@ -370,15 +372,11 @@ std::string Config::gS(const std::string & block, const std::string & key, const
 
 }
 
-// refactor-nice.pl: check this substitution
-// old: double Config::gD(const string & key) const
 double Config::gD(const std::string & key) const
 {
     return gD(key, "main");
 }
 
-// refactor-nice.pl: check this substitution
-// old: double Config::gD(const string & block, const string & key) const
 double Config::gD(const std::string & block, const std::string & key) const
 {
     double v = 0.0;
@@ -388,7 +386,7 @@ double Config::gD(const std::string & block, const std::string & key) const
 		int vi;
 		if ( confI.find(block, key, vi) ) {
 			DEBUGPRINT("Config: Setting %s::%s should be double (please change in the config)\n", block.c_str(), key.c_str() );
-			return (int)vi;
+			return static_cast<int>(vi);
 		}
 		fprintf (stderr, "Config: setting %s::%s not found !\n", block.c_str(), key.c_str() );
 		fprintf (stderr, "Config: %s\n", help(block, key).c_str() );
@@ -397,8 +395,6 @@ double Config::gD(const std::string & block, const std::string & key) const
     }
 }
 
-// refactor-nice.pl: check this substitution
-// old: double Config::gD(const string & block, const string & key, const double defv) const
 double Config::gD(const std::string & block, const std::string & key, const double defv) const
 {
     double v = 0.0;
@@ -408,7 +404,7 @@ double Config::gD(const std::string & block, const std::string & key, const doub
 		int vi;
 		if ( confI.find(block, key, vi) ) {
 			DEBUGPRINT("Config: Setting %s::%s should be double (please change in the config)\n", block.c_str(), key.c_str() );
-			return (int)vi;
+			return static_cast<int>(vi);
 		}
 #if defined DEBUGCONFIG
 		DEBUGPRINT("Config: Setting %s::%s not found using default value %f\n", block.c_str(), key.c_str(), defv );
@@ -418,15 +414,11 @@ double Config::gD(const std::string & block, const std::string & key, const doub
 
 }
 
-// refactor-nice.pl: check this substitution
-// old: int Config::gI(const string & key) const
 int Config::gI(const std::string & key) const
 {
     return gI(key, "main");
 }
 
-// refactor-nice.pl: check this substitution
-// old: int Config::gI(const string & block, const string & key) const
 int Config::gI(const std::string & block, const std::string & key) const
 {
     int v = 0;
@@ -441,8 +433,6 @@ int Config::gI(const std::string & block, const std::string & key) const
 
 }
 
-// refactor-nice.pl: check this substitution
-// old: int Config::gI(const string & block, const string & key, int defv) const
 int Config::gI(const std::string & block, const std::string & key, int defv) const
 {
     int v = 0;
@@ -456,15 +446,11 @@ int Config::gI(const std::string & block, const std::string & key, int defv) con
     }
 }
 
-// refactor-nice.pl: check this substitution
-// old: bool Config::gB(const string & key) const
 bool Config::gB(const std::string & key) const
 {
     return gB(key, "main");
 }
 
-// refactor-nice.pl: check this substitution
-// old: bool Config::gB(const string & block, const string & key) const
 bool Config::gB(const std::string & block, const std::string & key) const
 {
     bool v = true;
@@ -479,8 +465,6 @@ bool Config::gB(const std::string & block, const std::string & key) const
 
 }
 
-// refactor-nice.pl: check this substitution
-// old: bool Config::gB(const string & block, const string & key, bool defv) const
 bool Config::gB(const std::string & block, const std::string & key, bool defv) const
 {
     bool v = true;
@@ -494,8 +478,6 @@ bool Config::gB(const std::string & block, const std::string & key, bool defv) c
     }
 }
 
-// refactor-nice.pl: check this substitution
-// old: void Config::getAllS ( const std::string & block, std::map< string, string > & list ) const
 void Config::getAllS ( const std::string & block, std::map< string, std::string > & list ) const
 {
     confS.getAll ( block, list );
@@ -588,3 +570,4 @@ string Config::getAbsoluteFilenameRelativeToThisConfig(const string &p_Filename)
     return  t_ConfigFilename.extractPath().str() + p_Filename;
 }
 
+}
