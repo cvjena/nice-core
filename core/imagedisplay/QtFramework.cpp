@@ -5,9 +5,16 @@
  */
 #include "core/imagedisplay/QtFramework.h"
 #include "core/imagedisplay/DefaultMainWindow.h"
+
 #ifdef NICE_USELIB_GLUT
-	#include <GL/glut.h>
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/glut.h>
 #endif
+#endif
+
 
 namespace NICE {
 
