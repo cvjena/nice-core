@@ -7,7 +7,8 @@ Use the _SVD_ class for fast singular value decomposition.
 The calculation is performed at initialization and the resulting
 matrices are available from getter functions.
 
-See this short example:
+Calculating the SVD is a very straightforward task.
+See this short example on how to use the SVD class:
 
 ```c++
 // Create a matrix
@@ -30,4 +31,27 @@ NICE::MatrixT<double> result_s_matrix = svd.getS();
 // This returns the singular values as a vector. Use this function for
 // increased efficiency
 NICE::VectorT<double> result_s_vector = svd.getSingularValues();
+```
+
+## Eigenvalues
+-- add note about there being two ways to calculate eigenvectors --
+
+Calculating the eigenvalues of a matrix is as simple as single function call.
+The __eigenvalues__ function takes a _MatrixT<>_ and returns a _VectorT<>_ 
+that contains the eigenvalues. It allocates a _VectorT<>_ of matching dimensions
+on the heap.
+This behavior can be overridden be specifying a pointer as the second parameter.
+
+```c++
+// Create a matrix
+NICE::MatrixT<double> matrix(3,3,0);
+matrix.addIdentity(4);
+matrix(0,1) = -2;
+
+// Calculate the eigenvalues
+NICE::VectorT<double> eigenvals = NICE::eigenvalues(matrix);
+
+// ..or use your own vector
+NICE::VectorT<double> my_own_vector(3);
+NICE::eigenvalues(matrix, my_own_vector);
 ```
