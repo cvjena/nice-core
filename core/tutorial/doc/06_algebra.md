@@ -34,7 +34,7 @@ NICE::VectorT<double> result_s_vector = svd.getSingularValues();
 ```
 
 ## Eigenvalues
--- add note about there being two ways to calculate eigenvectors --
+_Note: Currently, calculating the eigenvalues of a matrix requires IPP._
 
 Calculating the eigenvalues of a matrix is as simple as single function call.
 The __eigenvalues__ function takes a _MatrixT<>_ and returns a _VectorT<>_ 
