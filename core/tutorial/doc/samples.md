@@ -1,3 +1,14 @@
+# Sample code
+Some tutorials come with sample code for a more hands-on learning experience.
+The following sample programs are available:
+
+| Tutorial | Sample Program |
+| -: | - |
+| 01 | Simple program that reads a file and writes the image to another|
+| 02 | Program that optimizes the contrast of a grayscale image|
+| 03 | Program that colorizes a grayscale image using pseudocolors|
+| 04 | Program that applies a motion blur effect to an image using a linear filter|
+
 # Sample images for sample code
 NICE-core supports PPM and PGM images out of the box without any additional
 dependencies.
