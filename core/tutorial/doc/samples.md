@@ -8,6 +8,7 @@ The following sample programs are available:
 | 02 | Program that optimizes the contrast of a grayscale image|
 | 03 | Program that colorizes a grayscale image using pseudocolors|
 | 04 | Program that applies a motion blur effect to an image using a linear filter|
+| 05 | Program that loads a Matlab file to showcase algebra functions|
 
 # Sample images for sample code
 NICE-core supports PPM and PGM images out of the box without any additional
@@ -29,3 +30,9 @@ The color samples are 8-bit-per-channel PPM images.
 They work with the sample code from these tutorials:
 
 * Tutorial 01
+
+# Other samples
+We also include some Matlab files for use with the following samples:
+
+* Tutorial 05
+* Tutorial 06
