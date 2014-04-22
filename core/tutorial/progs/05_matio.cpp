@@ -13,6 +13,8 @@
 #include <core/image/ImageT.h>
 #include <core/vector/MatrixT.h>
 #include <core/image/FilterT.h>
+
+#ifdef NICE_USELIB_MATIO
 #include <core/matlabAccess/MatFileIO.h>
 
 /*
@@ -35,3 +37,12 @@ int main(int argc, char** argv) {
 
 	return 0;
 }
+#else
+
+/*
+ * Replacement entry point
+ */
+int main(int argc, char** argv) {
+	std::cout << "This sample needs MATIO to work!\n";
+}
+#endif
