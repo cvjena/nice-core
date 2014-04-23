@@ -133,7 +133,6 @@ if(WITH_QT)
   FIND_PACKAGE(Qt4 REQUIRED)# COMPONENTS Qt3Support QtOpenGl)
   SET(QT_USE_QTOPENGL TRUE)
   SET(QT_USE_QTXML TRUE)
-  SET(QT_USE_QT3SUPPORT TRUE)
   if(QT_FOUND)
     message(STATUS "QTfound ${QT_QT3SUPPORT_INCLUDE_DIR}")
     set(CMAKE_AUTOMOC TRUE) #see doc: http://blogs.kde.org/2011/11/01/cool-new-stuff-cmake-286-automoc
