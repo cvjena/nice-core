@@ -178,10 +178,7 @@ public:
    * @note   If you want to explicitly select a file format,
    *         use read(ImageFile, const GrayColorImageCommonImplementation::MemoryLayout)
    */
-  inline void read(const std::string &filename /*,
-                   const GrayColorImageCommonImplementation::MemoryLayout _memoryLayout = ippAlignment*/) {
-    read(ImageFile(filename)/*, _memoryLayout*/);
-  }
+  void read(const std::string &filename); 
 
   /**
   * Write this image to a file. See also documentation of \c ImageFile.
@@ -196,9 +193,7 @@ public:
    * @note If you want to explicitly select a file format,
    *       use write(ImageFile)
    */
-  inline void write(const std::string &filename) const {
-    write(ImageFile(filename));
-  }
+  inline void write(const std::string &filename) const; 
 
   /**
   * Read this image from a PPM or PGM file.

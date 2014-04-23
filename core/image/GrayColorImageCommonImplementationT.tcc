@@ -195,4 +195,14 @@ void GrayColorImageCommonImplementationT<P>::writePXM(const char* pxmFileName) c
   }
 }
 
+template <class P>
+void GrayColorImageCommonImplementationT<P>::read(const std::string &filename) {
+    read(ImageFile(filename)/*, _memoryLayout*/);
+}
+
+template <class P>
+void GrayColorImageCommonImplementationT<P>::write(const std::string &filename) const {
+    write(ImageFile(filename));
+}
+
 } // namespace

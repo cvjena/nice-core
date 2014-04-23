@@ -28,7 +28,11 @@ QtFramework::QtFramework()
 #endif
 
 #ifndef WIN32
-  std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
+#ifndef __clang__
+#ifndef __llvm__ 
+    std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
+#endif
+#endif
 #endif
 }
 
@@ -40,7 +44,11 @@ QtFramework::QtFramework(int& argc, char** argv)
 #endif
 
 #ifndef WIN32
-  std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
+#ifndef __clang__
+#ifndef __llvm__ 
+    std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
+#endif
+#endif
 #endif
 }
 
