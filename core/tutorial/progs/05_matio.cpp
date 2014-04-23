@@ -1,9 +1,9 @@
 /*
- * Tutorial 04 - Filters
+ * Tutorials 05/06 - Matlab I/O and Linear Algebra
  * Sample Implementation
  *
- * @file 04_filter.cpp
- * @brief Sample implementation for tutorial 04
+ * @file 05_matio.cpp
+ * @brief Sample implementation for tutorials 05/06
  * @date 09.03.2014
  * @author Clemens-A. Brust
  */
