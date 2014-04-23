@@ -146,6 +146,10 @@ public:
    */
   void deleteFile() const;
    
+  /** returns true if the filename's path is relative which means beginning with (at least) a dot (.)
+      @return true if the filename is realtive
+  */
+  bool isRelative() const;
 private:
   //! stores the file name
   std::string fileName;

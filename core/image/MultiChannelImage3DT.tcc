@@ -680,7 +680,7 @@ void MultiChannelImage3DT<P>::calcVariance( uint srcchan, uint tarchan )
 }
 
 template<class P>
-P MultiChannelImage3DT<P>::getIntegralValue(int ulfx, int ulfy, int ulfz, int lrbx, int lrby, int lrbz, int channel)
+P MultiChannelImage3DT<P>::getIntegralValue(int ulfx, int ulfy, int ulfz, int lrbx, int lrby, int lrbz, int channel) const
 {
   ulfx = std::max(ulfx-1, -1);
   ulfx = std::min(ulfx, xsize-1);

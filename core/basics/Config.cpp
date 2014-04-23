@@ -7,6 +7,7 @@
 #include "core/basics/Config.h"
 #include "core/basics/ossettings.h"
 #include "core/basics/StringTools.h"
+#include "core/basics/FileName.h"
 
 using namespace NICE;
   
@@ -26,6 +27,7 @@ Config::Config ( const std::string & configfn )
     read(configfn);
   }
   ioUntilEndOfFile = true;
+  m_sConfigFilename = configfn;
 }
 
 Config::Config ( int argc, 
@@ -43,6 +45,7 @@ Config::Config ( int argc,
 Config::Config ( const Config & conf ) : Persistent()
 {
   ioUntilEndOfFile = true;
+  m_sConfigFilename = conf.m_sConfigFilename;
 	confB.copyFrom ( conf.confB );
 	confD.copyFrom ( conf.confD );
 	confI.copyFrom ( conf.confI );
@@ -308,7 +311,7 @@ bool Config::keyExists ( const std::string & block, const std::string & key ) co
     return ( confS.keyExists ( block, key ) || 
              confI.keyExists ( block, key ) ||
 	     confB.keyExists ( block, key ) ||
-	     confD.keyExists ( block, key ) );
+             confD.keyExists ( block, key ) );
 }
 
 void Config::addHelp ( const std::string & block, const std::string & key,
@@ -568,3 +571,20 @@ void Config::getAllBlocks ( std::set< std::string > & list ) const
     confS.getAllBlocks ( list );
     confI.getAllBlocks ( list );
 }
+
+string Config::getAbsoluteFilenameRelativeToThisConfig(const string &p_Filename) const
+{
+    if( m_sConfigFilename.empty() )
+        return p_Filename;
+
+    NICE::FileName t_DatasetFilename( p_Filename );
+
+    if( !t_DatasetFilename.isRelative() )
+    {
+        return p_Filename;
+    }
+
+    NICE::FileName t_ConfigFilename( this->m_sConfigFilename );
+    return  t_ConfigFilename.extractPath().str() + p_Filename;
+}
+

@@ -133,7 +133,14 @@ void FileName::createDirectory() const {
 }
 
 void FileName::deleteFile() const {
-  remove(fileName.c_str());
+    remove(fileName.c_str());
+}
+
+bool FileName::isRelative() const {
+    if(fileName.empty())
+        return false;
+
+    return  fileName.substr(0,1) != "/";
 }
 
 } // namespace

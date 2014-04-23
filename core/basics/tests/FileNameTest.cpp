@@ -23,6 +23,10 @@ void FileNameTest::testFileName() {
   CPPUNIT_ASSERT_EQUAL(path, fileName.extractPath().str());
   CPPUNIT_ASSERT_EQUAL(name, fileName.extractFileName().str());
   CPPUNIT_ASSERT_EQUAL(ext, fileName.extractExtension().str());
+
+  CPPUNIT_ASSERT_EQUAL(false, fileName.isRelative() );
+  FileName fileNameRelative(name);
+  CPPUNIT_ASSERT_EQUAL(true, fileNameRelative.isRelative() );
 }
 
 void FileNameTest::testFileNameSlash() {
@@ -34,4 +38,37 @@ void FileNameTest::testFileNameSlash() {
   fileNameSlash.removeSlash();
   CPPUNIT_ASSERT_EQUAL(path, fileNameSlash.str());
   CPPUNIT_ASSERT_EQUAL(pathSlash, fileName.str());
+
+  CPPUNIT_ASSERT_EQUAL(false, fileName.isRelative() );
+  CPPUNIT_ASSERT_EQUAL(false, fileNameSlash.isRelative() );
+}
+
+void FileNameTest::testPathRelative() {
+  FileName fileName;
+
+  // absolute pathes
+  fileName.set("");
+  CPPUNIT_ASSERT_EQUAL(false, fileName.isRelative() );
+  fileName.set("/home/user/temporary.ext");
+  CPPUNIT_ASSERT_EQUAL(false, fileName.isRelative() );
+  fileName.set("/home/user/");
+  CPPUNIT_ASSERT_EQUAL(false, fileName.isRelative() );
+  fileName.set("/tmp/tmp.ect");
+  CPPUNIT_ASSERT_EQUAL(false, fileName.isRelative() );
+
+  // relative pathes and files
+  fileName.set("temporary.ext");
+  CPPUNIT_ASSERT_EQUAL(true, fileName.isRelative() );
+  fileName.set("./");
+  CPPUNIT_ASSERT_EQUAL(true, fileName.isRelative() );
+  fileName.set("./temporary.ext");
+  CPPUNIT_ASSERT_EQUAL(true, fileName.isRelative() );
+  fileName.set("../temporary.ext");
+  CPPUNIT_ASSERT_EQUAL(true, fileName.isRelative() );
+  fileName.set("../../temporary.ext");
+  CPPUNIT_ASSERT_EQUAL(true, fileName.isRelative() );
+  fileName.set("../../temporary.ext");
+  CPPUNIT_ASSERT_EQUAL(true, fileName.isRelative() );
+
+
 }

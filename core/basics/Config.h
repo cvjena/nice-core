@@ -54,6 +54,8 @@ class Config : public NICE::Persistent
     /** read until end of file fore restore (default: yes)*/
     bool ioUntilEndOfFile;
 
+    /** stores filename the config was created from*/
+    std::string m_sConfigFilename;
   public:
 
       /** simplest constructor, create an empty config */
@@ -135,6 +137,19 @@ class Config : public NICE::Persistent
 	  @param key name of the variable
       */
       bool keyExists ( const std::string & block, const std::string & key ) const;
+
+      /** returns the filename the config was created by*/
+      std::string getFilename() const{ return m_sConfigFilename;}
+
+      /**
+       * @brief Returns the given filename as an absolute path relative to this config file' location
+       *
+       * If p_Filename is not a relative path, then the filepath is alread absolute and just return that!
+       *
+       * @param p_Filename filename being relative or absolute
+       * @return absolute filename
+       */
+      std::string getAbsoluteFilenameRelativeToThisConfig(const std::string &p_Filename) const;
 
       /** add a help text */
       void addHelp ( const std::string & block, const std::string & key,
