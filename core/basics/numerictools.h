@@ -446,7 +446,7 @@ std::string intToString(const int i);
  * @param length - resulting length of string including leading zeros
  * @return string
  */
-std::string intToString(const int i, const uint & length);
+std::string intToString(const int i, const unsigned int & length);
 
 /**
  * Convert a double into a string.
