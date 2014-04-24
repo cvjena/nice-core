@@ -71,12 +71,26 @@ if(WITH_DBV_LIBRARIES)
         #message(STATUS "ipp link dir: ${IPP_LIBRARY_DIRS}")
         #message(STATUS "ipp link libs: ${IPP_LIBRARIES}")
         ADD_DEFINITIONS( "-DNICE_USELIB_IPP=5" )
+	ADD_DEFINITIONS( "-lpthread" )
         INCLUDE_DIRECTORIES(${IPP_INCLUDE_DIRS})
         
       else()
         message(STATUS "IPP library not found")
       endif()
     endif()
+
+    NICE_OPTION(WITH_LINAL "Build with dbv LinAl support" OFF)
+    if(WITH_LINAL)
+      FIND_PACKAGE(LinAl)
+      if(LINAL_FOUND)
+	ADD_DEFINITIONS( "-DNICE_USELIB_LINAL" )
+	#ADD_DEFINITIONS("-lgfortran")
+        INCLUDE_DIRECTORIES(${LINAL_INCLUDE_DIR})
+	#message(STATUS "linal link libs: ${LINAL_LIBRARIES}")
+        message(STATUS "Using LinAl include dir: ${LINAL_INCLUDE_DIR}")
+      endif()
+    endif()
+
   else()
     message( SEND_ERROR "trying to use DBV extern library dir, but couldn't be found ${NICE_DBV_LIBRARIES_DIR}. Switch off DBV Usage to continue.") #unsetting dbv libraries path
     unset(WITH_DBV_LIBRARIES) #unsetting, since dbv dir not found
