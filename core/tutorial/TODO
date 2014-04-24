@@ -1,0 +1,31 @@
+# Tutorials TODO
+
+## General
+- Add "tutorial 0", a cheat sheet-like overview of NICE?
+
+## Tutorial 1 - Basic Image I/O Operations
+- Complete list of file formats vs. dependencies
+- Write down what parts of NICE support certain ImageT<> instances
+- Add recommendations on what pixel formats to use because of this
+
+## Tutorial 2 - Grayscale Image Operations
+- Add overview of different gray value transforms
+- Expand section about Image operator overloads
+- Add section on histogram specifications
+
+## Tutorial 3 - Color Image Operations
+- Section about differences and similarities between ImageT<> and ColorImageT<>
+- Section about conversion between color spaces
+
+## Tutorial 4 - Filters
+- Section about mean filters
+- Section about separable linear filters
+- Section about gaussian filters
+- Section about gradient images
+
+# Proposals for tutorials > 4
+- Drawing
+- Gauss pyramids? (Requires IPP)
+- Hough transform? (Lots of questions...)
+- Linear algebra examples?
+

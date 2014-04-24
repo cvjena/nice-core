@@ -69,6 +69,14 @@ class FilterT
     static void filterY ( const ImageT<SrcType>& src, const VectorT<CalcType>& kernel, ImageT<DstType> &result, const int& anchor = -1 );
 
     /**
+    * Filters (=convolves) Image \c src into the
+    * Image \c dst using filter (=convolution) kernel \c kernel.
+    * @copydoc filter()
+    */
+    static void filter ( const ImageT<SrcType>& src, const MatrixT<CalcType>& kernel, ImageT<DstType>& result,
+            const int& anchorx = -1, const int& anchory = -1 );
+
+    /**
     * Compute horizontal part of the gradient of a Image \c src via Sobel into Image \c dst.
     * The resulting image \c dst is of the same size as \c src.
     * @param src  source gray image

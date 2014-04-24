@@ -21,6 +21,7 @@ class TestImageFile : public CppUnit::TestFixture
 	CPPUNIT_TEST( testColorImage );
 	CPPUNIT_TEST( testGrayImage  );
 	CPPUNIT_TEST( testJPG_IO     );
+	CPPUNIT_TEST( testInvalidFileName );
 	CPPUNIT_TEST_SUITE_END();
 
    private:
@@ -51,6 +52,11 @@ class TestImageFile : public CppUnit::TestFixture
 	* Test JPEG Input and Output
 	*/
   	void testJPG_IO();
+
+  	/**
+  	* Test for correct detection of file names without appropriate endings
+  	*/
+  	void testInvalidFileName();
 };
 
 #endif // _TESTIMAGEFILE_IMAGE_H

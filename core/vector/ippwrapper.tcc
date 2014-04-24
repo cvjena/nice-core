@@ -4,6 +4,7 @@
 #include <numeric>
 #include <cmath>
 #include <functional>
+#include <cstdlib>
 
 template<class P>
 inline IppStatus ippsCopy( const P* pSrc, P* pDst, int len ) {
