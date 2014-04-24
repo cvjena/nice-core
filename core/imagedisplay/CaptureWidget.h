@@ -3,19 +3,14 @@
 
 #include <qvariant.h>
 #include <qdialog.h>
-#include <q3filedialog.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3GridLayout>
-#include <Q3HBoxLayout>
+#include <QFileDialog>
 #include <QLabel>
 #include <memory>
 
-class Q3VBoxLayout;
-class Q3HBoxLayout;
-class Q3GridLayout;
+class QVBoxLayout;
+class QHBoxLayout;
+class QGridLayout;
 class QSpacerItem;
-class Q3ButtonGroup;
 class QRadioButton;
 class QPushButton;
 class QCheckBox;
@@ -53,11 +48,11 @@ public slots:
   virtual void buttonStopClicked();
 
 protected:
-  Q3VBoxLayout* CaptureWidgetLayout;
-  Q3HBoxLayout* layout15;
+  QVBoxLayout* CaptureWidgetLayout;
+  QHBoxLayout* layout15;
 //   QVBoxLayout* layout14;
   QSpacerItem* spacer5;
-  Q3HBoxLayout* layout11;
+  QHBoxLayout* layout11;
 
 //   QButtonGroup* boxFormat;
 //   QRadioButton* radioPPM;

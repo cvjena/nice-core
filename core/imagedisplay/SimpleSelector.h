@@ -65,7 +65,7 @@ protected:
    * called by contextMenuEvent(), use this to include additional
    * menu items
    */
-  void addExtraMenuItems ( Q3PopupMenu *popupMenu );
+  void addExtraMenuItems ( QMenu *popupMenu );
 
   //! set current marker color
   void setCurrentColor ( int color );
@@ -81,7 +81,7 @@ private slots:
   void rectSelect(float left, float top, float right, float bottom);
 
   //! slot needed for the context menu
-  void menuActivated ( int id );
+  void menuActivated ( QAction* action );
 
   //! dummy slot for menu item insertion
   void dummy(void);
@@ -106,7 +106,7 @@ private:
   std::vector<int> m_rectanglesColor;
 
   //! this map maps menu item ids to colors
-  std::map<int, int> colorMenuMap;
+  std::map<QAction*, int> colorMenuMap;
 
 };
 

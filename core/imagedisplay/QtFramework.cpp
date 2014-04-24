@@ -94,8 +94,8 @@ int QtFramework::nonstaticExec(QWidget* _mainWindow, bool showMainWindow) {
 }
 
 int QtFramework::doExec(bool showMainWindow) {
-  //application->setMainWidget(mainWindow.get());
-  application->setMainWidget(mainWindow);
+  mainWindow->setAttribute(Qt::WA_QuitOnClose, true);
+
   if (showMainWindow) {
     mainWindow->show();
   }

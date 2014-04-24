@@ -13,14 +13,14 @@
 namespace NICE {
 
 DefaultMainWindow::DefaultMainWindow(const char* title) : QWidget(NULL, NULL) {
-  setCaption(title);
+  setWindowTitle(title);
 
   // create a timer waking us regularly
   timer.reset(new QTimer(this));
   timer->connect(timer.get(), SIGNAL(timeout()),
                  this, SLOT(timerSlot()));
   timerIntervalMS = 0;
-  timer->start(timerIntervalMS, false);
+  timer->start(timerIntervalMS);
 
   //ImageDisplayManagerWidget* manager =
       //new ImageDisplayManagerWidget(this, "image manager");
@@ -43,7 +43,7 @@ void DefaultMainWindow::timerSlot() {
     timer->stop();
   } else if (nextSleepMS != timerIntervalMS) {
     timerIntervalMS = nextSleepMS;
-    timer->start(timerIntervalMS, false);
+    timer->start(timerIntervalMS);
   }
 }
 
