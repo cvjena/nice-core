@@ -89,7 +89,7 @@ int main(int argc, char** argv) {
 
 #ifdef NICE_USELIB_LINAL
 	// Calculate singular value decomposition
-	NICE::SVD matrix_svd(matrix);
+	NICE::SVD<double> matrix_svd(matrix);
 
 	std::cout << "Vt:\n";
 	printMatrix(matrix_svd.getVt());
