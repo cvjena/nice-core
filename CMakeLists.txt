@@ -1,5 +1,5 @@
 #cmake_minimum_required(VERSION 2.8.6) #version 2.8.6 at least required because of command set(CMAKE_AUTOMOC TRUE) for qt moc-ing (see below)
-cmake_minimum_required(VERSION 2.8.12) #version 2.8.12 at least required because of command  get_filename_component(__testname_dir ${__testname_abspath} DIRECTORY) (getting directory path of filename)
+cmake_minimum_required(VERSION 2.8.6)
 project (NICELibrary)
 
 include(CheckSymbolExists)
@@ -28,8 +28,6 @@ if(CMAKE_VERBOSE)
 endif()
 
 set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
-
-set(NICE_BUILD_LIBS_STATIC_SHARED STATIC)
 
 set(NICE_SOURCEFILES_FIND_GLOBALLYRECURSIVE ON CACHE STRING "Scan a sublibraries directory for source files instead of using an explicit src file list")
 
@@ -132,10 +130,9 @@ endif()
 
 NICE_OPTION(WITH_QT "Build with Qt" ON)
 if(WITH_QT)
-  FIND_PACKAGE(Qt4)# COMPONENTS Qt3Support QtOpenGl)
+  FIND_PACKAGE(Qt4 REQUIRED)# COMPONENTS Qt3Support QtOpenGl)
   SET(QT_USE_QTOPENGL TRUE)
   SET(QT_USE_QTXML TRUE)
-  SET(QT_USE_QT3SUPPORT TRUE)
   if(QT_FOUND)
     message(STATUS "QTfound ${QT_QT3SUPPORT_INCLUDE_DIR}")
     set(CMAKE_AUTOMOC TRUE) #see doc: http://blogs.kde.org/2011/11/01/cool-new-stuff-cmake-286-automoc

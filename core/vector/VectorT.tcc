@@ -756,10 +756,14 @@ void VectorT<ElementType>::sortDescend(VectorT<int> & permutation) {
   permutation.resize(this->size());
 
   int idxSelf ( 0 );
-  for (VectorT<ElementType>::const_iterator itSelf = (*this).begin(); itSelf != (*this).end(); itSelf++, idxSelf++)
+  for (typename VectorT<ElementType>::const_iterator itSelf = (*this).begin(); 
+       itSelf != (*this).end(); 
+       itSelf++, idxSelf++)
   {
     int idxOrig ( 0 );
-    for ( VectorT<ElementType>::const_iterator itOrig = tmp_cp.begin(); itOrig != tmp_cp.end(); itOrig++, idxOrig++)
+    for (typename VectorT<ElementType>::const_iterator itOrig = tmp_cp.begin(); 
+         itOrig != tmp_cp.end(); 
+         itOrig++, idxOrig++)
     {
       if ( *itOrig == *itSelf )
       {

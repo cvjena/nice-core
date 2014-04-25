@@ -127,7 +127,7 @@ public:
    * @param channel channel
    * @return P mean value of given volume
    **/
-  P getIntegralValue(int ulfx, int ulfy, int ulfz, int lrbx, int lrby, int lrbz, int channel);
+  P getIntegralValue(int ulfx, int ulfy, int ulfz, int lrbx, int lrby, int lrbz, int channel) const;
 
   /** convert to ice image */
   void convertToGrey( NICE::Image & img, int z, uint channel = 0, bool normalize = true ) const;

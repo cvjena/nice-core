@@ -121,12 +121,17 @@ macro(nice_get_source_files)
 endmacro()
 
 macro(nice_build_library)
-  ADD_LIBRARY("nice_${the_library}" ${NICE_BUILD_LIBS_STATIC_SHARED} ${nice_${the_library}_HDR} ${nice_${the_library}_SRC})
+  ADD_LIBRARY("nice_${the_library}" ${nice_${the_library}_HDR} ${nice_${the_library}_SRC})
   TARGET_LINK_LIBRARIES("nice_${the_library}" ${nice_${the_library}_LINKING_DEPENDENCIES})
   #TARGET_LINK_LIBRARIES("nice_${the_library}" ${nice_${the_library}_LINKING_DEPENDENCIES} ${Boost_LIBRARIES} ${OPENGL_LIBRARY} ${GLUT_LIBRARY} ${QT_LIBRARIES})
   SET_PROPERTY(TARGET "nice_${the_library}" PROPERTY FOLDER "library")
   INSTALL(TARGETS "nice_${the_library}" DESTINATION lib EXPORT "nice_${the_library}-exports")
   INSTALL(EXPORT "nice_${the_library}-exports" DESTINATION lib/exports)
+
+  install(DIRECTORY ./ DESTINATION "include/${the_library}"
+          FILES_MATCHING 
+          PATTERN "*.h"
+          PATTERN "*.tcc")
 
   configure_file( ../cmake/niceConfig.cmake.in "${PROJECT_BINARY_DIR}/lib/nice_${the_library}Config.cmake" )
 endmacro()
@@ -188,7 +193,7 @@ macro(nice_add_unittests)
     foreach(__testcpp ${nice_${the_library}_TESTFILES_SRC})
       get_filename_component(__testname ${__testcpp} NAME_WE )
       nice_get_real_path(__testname_abspath ${__testcpp})
-      get_filename_component(__testname_dir ${__testname_abspath} DIRECTORY)
+      get_filename_component(__testname_dir ${__testname_abspath} PATH)
 
       message(STATUS "unittest: ${__testname} ${__testcpp}")
       

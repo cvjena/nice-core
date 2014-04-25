@@ -3,14 +3,10 @@
 
 #include <qvariant.h>
 #include <qwidget.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
-class Q3VBoxLayout;
-class Q3HBoxLayout;
-class Q3GridLayout;
 class QSpacerItem;
 class QPushButton;
 
@@ -32,7 +28,7 @@ public slots:
     virtual void buttonDeleteAll_clicked();
 
 protected:
-    Q3VBoxLayout* ImageDisplayManagerWidgetLayout;
+    QVBoxLayout* ImageDisplayManagerWidgetLayout;
 
 protected slots:
     virtual void languageChange();

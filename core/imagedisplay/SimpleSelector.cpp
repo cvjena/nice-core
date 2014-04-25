@@ -39,27 +39,27 @@ void SimpleSelector::rectSelect(float left, float top, float right, float bottom
     updateGL();
 }
   
-void SimpleSelector::addExtraMenuItems ( Q3PopupMenu *popupMenu )
+void SimpleSelector::addExtraMenuItems ( QMenu *popupMenu )
 {
     colorMenuMap.clear();
     for ( int color = 1 ; color <= m_maxColors ; color++ )
     {
 		string caption = "Color/Class " + itostr(color);
-		int id = popupMenu->insertItem ( QString(caption.c_str()), this, SLOT(dummy()) );
-		colorMenuMap.insert ( pair<int, int> ( id, color ) );
+		QAction* action = popupMenu->addAction ( QString(caption.c_str()), this, SLOT(dummy()) );
+		colorMenuMap.insert ( pair<QAction*, int> ( action, color ) );
     }
 
     connect (popupMenu, SIGNAL(activated(int)), this, SLOT(menuActivated(int)));
-    popupMenu->insertSeparator();
+    popupMenu->addSeparator();
 }
   
 void SimpleSelector::dummy(void)
 {
 }
 
-void SimpleSelector::menuActivated ( int id ) 
+void SimpleSelector::menuActivated (QAction* action) 
 {
-    map<int, int>::const_iterator i = colorMenuMap.find(id);
+    map<QAction*, int>::const_iterator i = colorMenuMap.find(action);
     if ( i != colorMenuMap.end()  ) 
 		setCurrentColor(i->second);
 }

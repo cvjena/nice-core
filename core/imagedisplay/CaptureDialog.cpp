@@ -1,19 +1,18 @@
 #include "CaptureDialog.h"
 
 #include <qlayout.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 namespace NICE {
 
 CaptureDialog::CaptureDialog(QWidget* parent, const char* name, 
                              bool modal, Qt::WFlags fl)
-    : QDialog( parent, name, modal, fl ) {
+    : QDialog( parent, fl ) {
   if (name == NULL) {
-    setName("CaptureDialog");
+    setWindowTitle("CaptureDialog");
   }
   
-  Q3VBoxLayout* layout = new Q3VBoxLayout( this, 11, 6, "layout"); 
+  QVBoxLayout* layout = new QVBoxLayout( this ); 
   
   m_capture = new CaptureWidget(this);
   m_capture->showCancelButton();

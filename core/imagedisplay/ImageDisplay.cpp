@@ -10,15 +10,14 @@
 #include <GL/glut.h>
 #endif
 #include <qcursor.h>
-#include <q3filedialog.h>
+#include <QFileDialog>
 #include <qapplication.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
-#include <q3buttongroup.h>
 #include <qcheckbox.h>
-//Added by qt3to4:
 #include <QContextMenuEvent>
 #include <QMouseEvent>
+#include <QMenu>
 
 #include <core/basics/Exception.h>
 #include <core/basics/FileName.h>
@@ -33,7 +32,7 @@
 namespace NICE {
 
 ImageDisplay::ImageDisplay ( QWidget* parent, const char* name, Qt::WFlags flags )
-    : QGLWidget ( parent, name, NULL, flags ),
+    : QGLWidget ( parent, NULL, flags ),
     image ( NULL ),
     colorImageBuffer ( NULL ),
     grayImageBuffer ( NULL ),
@@ -386,30 +385,23 @@ void ImageDisplay::makeDrop ( int x, int y ) {
 
 void ImageDisplay::contextMenuEvent ( QContextMenuEvent* event ) {
 
-  Q3PopupMenu* popupMenu = new Q3PopupMenu ( this );
+  QMenu* popupMenu = new QMenu ( this );
 
-  //   CHECK_PTR(popupMenu); // Qt4
-  //popupMenu->insertTearOffHandle();
   addExtraMenuItems ( popupMenu );
 
-  int saveID = popupMenu->insertItem ( "&Save image", this, SLOT ( menuSave() ) );
-  popupMenu->setAccel ( Qt::CTRL + Qt::Key_S, saveID );
+  popupMenu->addAction("&Save Image", this, SLOT ( menuSave() ), Qt::CTRL + Qt::Key_S);
+  popupMenu->addAction("&Restore aspect ratio", this, SLOT ( menuAspectRatio ), Qt::CTRL + Qt::Key_A);
 
-  int aspectID = popupMenu->insertItem ( "&Restore aspect ratio",
-                                         this, SLOT ( menuAspectRatio() ) );
-  popupMenu->setAccel ( Qt::CTRL + Qt::Key_A, aspectID );
+  popupMenu->addSeparator();
 
-  popupMenu->insertSeparator();
-  popupMenu->insertItem ( "Start &capturing image sequence",
-                          this, SLOT ( menuStartCapture() ) );
-  popupMenu->insertItem ( "Sto&p capturing", this, SLOT ( menuStopCapture() ) );
-
+  popupMenu->addAction ( "Start &capturing image sequence", this, SLOT ( menuStartCapture() ) );
+  popupMenu->addAction ( "Sto&p capturing", this, SLOT ( menuStopCapture() ) );
 
   popupMenu->exec ( QCursor::pos() );
   delete popupMenu;
 }
 
-void ImageDisplay::addExtraMenuItems ( Q3PopupMenu *popupMenu )
+void ImageDisplay::addExtraMenuItems ( QMenu *popupMenu )
 {
 }
 
@@ -420,17 +412,15 @@ void ImageDisplay::menuAspectRatio() {
 }
 
 void ImageDisplay::menuSave() {
-  QString s = Q3FileDialog::getSaveFileName (
-                "",
-                "Images (*.ppm *.pgm *.png *.jpg)",
-                this,
-                "Save file dialog",
-                "Choose a filename" );
-  if ( s.local8Bit().size() == 0 ) {
+  QString s = QFileDialog::getSaveFileName(this,
+		"Save file dialog",
+		"",
+		"Images (*.ppm, *.pgm, *.png, *.jpg)");
+  if ( s.isNull() ) {
     return;
   }
 
-  NICE::FileName filename ( s.local8Bit() );
+  NICE::FileName filename ( s.toLocal8Bit() );
   const std::string ext = filename.extractExtension().str();
   const bool extensionOk
   = ( ext == std::string ( ".ppm" ) || ext == std::string ( ".pgm" )
@@ -448,7 +438,7 @@ void ImageDisplay::menuSave() {
 void ImageDisplay::menuStartCapture() {
   if ( dialog.get() == NULL ) {
     dialog.reset ( new CaptureDialog ( this, "Capture Dialog" ) );
-    dialog->setCaption ( "Capture: " + captionBuffer );
+    dialog->setWindowTitle ( "Capture: " + captionBuffer );
     connect ( ( QObject* ) dialog->capture(), SIGNAL ( started() ),
               this, SLOT ( dialogStartCapture() ) );
     connect ( ( QObject* ) dialog->capture(), SIGNAL ( stopped() ),
@@ -485,7 +475,7 @@ void ImageDisplay::doSetCaption() {
   s << std::fixed << captionBuffer.toAscii().constData()
   << " (FPS: " << frameRateCounter.getFrameRate() << ")";
   //std::cerr << "ImageDisplay::doSetCaption(): " << s.str() << std::endl;
-  QWidget::setCaption ( s.str().c_str() );
+  QWidget::setWindowTitle ( s.str().c_str() );
 }
 
 

@@ -8,11 +8,10 @@
 
 #include <qgl.h>
 #include <qevent.h>
-#include <q3popupmenu.h>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QContextMenuEvent>
 #include <QGLWidget>
+#include <QMenu>
 
 #include <vector>
 
@@ -258,7 +257,7 @@ protected:
    * called by contextMenuEvent(), use this to include additional
    * menu items
    */
-  virtual void addExtraMenuItems ( Q3PopupMenu *popupMenu );
+  virtual void addExtraMenuItems ( QMenu *popupMenu );
 
   //! receive mouse events
   virtual void mousePressEvent(QMouseEvent* event);
