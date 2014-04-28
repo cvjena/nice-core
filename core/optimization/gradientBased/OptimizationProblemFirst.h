@@ -34,7 +34,7 @@ class OptimizationProblemFirst : private NonCopyable {
 public:
   //! Default constructor
   inline OptimizationProblemFirst(unsigned int dimension)
-      : m_gradientCache(dimension) {
+      : m_gradientCache(dimension, 0), m_positionCache(dimension,0) {
     init();
   }
 
