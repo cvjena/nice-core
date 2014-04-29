@@ -12,7 +12,7 @@ This tutorial will show you how to implement your own, non-standard
 optimization problems in a way that is compatible with NICE.
 
 The sample problem is a simple one: find the minimum of the quadratic
-function _f(x)=ax^2+bx+c_.
+function _f(x)=ax^2 +bx+c_.
 The values are read from the command line.
 
 We start by implementing the problem as a subclass of
