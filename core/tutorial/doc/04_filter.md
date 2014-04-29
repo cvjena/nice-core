@@ -85,3 +85,12 @@ You need to call two methods in this case:
 ```c++
 NICE::Filter::filterX(image, kernel, result);
 NICE::Filter::filterY(image, kernel, result);
+```
+
+## Running the sample
+
+_Command line:_
+
+```bash
+./04_filter ../../nice-core/core/tutorial/samples/peppers_color.ppm /tmp/output.pgm
+```

@@ -137,3 +137,25 @@ __position__ method:
 double x_min = problem.position()(0);
 std::cout << "Solution: " << x_min << "\n";
 ```
+
+## Running the sample
+
+_Command line:_
+
+```bash
+./06_optimization 4.3 5 2.3
+```
+
+_Output:_
+
+```
+Optimizing function f(x) = 4.3 x^2 + 5 x + 2.3
+FirstOrderRasmussen: initial value of the objective function is 2.3
+Iteration 1 / 100  objective function = 2.3
+FirstOrderRasmussen: new objective value 0.846598
+Iteration 3 / 100  objective function = 0.846598
+FirstOrderRasmussen: new objective value 0.846512
+Iteration 7 / 100  objective function = 0.846512
+FirstOrderRasmussen: low gradient 7.72715e-14 < 1e-05 = epsilonG
+Solution: -0.581395
+```
