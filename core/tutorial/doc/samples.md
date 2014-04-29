@@ -8,7 +8,8 @@ The following sample programs are available:
 | 02 | Program that optimizes the contrast of a grayscale image|
 | 03 | Program that colorizes a grayscale image using pseudocolors|
 | 04 | Program that applies a motion blur effect to an image using a linear filter|
-| 05 | Program that loads a Matlab file to showcase algebra functions|
+| 05 / 06 | Program that loads a Matlab file to showcase algebra functions|
+| 07 | Program that minimizes a given quadratic function |
 
 # Sample images for sample code
 NICE-core supports PPM and PGM images out of the box without any additional
