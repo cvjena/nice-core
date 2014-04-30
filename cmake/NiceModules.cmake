@@ -131,7 +131,8 @@ macro(nice_build_library)
   install(DIRECTORY ./ DESTINATION "include/${the_library}"
           FILES_MATCHING 
           PATTERN "*.h"
-          PATTERN "*.tcc")
+          PATTERN "*.tcc"
+	  PATTERN ".git" EXCLUDE)
 
   configure_file( ../cmake/niceConfig.cmake.in "${PROJECT_BINARY_DIR}/lib/nice_${the_library}Config.cmake" )
 endmacro()
