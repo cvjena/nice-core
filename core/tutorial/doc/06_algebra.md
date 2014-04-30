@@ -55,3 +55,37 @@ NICE::VectorT<double> eigenvals = NICE::eigenvalues(matrix);
 NICE::VectorT<double> my_own_vector(3);
 NICE::eigenvalues(matrix, my_own_vector);
 ```
+
+## Running the sample
+
+_Command line:_
+
+```bash
+./05_matio ../../nice-core/core/tutorial/samples/simple.mat MyMatrix
+```
+
+_Output:_
+
+```
+Loading matrix "MyMatrix"...
+Dimensions: 4 x 4
+1       2       3       4
+4       5       6       7
+2       3       4       5
+2       9       8       1
+Vt:
+-0.266556       -0.584949       -0.621772       -0.447418
+-0.188645       0.497147        0.204551        -0.821837
+0.925622        0.0646203       -0.282292       -0.243639
+-0.191273       0.637577        -0.701334       0.255031
+U:
+-0.285172       -0.294773       -0.738967       -0.534522
+-0.607906       -0.440949       0.603809        -0.267261
+-0.39275        -0.343498       -0.291375       0.801784
+-0.62839        0.775037        -0.0666614      -1.08901e-16
+S:
+17.8539 0       0       0
+0       6.33725 0       0
+0       0       1.03735 0
+0       0       0       2.17065e-16
+```

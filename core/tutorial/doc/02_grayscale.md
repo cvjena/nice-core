@@ -151,3 +151,11 @@ NICE::ImageFile dest_image(output_path);
 dest_image.writer(&image);
 return 0;
 ```
+
+## Running the sample
+
+_Command line:_
+
+```bash
+./02_grayscale ../../nice-core/core/tutorial/samples/peppers_gray.pgm /tmp/output.ppm
+```

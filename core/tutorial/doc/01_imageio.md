@@ -139,3 +139,17 @@ return 0;
 
 Remember that _ImageFile_ objects are just containers for a file's location
 and only open the file when you call methods that require reading or writing.
+
+## Running the sample
+
+_Command line:_
+
+```bash
+./01_imageio ../../nice-core/core/tutorial/samples/peppers_color.ppm /tmp/output.ppm
+```
+
+_Output:_
+
+```
+Source image dimensions: 512 x 512 (3 channels, 8 bpp)
+```

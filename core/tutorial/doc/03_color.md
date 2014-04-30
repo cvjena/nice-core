@@ -124,3 +124,11 @@ NICE::ImageFile dest_image(output_path);
 dest_image.writer(&pseudo_image);
 return 0;
 ```
+
+## Running the sample
+
+_Command line:_
+
+```bash
+./03_color ../../nice-core/core/tutorial/samples/peppers_gray.pgm /tmp/output.ppm
+```
