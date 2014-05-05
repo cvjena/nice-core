@@ -35,30 +35,43 @@ set(NICE_SOURCEFILES_FIND_GLOBALLYRECURSIVE ON CACHE STRING "Scan a sublibraries
 
 NICE_OPTION(WITH_MEX "Build with MEX support" OFF)
 if(WITH_MEX)
+  set(MATLAB_DEFAULT_ROOT "/home/matlab/8.2/academic")
+  set(MATLAB_DEFAULT_ARCH "glnxa64")
+
   # Look for MATLAB environment variable
   if(NOT EXISTS "$ENV{MATLAB}")
-    message(FATAL_ERROR "Cannot find MATLAB! Have you set \$MATLAB?")
+    if(NOT EXISTS ${MATLAB_DEFAULT_ROOT})
+      message(FATAL_ERROR "Cannot find MATLAB at ${MATLAB_DEFAULT_ROOT}! Please set \$MATLAB")
+    else()
+      message(WARNING "\$MATLAB not set, using default")
+      set(MATLAB_ROOT ${MATLAB_DEFAULT_ROOT}) 
+    endif()
   else()
-    message(STATUS "Using MATLAB from: $ENV{MATLAB}")
+    set(MATLAB_ROOT $ENV{MATLAB})
   endif()
+
+  message(STATUS "Using MATLAB from: ${MATLAB_ROOT}")
 
   # Look for Arch environment variable
   if(NOT "$ENV{Arch}" MATCHES ".*((32)|(64))$")
-    message(FATAL_ERROR "\$Arch not set but required for MEX support")
+    message(WARNING "\$Arch not set, using default")
+    set(MATLAB_ARCH ${MATLAB_DEFAULT_ARCH})
   else()
-    message(STATUS "Using MATLAB architecture: " $ENV{Arch})
+    set(MATLAB_ARCH $ENV{Arch})
   endif()
 
+  message(STATUS "Using MATLAB architecture: " ${MATLAB_ARCH})
+
   # Look for headers
-  if(EXISTS "$ENV{MATLAB}/extern/include/mex.h")
-    INCLUDE_DIRECTORIES($ENV{MATLAB}/extern/include)
+  if(EXISTS "${MATLAB_ROOT}/extern/include/mex.h")
+    INCLUDE_DIRECTORIES(${MATLAB_ROOT}/extern/include)
   else()
     message(FATAL_ERROR "Cannot find mex.h! Have you set \$MATLAB correctly?")
   endif()
 
-  FIND_LIBRARY(MEX_LIBMX mx PATHS $ENV{MATLAB}/bin/$ENV{Arch})
-  FIND_LIBRARY(MEX_LIBMEX mex PATHS $ENV{MATLAB}/bin/$ENV{Arch})
-  FIND_LIBRARY(MEX_LIBMAT mat PATHS $ENV{MATLAB}/bin/$ENV{Arch})
+  FIND_LIBRARY(MEX_LIBMX mx PATHS ${MATLAB_ROOT}/bin/${MATLAB_ARCH})
+  FIND_LIBRARY(MEX_LIBMEX mex PATHS ${MATLAB_ROOT}/bin/${MATLAB_ARCH})
+  FIND_LIBRARY(MEX_LIBMAT mat PATHS ${MATLAB_ROOT}/bin/${MATLAB_ARCH})
 
   SET(MEX_LIBRARIES ${MEX_LIBMX} ${MEX_LIBMEX} ${MEX_LIBMAT})
   SET(MEX_ENDING ".mexa64")
