@@ -72,6 +72,7 @@ macro(nice_get_source_files)
     ### Get all unit test cpp files recursively
     set(nice_${the_library}_TESTFILES_SRC "")
     set(nice_${the_library}_PROGFILES_SRC "")
+    set(nice_${the_library}_MEXFILES_SRC "")
     set(nice_${the_library}_SRC"")
     
 
@@ -86,6 +87,9 @@ macro(nice_get_source_files)
         elseif( t_SrcFile MATCHES "progs/" )
           #message(STATUS "prog: ${t_SrcFile}")
           LIST(APPEND nice_${the_library}_PROGFILES_SRC ${t_SrcFile})
+	elseif( t_SrcFile MATCHES "Mex[.]" )
+	  message(STATUS "mex: ${t_SrcFile}")
+          LIST(APPEND nice_${the_library}_MEXFILES_SRC ${t_SrcFile})
         else()
           LIST(APPEND nice_${the_library}_SRC ${t_SrcFile})
         endif()
@@ -172,6 +176,30 @@ macro(nice_add_progs)
     endforeach()
   endif()
 
+endmacro()
+
+# Add mex output
+macro(nice_add_mexes)
+  if(WITH_MEX)
+    message(STATUS "building mexes:")
+    
+    foreach(__mexcpp ${nice_${the_library}_MEXFILES_SRC})
+      get_filename_component(__mexname ${__mexcpp} NAME_WE )
+      message(STATUS "mexname: ${__mexname} ${__mexcpp}")
+    
+      set(mex_target_name "${the_library}_${__mexname}")
+      ADD_LIBRARY("${mex_target_name}" SHARED ${__mexcpp})
+      TARGET_LINK_LIBRARIES(${mex_target_name} "nice_${the_library}")
+      SET_TARGET_PROPERTIES(${mex_target_name} PROPERTIES OUTPUT_NAME "${__mexname}")
+      SET_TARGET_PROPERTIES(${mex_target_name} PROPERTIES SUFFIX "${MEX_ENDING}")
+      SET_TARGET_PROPERTIES(${mex_target_name} PROPERTIES PREFIX "")
+      
+      INSTALL(TARGETS ${mex_target_name} DESTINATION "bin/${the_library}")
+      
+      SET_PROPERTY(TARGET ${mex_target_name} PROPERTY FOLDER "programs/${the_library}")
+    
+    endforeach()
+  endif()
 endmacro()
 
 # Create unit test (using library CppUnitTest) for all cpp files in the subvariable ${nice_${the_library}_TESTFILES_SRC}

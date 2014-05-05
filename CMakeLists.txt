@@ -1,11 +1,13 @@
-#cmake_minimum_required(VERSION 2.8.6) #version 2.8.6 at least required because of command set(CMAKE_AUTOMOC TRUE) for qt moc-ing (see below)
-cmake_minimum_required(VERSION 2.8.6)
+#version 2.8.9 required for position independent code
+cmake_minimum_required(VERSION 2.8.9)
 project (NICELibrary)
 
 include(CheckSymbolExists)
 include(CheckIncludeFiles)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 include(cmake/NiceModules.cmake REQUIRED)
 
@@ -33,13 +35,34 @@ set(NICE_SOURCEFILES_FIND_GLOBALLYRECURSIVE ON CACHE STRING "Scan a sublibraries
 
 NICE_OPTION(WITH_MEX "Build with MEX support" ON)
 if(WITH_MEX)
-  INCLUDE_DIRECTORIES($ENV{MATLAB}/extern/include)
+  # Look for MATLAB environment variable
+  if(NOT EXISTS "$ENV{MATLAB}")
+    message(FATAL_ERROR "Cannot find MATLAB! Have you set \$MATLAB?")
+  else()
+    message(STATUS "Using MATLAB from: $ENV{MATLAB}")
+  endif()
+
+  # Look for Arch environment variable
+  if(NOT "$ENV{Arch}" MATCHES ".*((32)|(64))$")
+    message(FATAL_ERROR "\$Arch not set but required for MEX support")
+  else()
+    message(STATUS "Using MATLAB architecture: " $ENV{Arch})
+  endif()
+
+  # Look for headers
+  if(EXISTS "$ENV{MATLAB}/extern/include/mex.h")
+    INCLUDE_DIRECTORIES($ENV{MATLAB}/extern/include)
+  else()
+    message(FATAL_ERROR "Cannot find mex.h! Have you set \$MATLAB correctly?")
+  endif()
+
   FIND_LIBRARY(MEX_LIBMX mx PATHS $ENV{MATLAB}/bin/$ENV{Arch})
   FIND_LIBRARY(MEX_LIBMEX mex PATHS $ENV{MATLAB}/bin/$ENV{Arch})
   FIND_LIBRARY(MEX_LIBMAT mat PATHS $ENV{MATLAB}/bin/$ENV{Arch})
 
   SET(MEX_LIBRARIES ${MEX_LIBMX} ${MEX_LIBMEX} ${MEX_LIBMAT})
-
+  SET(MEX_ENDING ".mexa64")
+  ADD_DEFINITIONS("-DNICE_MEX_FOUND")
   MESSAGE(STATUS "Found mex libraries at ${MEX_LIBRARIES}")
 endif()
 
