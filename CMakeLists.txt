@@ -33,7 +33,7 @@ set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
 
 set(NICE_SOURCEFILES_FIND_GLOBALLYRECURSIVE ON CACHE STRING "Scan a sublibraries directory for source files instead of using an explicit src file list")
 
-NICE_OPTION(WITH_MEX "Build with MEX support" ON)
+NICE_OPTION(WITH_MEX "Build with MEX support" OFF)
 if(WITH_MEX)
   # Look for MATLAB environment variable
   if(NOT EXISTS "$ENV{MATLAB}")
