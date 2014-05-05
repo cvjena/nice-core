@@ -31,6 +31,18 @@ set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
 
 set(NICE_SOURCEFILES_FIND_GLOBALLYRECURSIVE ON CACHE STRING "Scan a sublibraries directory for source files instead of using an explicit src file list")
 
+NICE_OPTION(WITH_MEX "Build with MEX support" ON)
+if(WITH_MEX)
+  INCLUDE_DIRECTORIES($ENV{MATLAB}/extern/include)
+  FIND_LIBRARY(MEX_LIBMX mx PATHS $ENV{MATLAB}/bin/$ENV{Arch})
+  FIND_LIBRARY(MEX_LIBMEX mex PATHS $ENV{MATLAB}/bin/$ENV{Arch})
+  FIND_LIBRARY(MEX_LIBMAT mat PATHS $ENV{MATLAB}/bin/$ENV{Arch})
+
+  SET(MEX_LIBRARIES ${MEX_LIBMX} ${MEX_LIBMEX} ${MEX_LIBMAT})
+
+  MESSAGE(STATUS "Found mex libraries at ${MEX_LIBRARIES}")
+endif()
+
 NICE_OPTION(WITH_BOOST "Build with Boost support" OFF)
 if(WITH_BOOST)
   set(Boost_USE_STATIC_LIBS ON)
