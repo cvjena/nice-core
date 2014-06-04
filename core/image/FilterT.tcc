@@ -288,7 +288,7 @@ ImageT<DstType> * FilterT<SrcType, CalcType, DstType>::filterMeanLargeFS ( const
     sum = 0;
 
     const CalcType* pSrc = tmp.getPixelPointerXY ( x, 0 );
-    SrcType *pDst = result->getPixelPointerXY ( x, 0 );
+    DstType *pDst = result->getPixelPointerXY ( x, 0 );
 
     for ( unsigned int e = 0; e < size; ++e ) {
       sum += * ( pSrc );
