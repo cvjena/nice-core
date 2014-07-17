@@ -141,8 +141,11 @@ public:
 	/** return image for visualization */
   ImageT<P> getChannelT( int z, uint channel = 0 ) const;
 
-  /** return rgb image for visualization */
+  /** return rgb image (reading channels 0, 1, 2) for visualization */
   ColorImage getColor(int z) const;
+
+  /** return rgb image (reading arbitrary three channels) for visualization */
+  ColorImage getColorImageFromChannels(int z, int channel0, int channel1, int channel2) const;
 
   /** calculate image statistics */
   void statistics( P & min, P & max, uint channel = 0 ) const;

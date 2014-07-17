@@ -539,6 +539,30 @@ ColorImage MultiChannelImage3DT<P>::getColor(int z) const
 }
 
 template<class P>
+ColorImage MultiChannelImage3DT<P>::getColorImageFromChannels(int z, int channel0, int channel1, int channel2) const
+{
+  assert( z < zsize );
+  assert( numChannels >= std::max( std::max(channel0,channel1),channel2 ) );
+
+  NICE::ColorImage img( xsize, ysize );
+
+  long k = 0;
+
+  for ( int y = 0 ; y < ysize; y++ )
+  {
+    for ( int x = 0 ; x < xsize ; x++, k++ )
+    {
+      img.setPixel( x, y, 0, ( int )( data[channel0][z*xsize*ysize + k] ) );
+      img.setPixel( x, y, 1, ( int )( data[channel1][z*xsize*ysize + k] ) );
+      img.setPixel( x, y, 2, ( int )( data[channel2][z*xsize*ysize + k] ) );
+    }
+  }
+  //showImage(img);
+  //getchar();
+  return img;
+}
+
+template<class P>
 void MultiChannelImage3DT<P>::calcIntegral( uint channel )
 {
   assert( channel < numChannels );
