@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <sys/param.h> //for MAXPATHLEN - the maximal path length
+
 
 using namespace std;
 
@@ -141,6 +143,19 @@ bool FileName::isRelative() const {
         return false;
 
     return  fileName.substr(0,1) != "/";
+}
+
+bool FileName::convertToRealPath()
+{
+    char actualpath [MAXPATHLEN];
+    char *pRet = realpath( fileName.c_str(), actualpath);
+
+    //TODO: how to treat the return value???
+//    if( pRet == NULL)
+//        return false;
+
+    this->fileName = string( actualpath);
+    return true;
 }
 
 } // namespace
