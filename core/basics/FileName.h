@@ -150,6 +150,15 @@ public:
       @return true if the filename is realtive
   */
   bool isRelative() const;
+
+  /** Converts the path into a real path with all relative path elements being resolved.
+   * Example:
+   *    path before: "/home/user/experiment/../config/conf.conf
+   *    path after : "/home/user/config/conf.conf
+   * @return true if resolution was successfull
+   */
+  bool convertToRealPath();
+
 private:
   //! stores the file name
   std::string fileName;
