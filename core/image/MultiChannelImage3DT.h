@@ -1,10 +1,10 @@
 #ifndef _NICE_CORE_MULTICHANNELIMAGE3DT_H
 #define _NICE_CORE_MULTICHANNELIMAGE3DT_H
 
-#include <core/image/MultiChannelImageAccess3D.h>
-#include <core/image/ImageT.h>
-#include <core/image/MultiChannelImageT.h>
-#include <core/image/Histogram.h>
+#include "MultiChannelImageAccess3D.h"
+#include "ImageT.h"
+#include "MultiChannelImageT.h"
+#include "Histogram.h"
 
 #include <vector>
 #include <fstream>
