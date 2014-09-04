@@ -165,7 +165,7 @@ macro(nice_get_source_files)
     
 
     #message(STATUS "CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
-    file(GLOB_RECURSE list_tmp1 RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" *.cpp *.tcc *.c)
+    file(GLOB_RECURSE list_tmp1 RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" *.cpp *.tcc *.c *.C)
     #message(STATUS "list_tmp1: ${list_tmp1}")
     foreach( t_SrcFile ${list_tmp1})
       get_filename_component(t_SrcPath ${t_SrcFile} PATH)
@@ -205,9 +205,43 @@ macro(nice_get_source_files)
     #message(STATUS "globallyrecusive_tests: ${nice_${the_library}_TESTFILES_SRC}")
     #message(STATUS "globallyrecusive_progs: ${nice_${the_library}_PROGFILES_SRC}")
 
-    ### Get all header files recursively
-    file(GLOB_RECURSE nice_${the_library}_HDR RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.h)
-    
+    ### Get all header files recursively...
+    # ... but filter the headers according to their "type", meaning whether they are part of a unit test, a prog, or a mex.
+    # That means for example, that if you DO NOT WANT to build all progs in ./progs/ directories, all header files inside ./progs/ direcories 
+    # should be excluded and not be consided in the build. The same example applies to unit tests (./tests/) and mex filex.
+    # The reason is: The filter mechanism described above was also appied to source code files. So, we need to take care to have 
+    # the source and header files synchronized, so that we avoid using only the header file of a class, but not its source code implementation file
+    # which might lead to "undefined references" error. Especially in case of header file class definitions using Qt and an Q_OBJECT
+    # definition, a header file is moc'ed but but will generate "undefined references" if the source code file is not available.
+    file(GLOB_RECURSE list_tmp2 RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.h)
+    set(nice_${the_library}_HDR "")
+    foreach( t_HdrFile ${list_tmp2})
+      get_filename_component(t_HdrPath ${t_HdrFile} PATH)
+      set(t_HdrPath ${the_library}/${t_HdrPath})
+      string(REGEX REPLACE "(.*)/+$" "\\1" t_HdrPath ${t_HdrPath})
+      #list(FIND internal_deps ${t_HdrPath} dep_index)
+      if( NOT t_HdrFile MATCHES "moc_" )
+        if( t_HdrFile MATCHES "tests/" )
+          if(BUILD_UNITTESTS)
+            LIST(APPEND nice_${the_library}_HDR ${t_HdrFile})
+          endif()
+        elseif( t_HdrFile MATCHES "progs/" )
+          if(BUILD_PROGRAMS)
+            #message(STATUS "prog: ${t_HdrFile}")
+            LIST(APPEND nice_${the_library}_HDR ${t_HdrFile})
+          endif()
+        elseif( t_HdrFile MATCHES "Mex[.]" )
+          if(WITH_MEX)
+            #message(STATUS "mex: ${t_HdrFile}")
+            LIST(APPEND nice_${the_library}_HDR ${t_HdrFile})
+          endif()
+        else()
+           LIST(APPEND nice_${the_library}_HDR ${t_HdrFile})
+        endif()
+      endif()
+    endforeach()
+    #message(STATUS "header files found: ${nice_${the_library}_HDR}")
+
   else()
     message(STATUS "Using source files from file lists (*.cmake)")
     #define variable nice_<libname>_HDR and nice_<libname>_SRC for library header and source files (don't include progs and test source files here)
