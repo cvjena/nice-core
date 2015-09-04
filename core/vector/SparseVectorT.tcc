@@ -532,18 +532,21 @@ void SparseVectorT<I,V>::convertToVectorT(NICE::VectorT<V> & v ) const
 {
   uint dimension ( this->getDim() );
 
-  // if dimension is zero, it could either be the case that the sparse vector is empty, or that the dimension flag was not set properly. 
-  // thus, let's check out the largest dimension
-  // could be removed later... only needed for backwards compatibility
-  typename SparseVectorT<I,V>::const_iterator svIt = this->end(); 
-  svIt--;
-  uint dist (distance(this->begin(), this->end()) );
-  if (dist > 0)
-    dimension = svIt->first+1; //plus one, since this is the index, but we need the resulting size
-  //we're not allowed here to set the dimension flag, since we want to have this method to be a const one
+  if ( dimension == 0 )
+  {
+    // if dimension is zero, it could either be the case that the sparse vector is empty, or that the dimension flag was not set properly. 
+    // thus, let's check out the largest dimension
+    // could be removed later... only needed for backwards compatibility
+    typename SparseVectorT<I,V>::const_iterator svIt = this->end(); 
+    svIt--;
+    uint dist (distance(this->begin(), this->end()) );
+    if ( dist > 0 )
+      dimension = svIt->first+1; //plus one, since this is the index, but we need the resulting size
+    //we're not allowed here to set the dimension flag, since we want to have this method to be a const one
+  }
 
-  //our sparse vector is empty
-  if (dimension <= 0)
+  // is our sparse vector empty?
+  if ( dimension == 0 )
   {
     v.clear();
     v.resize(0);
@@ -557,7 +560,7 @@ void SparseVectorT<I,V>::convertToVectorT(NICE::VectorT<V> & v ) const
   v.set( (V) 0.0);
 
   //add the actual content
-  svIt = this->begin();
+  typename SparseVectorT<I,V>::const_iterator svIt = this->begin();
   for ( ; svIt != this->end(); svIt++ )
   {
     //just to be sure that we do not get some errors due to badly set dimension flags
