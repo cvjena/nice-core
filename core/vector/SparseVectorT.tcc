@@ -27,20 +27,20 @@ SparseVectorT<I,V>::SparseVectorT ( const std::map<I, V> & mymap ):std::map<I, V
 template<typename I, typename V>
 SparseVectorT<I,V>::SparseVectorT ( I k, V v )
 {
-  this->insert ( std::pair<short, double> ( k, v ) );
-  dim = k;
+  this->insert ( std::pair<I, V> ( k, v ) );
+  this->dim = k;
 }
 
 template<typename I, typename V>
-SparseVectorT<I,V>::SparseVectorT ( int _dim ) : dim ( _dim )
+SparseVectorT<I,V>::SparseVectorT ( uint _dim ) : dim ( _dim )
 {
 }
 
 template<typename I, typename V>
 SparseVectorT<I,V>::SparseVectorT ( const NICE::Vector &v, double tolerance )
 {
-  dim = (int)v.size();
-  for ( int i = 0; i < dim; i++ )
+  this->dim = v.size();
+  for ( uint i = 0; i < dim; i++ )
   {
     if ( fabs ( v[i] ) > tolerance )
       this->insert ( std::pair<I, V> ( i, v[i] ) );
@@ -57,7 +57,7 @@ void SparseVectorT<I,V>::sub ( const SparseVectorT<I,V> & v )
 template<typename I, typename V>
 void SparseVectorT<I,V>::add ( const SparseVectorT<I,V> & v )
 {
-  add ( v, 1.0 );
+  this->add ( v, 1.0 );
 }
 
 template<typename I, typename V>
@@ -326,16 +326,16 @@ void SparseVectorT<I,V>::normalize ( V minv, V maxv )
 }
 
 template<typename I, typename V>
-void SparseVectorT<I,V>::addMap ( const std::map<int, int> & v, double lambda )
+void SparseVectorT<I,V>::addMap ( const std::map<uint, int> & v, double lambda )
 {
-  for ( std::map<int, int>::const_iterator v_it = v.begin(); v_it != v.end(); v_it++ )
+  for ( std::map<uint, int>::const_iterator v_it = v.begin(); v_it != v.end(); v_it++ )
     ( *this ) [(I)v_it->first] += (V)v_it->second * lambda;
 }
 
 template<typename I, typename V>
-void SparseVectorT<I,V>::addMap ( const std::map<int, double> & v, double lambda )
+void SparseVectorT<I,V>::addMap ( const std::map<uint, double> & v, double lambda )
 {
-  for ( std::map<int, double>::const_iterator v_it = v.begin(); v_it != v.end(); v_it++ )
+  for ( std::map<uint, double>::const_iterator v_it = v.begin(); v_it != v.end(); v_it++ )
     ( *this ) [(I)v_it->first] += (V)v_it->second * lambda;
 }
 
@@ -456,15 +456,15 @@ bool SparseVectorT<I,V>::set ( I i , V newValue )
 }
 
 template<typename I, typename V>
-void SparseVectorT<I,V>::setDim ( int _dim )
+void SparseVectorT<I,V>::setDim ( uint _dim )
 {
-  dim = _dim;
+  this->dim = _dim;
 }
 
 template<typename I, typename V>
-int SparseVectorT<I,V>::getDim() const
+uint SparseVectorT<I,V>::getDim() const
 {
-  return dim;
+  return this->dim;
 }
 
 template<typename I, typename V>
@@ -530,16 +530,17 @@ I SparseVectorT<I,V>::pickRandomSample() const
 template<typename I, typename V>
 void SparseVectorT<I,V>::convertToVectorT(NICE::VectorT<V> & v ) const
 {
-  int dimension (this->getDim());
-  //dimension flag was not set properly
-  if (dimension < 0)
-  {
-    typename SparseVectorT<I,V>::const_iterator i = this->end(); i--;
-    int dist (distance(this->begin(), this->end()) );
-    if (dist > 0)
-      dimension = i->first+1; //plus one, since this is the index, but we need the resulting size
-    //we're not allowed here to set the dimension flag, since we want to have this method to be a const one
-  }
+  uint dimension ( this->getDim() );
+
+  // if dimension is zero, it could either be the case that the sparse vector is empty, or that the dimension flag was not set properly. 
+  // thus, let's check out the largest dimension
+  // could be removed later... only needed for backwards compatibility
+  typename SparseVectorT<I,V>::const_iterator svIt = this->end(); 
+  svIt--;
+  uint dist (distance(this->begin(), this->end()) );
+  if (dist > 0)
+    dimension = svIt->first+1; //plus one, since this is the index, but we need the resulting size
+  //we're not allowed here to set the dimension flag, since we want to have this method to be a const one
 
   //our sparse vector is empty
   if (dimension <= 0)
@@ -556,12 +557,12 @@ void SparseVectorT<I,V>::convertToVectorT(NICE::VectorT<V> & v ) const
   v.set( (V) 0.0);
 
   //add the actual content
-  typename SparseVectorT<I,V>::const_iterator i = this->begin();
-  for ( ; i != this->end(); i++ )
+  svIt = this->begin();
+  for ( ; svIt != this->end(); svIt++ )
   {
     //just to be sure that we do not get some errors due to badly set dimension flags
-    if (i->first < dimension)
-      v[i->first] = i->second;
+    if (svIt->first < dimension)
+      v[svIt->first] = svIt->second;
   }
 }
 
