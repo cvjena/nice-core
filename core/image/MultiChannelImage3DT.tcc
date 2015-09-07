@@ -7,7 +7,7 @@ namespace NICE {
 template<class P>
 MultiChannelImage3DT<P>::MultiChannelImage3DT( int _xsize, int _ysize, int _zsize, uint _numChannels)
 {
-  data = NULL;
+//  data = NULL;
   numChannels = 0;
   xsize = 0;
   ysize = 0;
@@ -22,7 +22,7 @@ MultiChannelImage3DT<P>::MultiChannelImage3DT()
   ysize = 0;
   zsize = 0;
   numChannels = 0;
-  data = NULL;
+//  data = NULL;
 }
 
 template<class P>
@@ -52,40 +52,32 @@ MultiChannelImageT<P> MultiChannelImage3DT<P>::operator[] (uint z)
 template<class P>
 MultiChannelImage3DT<P>& MultiChannelImage3DT<P>::operator=(const MultiChannelImage3DT<P>& orig) 
 {
-  if(!(xsize == orig.xsize && ysize == orig.ysize && zsize == orig.zsize && numChannels == orig.numChannels))
+  if(  xsize == orig.xsize
+     && ysize == orig.ysize
+     && zsize == orig.zsize
+     && numChannels == orig.numChannels)
+  {
+      int iMemSize = xsize*ysize*zsize;
+      for(int c=0; c < numChannels; ++c)
+      {
+          std::copy(orig.data[c], orig.data[c]+iMemSize, data[c]);
+      }
+  }
+  else
   {
     freeData();
     xsize = orig.xsize;
     ysize = orig.ysize;
     zsize = orig.zsize;
     numChannels = orig.numChannels;
-    if(orig.data != NULL)
-    {
-      data = new P *[numChannels];
-      for ( int c = 0; c < ( int )numChannels; c++ )
-      {
-        if ( orig.data[c] == NULL )
-        {
-          data[c] = NULL;
-        }
-        else
-        {
-          data[c] = new P [xsize*ysize*zsize];
-        }
-      }
-    }
-    else
-      data = NULL;
-  }
 
-  for ( int c = 0; c < ( int )numChannels; c++ )
-  {
-    if ( orig.data[c] != NULL )
+    int iMemSize = xsize*ysize*zsize;
+
+    for(int c = 0; c < numChannels; ++c)
     {
-      for ( int x = 0; x < xsize*ysize*zsize; x++ )
-      {
-        data[c][x] = orig.data[c][x];
-      }
+        P *t_newData = new P [iMemSize];
+        std::copy(orig.data[c], orig.data[c]+iMemSize, t_newData);
+        data.push_back( t_newData );
     }
   }
   
@@ -95,13 +87,21 @@ MultiChannelImage3DT<P>& MultiChannelImage3DT<P>::operator=(const MultiChannelIm
 template<class P>
 MultiChannelImage3DT<P>::MultiChannelImage3DT( const MultiChannelImage3DT<P>& p )
 {
-  data = NULL;
   xsize = p.xsize;
   ysize = p.ysize;
   zsize = p.zsize;
   numChannels = p.numChannels;
-   
-  if(p.data != NULL)
+
+  int iMemSize = xsize*ysize*zsize;
+
+  for(int c=0; c < numChannels; ++c)
+  {
+      P *t_newData = new P [iMemSize];
+      std::copy(p.data[c], p.data[c]+iMemSize, t_newData);
+      data.push_back( t_newData );
+  }
+
+/*  if(p.data != NULL)
     data = new P *[numChannels];
   else
     data = NULL;
@@ -121,13 +121,25 @@ MultiChannelImage3DT<P>::MultiChannelImage3DT( const MultiChannelImage3DT<P>& p 
       }
     }
   }
+*/
 }
 
 
 template<class P>
 void MultiChannelImage3DT<P>::addChannel( int newChans )
 {
-  P **tmpData = new P *[numChannels+newChans];
+    assert(xsize > 0);
+    assert(ysize > 0);
+    assert(zsize > 0);
+
+    for (int i = 0; i < newChans; i++ )
+    {
+        this->data.push_back( new P [xsize*ysize*zsize] );
+    }
+
+    numChannels = this->data.size();
+/* old and ugly:
+   P **tmpData = new P *[numChannels+newChans];
 
   bool allocMem = false;
   int i = 0;
@@ -160,6 +172,7 @@ void MultiChannelImage3DT<P>::addChannel( int newChans )
   }
 
   delete [] tmpData;
+  */
 }
 
 template<class P>
@@ -225,6 +238,37 @@ void MultiChannelImage3DT<P>::addChannel(const NICE::MultiChannelImage3DT<SrcP> 
 }
 
 template<class P>
+template<class SrcP>
+void MultiChannelImage3DT<P>::addChannelReferences(const NICE::MultiChannelImage3DT<SrcP> &newImg)
+{
+    if(numChannels == 0)
+    {
+        xsize = newImg.width();
+        ysize = newImg.height();
+        zsize = newImg.depth();
+    }
+    else
+    {
+        if( !(       newImg.width() == this->width()
+                     && newImg.height() == this->height()
+                     && newImg.depth() == this->depth() ) )
+        {
+            throw( " channelwise dimensions don't fit! Abort this crazy mixing of channels" );
+            return;
+        }
+    }
+
+    // add channel deep data references
+    // -> wrap this MultiChannelImage3D around the other data
+    const std::vector< P* > vecDataChannelPtrs = newImg.getDataPointer();
+    for( int c=0; c < vecDataChannelPtrs.size() ; ++c)
+        data.push_back( vecDataChannelPtrs[c] );
+
+    numChannels = data.size();
+
+}
+
+template<class P>
 MultiChannelImage3DT<P>::~MultiChannelImage3DT()
 {
   freeData();
@@ -233,16 +277,20 @@ MultiChannelImage3DT<P>::~MultiChannelImage3DT()
 template<class P>
 void MultiChannelImage3DT<P>::freeData()
 {
-  if ( data != NULL )
-  {
-    for ( uint i = 0 ; i < numChannels ; i++ )
-      if ( data[i] != NULL )
-        delete [] data[i];
+    if ( !data.empty())
+    {
+        for ( int i = 0 ; i < (int)data.size() ; i++ )
+            if ( data[i] != NULL )
+                delete [] data[i];
 
-    delete [] data;
+        data.clear();
+    }
+}
 
-    data = NULL;
-  }
+template<class P>
+void MultiChannelImage3DT<P>::freeShallowData()
+{
+    this->data.clear();
 }
 
 template<class P>
@@ -253,27 +301,14 @@ void MultiChannelImage3DT<P>::reInit( int _xsize, int _ysize, int _zsize, int _n
   ysize = _ysize;
   zsize = _zsize;
   numChannels = _numChannels;
-  data = new P *[numChannels];
-
-  for ( uint i = 0 ; i < numChannels; i++ )
-    data[i] = new P [xsize*ysize*zsize];
+  this->addChannel(numChannels);
 }
 
 template<class P>
 template<class SrcP>
 void MultiChannelImage3DT<P>::reInitFrom( const MultiChannelImage3DT<SrcP> & src )
 {
-  freeData();
-
-  xsize = src.width();
-  ysize = src.height();
-  zsize = src.depth();
-  numChannels = src.channels();
-
-  data = new P *[numChannels];
-
-  for ( uint i = 0 ; i < numChannels; i++ )
-    data[i] = new P [xsize*ysize*zsize];
+    this->reInit(src.width(),src.height(), src.depth(), src.channels() );
 }
 
 template<class P>
@@ -289,7 +324,7 @@ P MultiChannelImage3DT<P>::get( int x, int y, int z, uint channel ) const
 }
 
 template<class P>
-P ** MultiChannelImage3DT<P>::getDataPointer()
+std::vector<P*> MultiChannelImage3DT<P>::getDataPointer() const
 {
   return data;
 }
