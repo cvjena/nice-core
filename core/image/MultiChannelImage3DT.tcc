@@ -483,6 +483,20 @@ ImageT<P> MultiChannelImage3DT<P>::getChannelT( int z, uint channel ) const
   return img;
 }
 
+template<class P>
+ImageT<P> MultiChannelImage3DT<P>::getXSlice ( int x, uint channel ) const
+{
+    assert( channel < numChannels );
+
+    NICE::ImageT<P> img(zsize, ysize);
+
+    for ( int y = 0; y < ysize; y++ )
+        for ( int z = 0; z < zsize; z++ )
+            img.setPixel( z, y, data[channel][z*xsize*ysize + y*xsize + x]);
+
+    return img;
+}
+
 /** convert to ice image */
 template<class P>
 void MultiChannelImage3DT<P>::convertToGrey( NICE::Image & img, int z, uint channel,  bool normalize ) const

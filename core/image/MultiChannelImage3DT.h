@@ -158,6 +158,9 @@ public:
 	/** return image for visualization */
   ImageT<P> getChannelT( int z, uint channel = 0 ) const;
 
+  /** return x-slice as image */
+  ImageT<P> getXSlice ( int x, uint channel = 0 ) const;
+
   /** return rgb image (reading channels 0, 1, 2) for visualization */
   ColorImage getColor(int z) const;
 
