@@ -6,6 +6,9 @@
 #include <string>
 #include <set>
 
+#include <unistd.h> //for getpwd() under linux
+#include <sys/param.h> //for MAXPATHLEN - the maximal path length
+
 // nice-core includes
 #include "core/basics/Exception.h"
 #include "core/basics/Config.h"
@@ -45,7 +48,21 @@ Config::Config ( int argc,
 {
   readFromArguments ( argc, argv );
   std::string configfile = gS("main", "config", "" );
-  
+
+  NICE::FileName t_ConfigFilename( configfile );
+
+  // check for relative path correction:
+  // if dataset is a relative path, then make it absolute using the
+  // currend working directory
+  if( t_ConfigFilename.isRelative() )
+  {
+      char sCWDPath[MAXPATHLEN];
+      getcwd(sCWDPath, MAXPATHLEN);
+      t_ConfigFilename.set( string(sCWDPath) + "/" + configfile );
+      t_ConfigFilename.convertToRealPath();
+      configfile = t_ConfigFilename.str();
+  }
+  m_sConfigFilename = configfile;
   std::cerr << "configfile: " << configfile << std::endl;
   ioUntilEndOfFile = gB("main", "ioUntilEndOfFile", true );
   if ( configfile.size() > 0 )

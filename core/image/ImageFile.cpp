@@ -240,6 +240,9 @@ ImageFile::Format ImageFile::name2Format(const std::string &filename)
 	#endif
 
 		int pos=filename.find_last_of('.');
+		if(pos==std::string::npos)
+			return ImageFile::FormatUnknown;
+
 		magic=filename.substr(pos);
 		if(magic==".pgm" || magic==".PGM")
 				return ImageFile::PGM_RAW;

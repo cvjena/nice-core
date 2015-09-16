@@ -1,8 +1,8 @@
 #ifndef _NICE_CORE_MULTICHANNELIMAGET_H
 #define _NICE_CORE_MULTICHANNELIMAGET_H
 
-#include <core/image/MultiChannelImageAccess.h>
-#include <core/image/ImageT.h>
+#include "MultiChannelImageAccess.h"
+#include "ImageT.h"
 
 namespace NICE {
 

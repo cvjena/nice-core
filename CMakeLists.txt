@@ -1,11 +1,13 @@
-#cmake_minimum_required(VERSION 2.8.6) #version 2.8.6 at least required because of command set(CMAKE_AUTOMOC TRUE) for qt moc-ing (see below)
-cmake_minimum_required(VERSION 2.8.12) #version 2.8.12 at least required because of command  get_filename_component(__testname_dir ${__testname_abspath} DIRECTORY) (getting directory path of filename)
+#version 2.8.9 required for position independent code
+cmake_minimum_required(VERSION 2.8.9)
 project (NICELibrary)
 
 include(CheckSymbolExists)
 include(CheckIncludeFiles)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 include(cmake/NiceModules.cmake REQUIRED)
 
@@ -29,9 +31,65 @@ endif()
 
 set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
 
-set(NICE_BUILD_LIBS_STATIC_SHARED STATIC)
-
 set(NICE_SOURCEFILES_FIND_GLOBALLYRECURSIVE ON CACHE STRING "Scan a sublibraries directory for source files instead of using an explicit src file list")
+
+set(external_deps "")
+
+NICE_OPTION(WITH_MEX "Build with MEX support" OFF)
+if(WITH_MEX)
+  if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    cmake_minimum_required(VERSION 2.8.12)
+    set(MATLAB_DEFAULT_ROOT "/Applications/MATLAB_R2013a.app")
+    set(MATLAB_DEFAULT_ARCH "maci64")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -include algorithm")
+    set(MEX_ENDING ".mexmaci64")
+    set(CMAKE_MACOSX_RPATH 1)
+  else()
+    set(MATLAB_DEFAULT_ROOT "/home/matlab/8.2/academic")
+    set(MATLAB_DEFAULT_ARCH "glnxa64")
+    set(MEX_ENDING ".mexa64")
+  endif()
+
+  # Look for MATLAB environment variable
+  if(NOT EXISTS "$ENV{MATLAB}")
+    if(NOT EXISTS ${MATLAB_DEFAULT_ROOT})
+      message(FATAL_ERROR "Cannot find MATLAB at ${MATLAB_DEFAULT_ROOT}! Please set \$MATLAB")
+    else()
+      message(WARNING "\$MATLAB not set, using default")
+      set(MATLAB_ROOT ${MATLAB_DEFAULT_ROOT}) 
+    endif()
+  else()
+    set(MATLAB_ROOT $ENV{MATLAB})
+  endif()
+
+  message(STATUS "Using MATLAB from: ${MATLAB_ROOT}")
+
+  # Look for Arch environment variable
+  if(NOT "$ENV{Arch}" MATCHES ".*((32)|(64))$")
+    message(WARNING "\$Arch not set, using default")
+    set(MATLAB_ARCH ${MATLAB_DEFAULT_ARCH})
+  else()
+    set(MATLAB_ARCH $ENV{Arch})
+  endif()
+
+  message(STATUS "Using MATLAB architecture: " ${MATLAB_ARCH})
+
+  # Look for headers
+  if(EXISTS "${MATLAB_ROOT}/extern/include/mex.h")
+    INCLUDE_DIRECTORIES(${MATLAB_ROOT}/extern/include)
+  else()
+    message(FATAL_ERROR "Cannot find mex.h! Have you set \$MATLAB correctly?")
+  endif()
+
+  FIND_LIBRARY(MEX_LIBMX mx PATHS ${MATLAB_ROOT}/bin/${MATLAB_ARCH} NO_DEFAULT_PATH)
+  FIND_LIBRARY(MEX_LIBMEX mex PATHS ${MATLAB_ROOT}/bin/${MATLAB_ARCH})
+  FIND_LIBRARY(MEX_LIBMAT mat PATHS ${MATLAB_ROOT}/bin/${MATLAB_ARCH})
+
+  SET(MEX_LIBRARIES ${MEX_LIBMX} ${MEX_LIBMEX} ${MEX_LIBMAT})
+  ADD_DEFINITIONS("-DNICE_USELIB_MEX")
+  MESSAGE(STATUS "Found mex libraries at ${MEX_LIBRARIES}")
+  set(external_deps ${external_deps} "MEX")
+endif()
 
 NICE_OPTION(WITH_BOOST "Build with Boost support" OFF)
 if(WITH_BOOST)
@@ -43,6 +101,7 @@ if(WITH_BOOST)
       ADD_DEFINITIONS( "-DNICE_BOOST_FOUND" )
 	  ADD_DEFINITIONS( "-DNICE_USELIB_BOOST" )
   ENDIF()
+  set(external_deps ${external_deps} "BOOST")
 endif()
 
 FIND_PACKAGE(CppUnit)
@@ -55,6 +114,7 @@ else()
   #set(CPPUNIT_INCLUDE_DIR "/usr/include/") #can be found in  /usr/include/cppunit
  # ADD_DEFINITIONS( "-DNICE_USELIB_CPPUNIT" )
   message(STATUS "CppUnit not found")
+  set(external_deps ${external_deps} "BOOST")
 ENDIF()
 
 NICE_OPTION(WITH_DBV_LIBRARIES "Build with DBV extern librares" OFF)
@@ -73,12 +133,28 @@ if(WITH_DBV_LIBRARIES)
         #message(STATUS "ipp link dir: ${IPP_LIBRARY_DIRS}")
         #message(STATUS "ipp link libs: ${IPP_LIBRARIES}")
         ADD_DEFINITIONS( "-DNICE_USELIB_IPP=5" )
+	ADD_DEFINITIONS( "-lpthread" )
         INCLUDE_DIRECTORIES(${IPP_INCLUDE_DIRS})
         
+        set(external_deps ${external_deps} "IPP")
       else()
         message(STATUS "IPP library not found")
       endif()
     endif()
+
+    NICE_OPTION(WITH_LINAL "Build with dbv LinAl support" OFF)
+    if(WITH_LINAL)
+      FIND_PACKAGE(LinAl)
+      if(LINAL_FOUND)
+	ADD_DEFINITIONS( "-DNICE_USELIB_LINAL" )
+	#ADD_DEFINITIONS("-lgfortran")
+        INCLUDE_DIRECTORIES(${LINAL_INCLUDE_DIR})
+	#message(STATUS "linal link libs: ${LINAL_LIBRARIES}")
+        message(STATUS "Using LinAl include dir: ${LINAL_INCLUDE_DIR}")
+        set(external_deps ${external_deps} "LINAL")
+      endif()
+    endif()
+
   else()
     message( SEND_ERROR "trying to use DBV extern library dir, but couldn't be found ${NICE_DBV_LIBRARIES_DIR}. Switch off DBV Usage to continue.") #unsetting dbv libraries path
     unset(WITH_DBV_LIBRARIES) #unsetting, since dbv dir not found
@@ -92,6 +168,7 @@ if(WITH_OPENMP)
       set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
       set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
       ADD_DEFINITIONS( "-DNICE_USELIB_OPENMP")
+      set (external_deps ${external_deps} "OPENMP")
   endif()
 endif()
 
@@ -101,6 +178,7 @@ if(WITH_PNG)
     if (PNG_FOUND)
       INCLUDE_DIRECTORIES(${PNG_INCLUDE_DIRS})
       ADD_DEFINITIONS( "-DNICE_USELIB_PNG")
+      set (external_deps ${external_deps} "PNG")
     endif()
 endif()
 
@@ -109,12 +187,14 @@ if(WITH_MATIO)
   find_package(HDF5)
   if(HDF5_FOUND)
     message(STATUS "HDF5-dir: ${HDF5_INCLUDE_DIR}")
+    set (external_deps ${external_deps} "HDF5")
   endif()
   find_package(MATIO)
   if(MATIO_FOUND)
     message(STATUS "Matio-dir: ${MATIO_INCLUDE_DIRS}")
     ADD_DEFINITIONS( "-DNICE_USELIB_MATIO")
     INCLUDE_DIRECTORIES(${MATIO_INCLUDE_DIRS})
+    set (external_deps ${external_deps} "MATIO")
   endif()
 endif()
 
@@ -132,16 +212,16 @@ endif()
 
 NICE_OPTION(WITH_QT "Build with Qt" ON)
 if(WITH_QT)
-  FIND_PACKAGE(Qt4)# COMPONENTS Qt3Support QtOpenGl)
+  FIND_PACKAGE(Qt4 REQUIRED)# COMPONENTS QtOpenGl)
   SET(QT_USE_QTOPENGL TRUE)
   SET(QT_USE_QTXML TRUE)
-  SET(QT_USE_QT3SUPPORT TRUE)
   if(QT_FOUND)
-    message(STATUS "QTfound ${QT_QT3SUPPORT_INCLUDE_DIR}")
     set(CMAKE_AUTOMOC TRUE) #see doc: http://blogs.kde.org/2011/11/01/cool-new-stuff-cmake-286-automoc
     INCLUDE(${QT_USE_FILE})
     ADD_DEFINITIONS(${QT_DEFINITIONS})
     ADD_DEFINITIONS( "-DNICE_USELIB_QT")
+    set(external_deps ${external_deps} "QT4")
+    set(external_deps ${external_deps} "QT4_XML")
   endif()
 endif()
 
@@ -224,11 +304,36 @@ set(__listSubLibs "")
 foreach(_curSubdir ${__listSubDirs})
 	nice_get_real_path(__modpath "${NICE_CURR_DIR}/${_curSubdir}/")
 	if(EXISTS "${__modpath}/CMakeLists.txt")
-		#ADD_SUBDIRECTORY(${__modpath})
 	    LIST(APPEND __listSubLibs ${_curSubdir})
 	  NICE_OPTION(BUILD_LIB_${_curSubdir} "Build library ${_curSubdir}" ON)
 	endif()
 endforeach()
+
+set(internal_deps "")
+
+
+foreach(_curSubLib ${__listSubLibs})
+  if(BUILD_LIB_${_curSubLib})
+	nice_get_real_path(__modpath "${NICE_CURR_DIR}/${_curSubLib}")
+	message(STATUS "Scanning ${__modpath}...")
+	SUBDIRREC(__depDirs "${__modpath}")
+	foreach(__depDir ${__depDirs})
+		#message(STATUS "Adding (${_curSubLib}) ${__depDir} to list...")
+		set(internal_deps ${internal_deps} ${_curSubLib}/${__depDir})
+	endforeach()
+	set(internal_deps ${internal_deps} ${_curSubLib})
+  else()
+    message(STATUS "${_curSubLib} is excluded from build")
+  endif()
+endforeach()
+
+message(STATUS "External dependencies found: ${external_deps}")
+
+## Update deps
+NICE_OPTION(USE_LIBDEPEND "Use libdepend.inc files" OFF)
+if(USE_LIBDEPEND)
+	UPDATE_NICE_DEPENDENCIES()
+endif()
 
 foreach(_curSublib ${__listSubLibs})
   if(BUILD_LIB_${_curSublib})

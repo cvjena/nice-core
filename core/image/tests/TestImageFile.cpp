@@ -295,6 +295,12 @@ void TestImageFile::testJPG_IO()
     }
 }
 
+void TestImageFile::testInvalidFileName() {
+	ImageFile image_file;
+	ImageFile::Format fileformat = image_file.name2Format("nodothere");
+	CPPUNIT_ASSERT_EQUAL(fileformat,ImageFile::FormatUnknown);
+}
+
 #endif
 
 

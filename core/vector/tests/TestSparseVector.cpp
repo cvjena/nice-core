@@ -19,6 +19,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION( TestSparseVector );
 using namespace NICE;
 using namespace std;
 
+const bool b_verbose = false;
+
 void TestSparseVector::testProducts()
 {
   SparseVector v1;
@@ -41,7 +43,13 @@ void TestSparseVector::testProducts()
   SparseVector v3;
   v3.restore ( iss );
   
+  if ( b_verbose )
+    std::cerr << "TestSparseVector::testProducts -- check1 v3 == v1 " << std::endl;
+  
   CPPUNIT_ASSERT ( v3 == v1 );
+  
+  if ( b_verbose )
+    std::cerr << "TestSparseVector::testProducts -- check1 v3 == v1 passed" << std::endl;
 
   //cerr << "Testing SparseVector::FORMAT_INDEX_LINE" << endl;
   stringstream ss;
@@ -50,7 +58,13 @@ void TestSparseVector::testProducts()
   v3.clear();
   v3.restore ( ss, SparseVector::FORMAT_INDEX_LINE );
 
+  if ( b_verbose )
+    std::cerr << "TestSparseVector::testProducts -- check2 v3 == v1 " << std::endl;
+  
   CPPUNIT_ASSERT ( v3 == v1 );
+  
+  if ( b_verbose )
+    std::cerr << "TestSparseVector::testProducts -- check2 v3 == v1 passed" << std::endl;
   
   //cerr << "Testing SparseVector::FORMAT_INDEX" << endl;
   stringstream ss2;
@@ -59,7 +73,13 @@ void TestSparseVector::testProducts()
   v3.clear();
   v3.restore ( ss2, SparseVector::FORMAT_INDEX );
 
+  if ( b_verbose )
+    std::cerr << "TestSparseVector::testProducts -- check3 v3 == v1" << std::endl;
+  
   CPPUNIT_ASSERT ( v3 == v1 );
+  
+  if ( b_verbose )
+    std::cerr << "TestSparseVector::testProducts -- check3 v3 == v1 passed" << std::endl;
 
 }
 
@@ -77,7 +97,18 @@ void TestSparseVector::testConversionToVectorT()
   NICE::Vector vGT(5);
   vGT[0] = 0.5;vGT[1] = 1.0;vGT[2] = 0.0;vGT[3] = 0.1;vGT[4] = 2.0;
    
+  if ( b_verbose )
+  {
+    std::cerr << "TestSparseVector::testConversionToVectorT -- v == vGT" << std::endl;
+  
+    std::cerr << v << std::endl;
+    std::cerr << vGT << std::endl;
+  }
+  
   CPPUNIT_ASSERT ( v == vGT );
+  
+  if ( b_verbose )
+    std::cerr << "TestSparseVector::testConversionToVectorT -- v == vGT passed" << std::endl;
 }
 
 #endif

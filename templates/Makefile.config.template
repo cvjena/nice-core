@@ -151,7 +151,7 @@ ifeq (1,$(shell test -f $(LINALCONFIG) && echo "1"))
 endif
 
 # ---------------------------------- QT4 (first local install -> if not available 
-QT4_PKGCONFIG=QtGui QtCore QtOpenGL Qt3Support
+QT4_PKGCONFIG=QtGui QtCore QtOpenGL
 QT4_XML_PKGCONFIG=QtXml
 
 ifeq (1,$(shell pkg-config --exists $(QT4_PKGCONFIG) && echo "1"))
@@ -161,7 +161,7 @@ else
   QTDIR=$(THIRD_BASE)/qt4
   ifeq (1,$(shell test -d $(QTDIR)/lib/pkgconfig && echo "1"))
     QT4_PKGCONFIG_XXX=$(QTDIR)/lib/pkgconfig
-    QT4_PKGCONFIG=$(QT4_PKGCONFIG_XXX)/QtGui.pc $(QT4_PKGCONFIG_XXX)/QtCore.pc $(QT4_PKGCONFIG_XXX)/QtOpenGL.pc $(QT4_PKGCONFIG_XXX)/Qt3Support.pc
+    QT4_PKGCONFIG=$(QT4_PKGCONFIG_XXX)/QtGui.pc $(QT4_PKGCONFIG_XXX)/QtCore.pc $(QT4_PKGCONFIG_XXX)/QtOpenGL.pc
     QT4_XML_PKGCONFIG=$(QT4_PKGCONFIG_XXX)/QtXml.pc
     MOC_BINARY=$(QTDIR)/bin/moc
   	$(call CONFIGINFO,QT4_3rdparty,1)
@@ -169,7 +169,7 @@ else
 endif
 
 ifeq (1,$(shell pkg-config --exists $(QT4_PKGCONFIG) && echo "1"))
-  QT4_CFLAGS=-DQT3_SUPPORT -DNICE_USELIB_QT
+  QT4_CFLAGS=-DNICE_USELIB_QT
   # The moc precompiler. Make sure it´s the Qt4 version!
   MOC=$(MOC_BINARY) $(QT4_CFLAGS)
 else
@@ -331,7 +331,8 @@ endif
 # for Matze Wackers optimization lib
 DEBUGFLAGS_CFLAGS=-DOPT_DEBUG -DDEBUG
 
-MATIODIR=matio/
+MATIODIR=$(NICEHOME)/matio/
+# $(info Matio dir: $(MATIODIR))
 ifeq (1,$(shell test -d $(MATIODIR) && echo "1"))
   MATIO_CFLAGS=-DNICE_USELIB_MATIO -I$(MATIODIR)
   MATIO_LDFLAGS=-L$(MATIODIR) -lmatio
@@ -339,3 +340,20 @@ ifeq (1,$(shell test -d $(MATIODIR) && echo "1"))
 else
   $(call CONFIGINFO,MATIO,0)
 endif
+
+#HDF5
+ifeq (1,$(shell pkg-config --exists hdf5 && echo "1"))
+  HDF5_CFLAGS= `pkg-config --cflags hdf5 -DNICE_USELIB_HDF5  
+  HDF5_LDFLAGS=`pkg-config --libs hdf5
+  $(call CONFIGINFO,HDF5_LOCAL,1)
+else
+  HDF5_PREFIX=$(NICEHOME)/matio/hdf5/
+  ifeq (1,$(shell test -d $(HDF5_PREFIX) && echo "1"))
+    HDF5_CFLAGS=-I$(HDF5_PREFIX)/include/ -DNICE_USELIB_HDF5
+    HDF5_LDFLAGS=-L$(HDF5_PREFIX)/lib -L$(HDF5_PREFIX)/lib64 -lhdf5
+    $(call CONFIGINFO,HDF5,1)
+  else
+    $(call CONFIGINFO,HDF5,0)
+  endif
+endif
+

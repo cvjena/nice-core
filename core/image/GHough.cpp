@@ -52,7 +52,7 @@ GHough& GHough::operator=(const GHough& ex)
 void GHough::initialize(IppiSize imageSize,IppiSize transformSize, NeighborType addMode)
 {
     this->imageSize = imageSize;
-    transformSize = transformSize;
+    this->transformSize = transformSize;
     this->addMode = addMode;
     
     //! Allocates memory for data

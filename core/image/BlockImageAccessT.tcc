@@ -32,7 +32,7 @@ void BlockImageAccessT<P>::set(const P& value) {
   for(int y=0; y<this->height(); ++y) {
     const P* end = this->getPixelPointerYEnd(y);
     const int inc = this->columnStepsize();
-    for (P* p = this->getPixelPointerY(y); p != end; p = (void*)p + inc) {
+    for (P* p = this->getPixelPointerY(y); p != end; p = p + inc) {
       *p = value;
     }
   }

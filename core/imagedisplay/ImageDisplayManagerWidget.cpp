@@ -4,28 +4,26 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 /*
  *  Constructs a ImageDisplayManagerWidget as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
  */
 ImageDisplayManagerWidget::ImageDisplayManagerWidget( QWidget* parent, const char* name, Qt::WFlags fl )
-    : QWidget( parent, name, fl )
+    : QWidget( parent, fl )
 {
-    if ( !name )
-  setName( "ImageDisplayManagerWidget" );
-    ImageDisplayManagerWidgetLayout = new Q3VBoxLayout( this, 11, 6, "ImageDisplayManagerWidgetLayout");
+    ImageDisplayManagerWidgetLayout = new QVBoxLayout( this );
 
-    buttonShowAll = new QPushButton( this, "buttonShowAll" );
+    buttonShowAll = new QPushButton( this );
     ImageDisplayManagerWidgetLayout->addWidget( buttonShowAll );
 
-    buttonHideAll = new QPushButton( this, "buttonHideAll" );
+    buttonHideAll = new QPushButton( this );
     ImageDisplayManagerWidgetLayout->addWidget( buttonHideAll );
 
-    buttonDeleteAll = new QPushButton( this, "buttonDeleteAll" );
+    buttonDeleteAll = new QPushButton( this );
     ImageDisplayManagerWidgetLayout->addWidget( buttonDeleteAll );
     languageChange();
     resize( QSize(205, 133).expandedTo(minimumSizeHint()) );
@@ -51,7 +49,7 @@ ImageDisplayManagerWidget::~ImageDisplayManagerWidget()
  */
 void ImageDisplayManagerWidget::languageChange()
 {
-    setCaption( tr( "Image displays" ) );
+    setWindowTitle( tr( "Image displays" ) );
     buttonShowAll->setText( tr( "Show all images" ) );
     buttonHideAll->setText( tr( "Hide all images" ) );
     buttonDeleteAll->setText( tr( "Release (!) all images" ) );

@@ -1,0 +1,28 @@
+## Wichtigere Sachen
+*Für die generischen Klassen müssen wir uns etwas überlegen*. Die Implementationen müssen mit in die Header, aber wir können die Lib so "von außen" nicht benutzen, weil wir beim Kompilieren der Templates die NICE_USELIB.. aus unserem Buildsystem brauchen und damit auch noch beim Benutzer Abhängigkeiten erzeugen, die vermeidbar wären.
+
+```
+$ grep --include={*.h,*.tcc} -rnw ./ -e ".*def.*USELIB.*" | wc -l
+185
+
+```
+In den meisten Fällen können wir wohl die Template-Funktion explizit instantiieren und in den Header nur noch "extern template..." angeben.
+
+## Buildsystem
+-- WITH_QT OFF verhindert nicht das Kompilieren von libimagedisplay, die hängt aber von Qt ab.
+?? NICE_USELIB_QT verwenden, um in ImageDisplay.h die QT-Header auszuschließen
+
+-- Das Verzeichnis von GLUT ist für Windows hardcoded, sollte eigentlich Umgebungsvariable nutzen. 
+?? Rausnehmen
+
+-- WITH... sind Voreinstellungen in CMakeLists
+?? In Abhängigkeit der gefundenen Libs setzen
+
+-- Die Abhängigkeiten werden in nice-core/CMakeLists.txt gesucht, aber in nice-core/core/CMakeLists.txt werden unabhängig davon die Ergebnisse der find_package()-Aufrufe benutzt.
+?? Wenn nice-core ohnehin nur aus "core" besteht, reicht vielleicht auch nur eine CMakeLists.txt. Dann können wir target_link_libraries aufrufen, nachdem wir eine Abhängigkeit gefunden haben. Alternativ: Wenn jedes Projekt seine eigenen Abhängigkeiten hat, dann kann auch jedes Projekt selbst danach suchen.
+
+## Aufräumen
+-- "Filter.h is obsolete" - hängt noch sehr viel davon ab?
+
+## Bugs
+-- Konstruktor von ImageT ruft string::substr mit falschen Parametern auf, wenn der Punkt im Dateinamen fehlt.

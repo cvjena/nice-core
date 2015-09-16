@@ -1,4 +1,4 @@
-# --------------------------------
+## --------------------------------
 # - initialization in top makefile
 #
 # here all variables used later on will be defined and initialized. also the

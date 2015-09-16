@@ -33,7 +33,7 @@ ArrayPlot::ArrayPlot ( std::vector<double> probs,
                        QWidget* parent,
                        const char* name ,
                        Qt::WFlags flags )
-    : QGLWidget ( parent, name, NULL, flags ),
+    : QGLWidget ( parent, NULL, flags ),
     m_width ( width ),
     m_height ( height ),
     m_maxProb ( -std::numeric_limits<double>::infinity() ),

@@ -5,7 +5,7 @@
 set(the_library "core")
 
 #add linkage dependencies to other libraries here
-set("nice_${the_library}_LINKING_DEPENDENCIES"  ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${QT_LIBRARIES} ${IPP_LIBRARIES} ${ImageMagick_LIBRARIES})
+set("nice_${the_library}_LINKING_DEPENDENCIES"  ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${QT_LIBRARIES} ${IPP_LIBRARIES} ${LINAL_LIBRARIES} ${ImageMagick_LIBRARIES} ${PNG_LIBRARIES})
 if(MATIO_FOUND)
   list(APPEND nice_${the_library}_LINKING_DEPENDENCIES ${MATIO_LIBRARIES})
 endif(MATIO_FOUND)

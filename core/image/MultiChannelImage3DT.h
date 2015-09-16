@@ -1,10 +1,10 @@
 #ifndef _NICE_CORE_MULTICHANNELIMAGE3DT_H
 #define _NICE_CORE_MULTICHANNELIMAGE3DT_H
 
-#include <core/image/MultiChannelImageAccess3D.h>
-#include <core/image/ImageT.h>
-#include <core/image/MultiChannelImageT.h>
-#include <core/image/Histogram.h>
+#include "MultiChannelImageAccess3D.h"
+#include "ImageT.h"
+#include "MultiChannelImageT.h"
+#include "Histogram.h"
 
 #include <vector>
 #include <fstream>
@@ -28,7 +28,8 @@ protected:
   typedef unsigned int uint;
 
   /** image data, use carefully !!! data[channel][pixel_offset] */
-  P **data;
+  std::vector<P*> data;
+//    P **data;
   
   /** image width */
   int xsize;
@@ -73,6 +74,17 @@ public:
   /** free all memory */
   void freeData();
 
+  /**
+   * @brief free only the pointer to the actual data, but leaves the actual data in the memory.
+   *
+   * Usefull for when the underlying data (e.g data[0] ptrs are passed to an other multi channel
+   * image for further use and memcopy should be avoided.
+   * Detail: Only frees variable 'data', not the memory data[0:numChannels] is pointing to
+   * @author Johannes Ruehle
+   * @date 2014-07-18
+   */
+  void freeShallowData();
+
   /** reinit */
   void reInit( int xsize, int ysize, int zsize, int numChannels = 1);
 
@@ -89,12 +101,17 @@ public:
   
   template<class SrcP>
   void addChannel(const NICE::MultiChannelImage3DT<SrcP> &newImg);
+
+  /** add channels only as references (no deep memory copy) */
+  template<class SrcP>
+  void addChannelReferences(const NICE::MultiChannelImage3DT<SrcP> &newImg);
   
   /** get value */
   P get( int x, int y, int z, uint channel = 0 ) const;
   
   /** get data pointer */
-  P** getDataPointer();
+  std::vector<P*> getDataPointer() const;
+  //P** getDataPointer();
 
   /** set value */
   void set( int x, int y, int z, P val, uint channel = 0 );
@@ -141,8 +158,14 @@ public:
 	/** return image for visualization */
   ImageT<P> getChannelT( int z, uint channel = 0 ) const;
 
-  /** return rgb image for visualization */
+  /** return x-slice as image */
+  ImageT<P> getXSlice ( int x, uint channel = 0 ) const;
+
+  /** return rgb image (reading channels 0, 1, 2) for visualization */
   ColorImage getColor(int z) const;
+
+  /** return rgb image (reading arbitrary three channels) for visualization */
+  ColorImage getColorImageFromChannels(int z, int channel0, int channel1, int channel2) const;
 
   /** calculate image statistics */
   void statistics( P & min, P & max, uint channel = 0 ) const;
