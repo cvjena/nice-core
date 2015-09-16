@@ -141,7 +141,8 @@ ColorImageT<P>::ColorImageT(const std::string& fileName,
 {
   this->m_columnStepsize = this->channels() * sizeof(P);
   this->allocPixel(0, 0, _memoryLayout);
-  this->read(ImageFile(fileName));
+  //this->read(ImageFile(fileName));
+  this->read(fileName);
 }
 
 

@@ -32,6 +32,12 @@ And finally FreeGLUT (using _homebrew_):
 $ brew install freeglut
 ```
 
+Sometimes you also need to specify an external framework path (like for MacPorts and Lion)
+
+```
+$ export DYLD_FRAMEWORK_PATH=/opt/local/Library/Frameworks/
+```
+
 ## Preparing the file system
 Make a new working directory and clone the repository from GitHub:
 

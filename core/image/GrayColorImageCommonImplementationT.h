@@ -1,6 +1,4 @@
 /*
- * LImUn - Library for ImageT Understanding
- *  - libimage - An ImageT library
  * See file License for license information.
  */
 #ifndef _LIMUN_IMAGET_H
@@ -14,8 +12,10 @@ namespace NICE {
 #include "core/image/ippwrapper.h"
 #include "core/image/pointerArithmetic.h"
 #include "core/image/ImageException.h"
+// this is a cyclic dependency we need to resolve!
+//#include "core/image/ImageFile.h"
 #include "core/image/GrayColorImageCommonImplementation.h"
-#include <core/image/RectT.h>
+#include "core/image/RectT.h"
 
 namespace NICE {
 
