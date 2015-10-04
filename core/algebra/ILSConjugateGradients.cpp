@@ -67,7 +67,6 @@ int ILSConjugateGradients::solveLin ( const GenericMatrix & gm, const Vector & b
   
   if ( timeAnalysis ) {
     t.stop();
-    cerr << "r = " << r << endl;
     cerr << "ILSConjugateGradients: TIME " << t.getSum() << " " << r.normL2() << " " << r.normInf() << endl;
     t.start();
   }
@@ -87,9 +86,9 @@ int ILSConjugateGradients::solveLin ( const GenericMatrix & gm, const Vector & b
   {
     // pre-conditioned vector, currently M=I, i.e. no pre-condition
     // otherwise set z = M * r
-    if ( jacobiPreconditioner.size() != r.size() )
+    if ( jacobiPreconditioner.size() != r.size() ) {
       z = r;
-    else {
+    } else {
       // use simple Jacobi pre-conditioning
       for ( uint jj = 0 ; jj < z.size() ; jj++ )
         z[jj] = r[jj] / jacobiPreconditioner[jj];
