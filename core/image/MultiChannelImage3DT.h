@@ -97,7 +97,7 @@ public:
 
   /** add a channel to Multichannel Image */
   template<class SrcP>
-  void addChannel( NICE::MultiChannelImageT<SrcP> &newImg );
+  void addChannel(const NICE::MultiChannelImageT<SrcP> &newImg );
   
   template<class SrcP>
   void addChannel(const NICE::MultiChannelImage3DT<SrcP> &newImg);
@@ -196,6 +196,6 @@ public:
 
 } // namespace
 
-#include <core/image/MultiChannelImage3DT.tcc>
+#include "MultiChannelImage3DT.tcc"
 
 #endif

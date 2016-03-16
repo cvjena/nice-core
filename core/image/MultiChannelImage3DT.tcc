@@ -177,7 +177,7 @@ void MultiChannelImage3DT<P>::addChannel( int newChans )
 
 template<class P>
 template<class SrcP>
-void MultiChannelImage3DT<P>::addChannel(NICE::MultiChannelImageT<SrcP> &newMCImg)
+void MultiChannelImage3DT<P>::addChannel(const NICE::MultiChannelImageT<SrcP> &newMCImg)
 {
   int oldchan = numChannels;
   if(this->xsize > 0)
@@ -193,12 +193,13 @@ void MultiChannelImage3DT<P>::addChannel(NICE::MultiChannelImageT<SrcP> &newMCIm
   
   for(int z = 0; z < this->zsize; z++)
   {
-    NICE::ImageT<SrcP> newImg = newMCImg[z];
+    //NICE::ImageT<SrcP> newImg = newMCImg[z];
     for(int y = 0; y < this->ysize; y++)
     {
       for(int x = 0; x < this->xsize; x++)
       {
-        data[oldchan][x + y*xsize + z*xsize*ysize] = (P)newImg(x,y);
+        //data[oldchan][x + y*xsize + z*xsize*ysize] = (P)newImg(x,y);
+        data[oldchan][x + y*xsize + z*xsize*ysize] = (P)newMCImg.get(x,y,(unsigned int)z);
       }
     }
   }
@@ -860,7 +861,7 @@ void MultiChannelImage3DT<P>::restore( std::string filename )
     }
   } else {
     freeData();
-    data = NULL;
+    //data = NULL;
   }
 
   fclose( f );
