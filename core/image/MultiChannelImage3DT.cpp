@@ -1,4 +1,4 @@
-#include "core/image/MultiChannelImage3DT.h"
+#include "MultiChannelImage3DT.h"
 
 using namespace NICE;
 
