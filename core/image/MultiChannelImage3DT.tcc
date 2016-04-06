@@ -648,7 +648,7 @@ void MultiChannelImage3DT<P>::calcIntegral( uint channel )
   /** y-z plane **/
   k = xsize*ysize + xsize;
   for ( int z = 1 ; z < zsize ; z++, k+=xsize )
-    for ( int y = 1 ; y < zsize ; y++, k+=xsize )
+    for ( int y = 1 ; y < ysize ; y++, k+=xsize )
     {
       integralImage[k] += integralImage[k-(xsize*ysize)];
       integralImage[k] += integralImage[k - xsize];
