@@ -50,7 +50,7 @@ MultiChannelImageT<P> MultiChannelImage3DT<P>::operator[] (uint z)
 }
 
 template<class P>
-MultiChannelImage3DT<P>& MultiChannelImage3DT<P>::operator=(const MultiChannelImage3DT<P>& orig) 
+MultiChannelImage3DT<P>& MultiChannelImage3DT<P>::operator=(const MultiChannelImage3DT<P>& orig)
 {
   if(  xsize == orig.xsize
      && ysize == orig.ysize
@@ -80,7 +80,7 @@ MultiChannelImage3DT<P>& MultiChannelImage3DT<P>::operator=(const MultiChannelIm
         data.push_back( t_newData );
     }
   }
-  
+
   return *this;
 }
 
@@ -138,41 +138,26 @@ void MultiChannelImage3DT<P>::addChannel( int newChans )
     }
 
     numChannels = this->data.size();
-/* old and ugly:
-   P **tmpData = new P *[numChannels+newChans];
+}
 
-  bool allocMem = false;
-  int i = 0;
-
-  for ( ; i < (int)numChannels; i++ )
-  {
-    tmpData[i] = data[i];
-
-    if ( data[i] != NULL )
-      allocMem = true;
-  }
-
-  if ( allocMem )
-  {
-    for ( ; i < newChans + (int)numChannels; i++ )
+template<class P>
+template<class SrcP>
+void MultiChannelImage3DT<P>::addChannel( const NICE::ImageT<SrcP> &newImg )
+{
+    int oldchan = numChannels;
+    if(this->xsize > 0)
     {
-      tmpData[i] = new P [xsize*ysize*zsize];
+        assert(newImg.width() == this->width() && newImg.height() == this->height());
+        addChannel(1);
     }
-  }
-
-  numChannels += newChans;
-
-  delete [] data;
-
-  data = new P *[numChannels];
-
-  for ( i = 0; i < (int)numChannels; i++ )
-  {
-    data[i] = tmpData[i];
-  }
-
-  delete [] tmpData;
-  */
+    else
+    {
+        reInit( newImg.width(), newImg.height(), 1, 1 );
+    }
+    
+    for ( int y = 0; y < ysize; y++ )
+        for ( int x = 0; x < ysize; x++ )
+            data[oldchan][x + y*xsize] = (P) newImg.getPixelQuick(x,y);
 }
 
 template<class P>
@@ -190,7 +175,7 @@ void MultiChannelImage3DT<P>::addChannel(const NICE::MultiChannelImageT<SrcP> &n
   {
     reInit( newMCImg.width(), newMCImg.height(), newMCImg.channels(), 1 );
   }
-  
+
   for(int z = 0; z < this->zsize; z++)
   {
     //NICE::ImageT<SrcP> newImg = newMCImg[z];
@@ -219,9 +204,9 @@ void MultiChannelImage3DT<P>::addChannel(const NICE::MultiChannelImage3DT<SrcP> 
   {
       reInit( newImg.width(), newImg.height(), newImg.depth(), newImg.channels() );
   }
-  
+
   int chanNI = 0;
-  
+
   for(int c = oldchan; c < (int)numChannels; c++, chanNI++)
   {
     int val = 0;
@@ -565,7 +550,27 @@ void MultiChannelImage3DT<P>::convertToColor( NICE::ColorImage & img, int z, con
 }
 
 template<class P>
-ColorImage MultiChannelImage3DT<P>::getColor(int z) const
+NICE::MultiChannelImageT<P> MultiChannelImage3DT<P>::getColorMCI(int z) const
+{
+    assert( z < zsize );
+    assert( numChannels >= 3 );
+
+    NICE::MultiChannelImageT<P> img( xsize, ysize, 3 );
+    long k = 0;
+
+    for ( int y = 0 ; y < ysize; y++ )
+        for ( int x = 0; x < xsize; x++ )
+        {
+            img.set( x, y, 0, ( int )( data[0][z*xsize*ysize + k] ) );
+            img.set( x, y, 1, ( int )( data[1][z*xsize*ysize + k] ) );
+            img.set( x, y, 2, ( int )( data[2][z*xsize*ysize + k] ) );
+        }
+
+    return img;
+}
+
+template<class P>
+NICE::ColorImage MultiChannelImage3DT<P>::getColor(int z) const
 {
   assert( z < zsize );
 	assert( numChannels >= 3 );
@@ -589,7 +594,7 @@ ColorImage MultiChannelImage3DT<P>::getColor(int z) const
 }
 
 template<class P>
-ColorImage MultiChannelImage3DT<P>::getColorImageFromChannels(int z, int channel0, int channel1, int channel2) const
+NICE::ColorImage MultiChannelImage3DT<P>::getColorImageFromChannels(int z, int channel0, int channel1, int channel2) const
 {
   assert( z < zsize );
   assert( numChannels >= std::max( std::max(channel0,channel1),channel2 ) );

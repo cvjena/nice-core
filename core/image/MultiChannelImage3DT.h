@@ -30,19 +30,19 @@ protected:
   /** image data, use carefully !!! data[channel][pixel_offset] */
   std::vector<P*> data;
 //    P **data;
-  
+
   /** image width */
   int xsize;
-  
+
   /** image height */
   int ysize;
 
   /** image depth */
   int zsize;
-  
+
   /** number of image channels */
   uint numChannels;
-  
+
 public:
 
   virtual inline int width() const;
@@ -95,20 +95,24 @@ public:
 
   void addChannel( int newChans = 1 );
 
+  /** add a channel to Image */
+  template<class SrcP>
+  void addChannel(const NICE::ImageT<SrcP> &newImg );
+  
   /** add a channel to Multichannel Image */
   template<class SrcP>
   void addChannel(const NICE::MultiChannelImageT<SrcP> &newImg );
-  
+
   template<class SrcP>
   void addChannel(const NICE::MultiChannelImage3DT<SrcP> &newImg);
 
   /** add channels only as references (no deep memory copy) */
   template<class SrcP>
   void addChannelReferences(const NICE::MultiChannelImage3DT<SrcP> &newImg);
-  
+
   /** get value */
   P get( int x, int y, int z, uint channel = 0 ) const;
-  
+
   /** get data pointer */
   std::vector<P*> getDataPointer() const;
   //P** getDataPointer();
@@ -124,14 +128,14 @@ public:
 
   /** calc integral image */
   void calcIntegral( uint channel = 0 );
-  
-  /** 
+
+  /**
    * @brief calculate the variance image map of a channel
    * @param srcchan source channel with raw data
    * @param tarchan target channel for the variance map
    */
   void calcVariance( uint srcchan = 0, uint tarchan = 1 );
-  
+
   /**
    * @brief calculate the integral value in the volume given by upper left front corner and lower right back corner, including out of boundary check
    * @warning make sure that the given channel is an integral 3d image
@@ -161,6 +165,9 @@ public:
   /** return x-slice as image */
   ImageT<P> getXSlice ( int x, uint channel = 0 ) const;
 
+  /** return rgb image (reading channels 0, 1, 2) as MultiChannelImageT */
+  MultiChannelImageT<P> getColorMCI(int z) const;
+
   /** return rgb image (reading channels 0, 1, 2) for visualization */
   ColorImage getColor(int z) const;
 
@@ -177,19 +184,19 @@ public:
 
   /** do a histogram equalization */
   void equalizeHistogram( uint channel = 0 ) const;
-  
+
   /** dump all data to RAW format: xsize, ysize, numChannels, <data> */
   void store( std::string filename ) const;
 
   /** read all data from RAW format: xsize, ysize, numChannels, <data> */
   void restore( std::string filename );
-  
+
   /** copy alls data to new object */
   MultiChannelImage3DT<P>& operator=( const MultiChannelImage3DT<P>& orig );
-  
+
   /** element operator */
   P & operator() (int x, int y, int z, uint channel = 0);
-  
+
   /** element operator */
   MultiChannelImageT<P> operator[] (uint c);
 };
