@@ -7,16 +7,16 @@
 #define LIMUN_IMAGETOOLS_H
 
 
-#include <core/image/ippwrapper.h>
+#include "core/image/ippwrapper.h"
 
-#include <core/vector/VectorT.h>
-#include <core/vector/MatrixT.h>
+#include "core/vector/VectorT.h"
+#include "core/vector/MatrixT.h"
 
-#include <core/image/ImageT.h>
-#include <core/image/ColorImageT.h>
+#include "core/image/ImageT.h"
+#include "core/image/ColorImageT.h"
 
-#include <core/image/Convert.h>
-#include <core/image/Filter.h>
+#include "core/image/Convert.h"
+#include "core/image/FilterT.h"
 
 namespace NICE {
 

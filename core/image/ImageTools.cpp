@@ -605,8 +605,31 @@ Matrix* KLTCornerDetector ( const Image& src, const uint& noCorners,
     if ( gradY->width() != src.width() || gradY->height() != src.height() )
       fthrow ( ImageException, "Optional gradient image gradY must have the same size like src." );
 
-  const GrayImage16s* diffX = ( gradX == NULL ) ? sobelX ( src ) : gradX;
-  const GrayImage16s* diffY = ( gradY == NULL ) ? sobelY ( src ) : gradY;
+  NICE::FilterT<unsigned char, unsigned char, unsigned char> filter;
+  NICE::GrayImage16s* diffX = new NICE::GrayImage16s( src.width(), src.height() );
+  NICE::GrayImage16s* diffY = new NICE::GrayImage16s( src.width(), src.height() );
+
+  if ( gradX == NULL )
+  {
+    NICE::Image dstx( src.width(), src.height() );
+    filter.sobelX( src, dstx );
+    for (int y = 0; y < diffX->height(); y++)
+      for (int x = 0; x < diffX->width(); x++)
+        diffX->setPixelQuick( x, y, (short int)dstx.getPixelQuick(x,y) );
+  }
+  else
+    diffX = (NICE::GrayImage16s*)gradX;
+
+  if ( gradY == NULL )
+  {
+    NICE::Image dsty( src.width(), src.height() );
+    filter.sobelY( src, dsty );
+    for (int y = 0; y < diffY->height(); y++)
+      for (int x = 0; x < diffY->width(); x++)
+        diffY->setPixelQuick( x, y, (short int)dsty.getPixelQuick(x,y) );
+  }
+  else
+    diffY = (NICE::GrayImage16s*)gradY;
 
   //
   uint EXQ, EYQ, EXY;
