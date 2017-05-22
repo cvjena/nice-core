@@ -1,6 +1,6 @@
 #include <iostream>
-#include <core/image/Filter.h>
-#include <core/basics/Timer.h>
+#include "core/image/FilterT.h"
+#include "core/basics/Timer.h"
 
 using namespace NICE;
 using namespace std;
@@ -11,18 +11,18 @@ using namespace std;
 int main ( int argc, char **argv )
 {
   if ( argc != 2 ) {
-    cerr << "usage: " << argv[0] << " <img>" << endl;
+    std::cerr << "usage: " << argv[0] << " <img>" << std::endl;
     exit ( -1 );
   }
-  Image img_uchar ( argv[1] );
-  ImageT<DATATYPE> img ( img_uchar.width(), img_uchar.height() );
+  NICE::Image img_uchar ( argv[1] );
+  NICE::ImageT<DATATYPE> img ( img_uchar.width(), img_uchar.height() );
 
   for ( int y = 0; y < img.height(); y++ )
     for ( int x = 0; x < img.width(); x++ )
       img.setPixel ( x, y, ( DATATYPE ) img_uchar.getPixel ( x, y ) );
 
-  ImageT<DATATYPE> gaussResult ( img.width(), img.height() );
-  ImageT<DATATYPE> gaussResultApprox ( img.width(), img.height() );
+  NICE::ImageT<DATATYPE> gaussResult ( img.width(), img.height() );
+  NICE::ImageT<DATATYPE> gaussResultApprox ( img.width(), img.height() );
   gaussResult.set ( 0 );
   gaussResultApprox.set ( 0 );
 
@@ -47,17 +47,26 @@ int main ( int argc, char **argv )
     t.start();
     for ( int i = 0 ; i < numRuns ; i++ )
       if ( evaluate_mean_filter )
+      {
 #ifdef DATATYPE_UCHAR
-        filterMean<unsigned char, int> ( img, filtersize, &gaussResult );
+        NICE::FilterT<unsigned char, int, int> filter;
+        filter.filterMean ( img, filtersize, &gaussResult );
 #else
-        filterMean<DATATYPE, DATATYPE> ( img, filtersize, &gaussResult );
+        NICE::FilterT<DATATYPE, DATATYPE, DATATYPE> filter;
+        filter.filterMean ( img, filtersize, &gaussResult );
 #endif
+      }
       else
+      {
 #ifdef DATATYPE_UCHAR
-        filterGaussSigma<unsigned char, int> ( img, sigma, &gaussResult );
+        NICE::FilterT<unsigned char, int, int> filter;
+        filter.filterGaussSigmaApproximate ( img, sigma, &gaussResult );
 #else
-        filterGaussSigma<DATATYPE, DATATYPE> ( img, sigma, &gaussResult );
+        NICE::FilterT<DATATYPE, DATATYPE, DATATYPE> filter;
+        filter.filterGaussSigmaApproximate ( img, sigma, &gaussResult );
 #endif
+      }
+
     t.stop();
 
     double timeStandard = t.getLast();
@@ -70,17 +79,26 @@ int main ( int argc, char **argv )
     t.start();
     for ( int i = 0 ; i < numRuns ; i++ )
       if ( evaluate_mean_filter )
+      {
 #ifdef DATATYPE_UCHAR
-        filterMeanLargeFS<unsigned char, int, unsigned char> ( img, filtersize, &gaussResultApprox );
+        NICE::FilterT<unsigned char, int, unsigned char> filter;
+        filter.filterMeanLargeFS ( img, filtersize, &gaussResultApprox );
 #else
-        filterMeanLargeFS<DATATYPE, DATATYPE, DATATYPE> ( img, filtersize, &gaussResultApprox );
+        NICE::FilterT<DATATYPE, DATATYPE, DATATYPE> filter;
+        filter.filterMeanLargeFS ( img, filtersize, &gaussResultApprox );
 #endif
+      }
       else
+      {
 #ifdef DATATYPE_UCHAR
-        filterGaussSigmaApproximate<unsigned char, int, int> ( img, sigma, &gaussResultApprox );
+        NICE::FilterT<unsigned char, int, int> filter;
+        filter.filterGaussSigmaApproximate ( img, sigma, &gaussResult );
 #else
-        filterGaussSigmaApproximate<DATATYPE, DATATYPE, DATATYPE> ( img, sigma, &gaussResultApprox );
+        NICE::FilterT<DATATYPE, DATATYPE, DATATYPE> filter;
+        filter.filterGaussSigmaApproximate ( img, sigma, &gaussResult );
 #endif
+      }
+
     t.stop();
 
     double timeApprox = t.getLast();
