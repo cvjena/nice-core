@@ -7,13 +7,13 @@
  * @file DeprecatedConverter.h
  * DEPRECATED
  * - Do NOT use this class in new code
- * - use the new functions in Convert.h, Filter.h, etc.
- * @deprecated Use new functions in Convert.h, Filter.h, ...
+ * - use the new functions in Convert.h, FilterT.h, etc.
+ * @deprecated Use new functions in Convert.h, FilterT.h, ...
  */
 #ifndef LIMUN_CONVERTER_H
 #define LIMUN_CONVERTER_H
 
-#include <core/basics/deprecated.h>
+#include "core/basics/deprecated.h"
 
 #include "core/image/ippwrapper.h"
 #include "core/image/GrayColorImageCommonImplementation.h"

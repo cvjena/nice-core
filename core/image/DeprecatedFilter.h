@@ -3,23 +3,30 @@
  *  - libimage - An image library
  * See file License for license information.
  */
+/**
+ * @file DeprecatedFilter.h
+ * DEPRECATED
+ * - Do NOT use this class in new code
+ * - use the new functions in FilterT.h
+ * @deprecated Use new functions in FilterT.h
+ */
 #ifndef LIMUN_FILTER_H
 #define LIMUN_FILTER_H
 
 
-#include <core/image/ippwrapper.h>
-#include <core/image/ImageOperators.h>
+#include "core/image/ippwrapper.h"
+#include "core/image/ImageOperators.h"
 
-#include <core/vector/VectorT.h>
-#include <core/vector/MatrixT.h>
+#include "core/vector/VectorT.h"
+#include "core/vector/MatrixT.h"
 
-#include <core/basics/RoundToNearest.h>
+#include "core/basics/RoundToNearest.h"
 
-#include <core/image/ImageT.h>
-#include <core/image/ColorImageT.h>
-#include <core/image/Buffer.h>
+#include "core/image/ImageT.h"
+#include "core/image/ColorImageT.h"
+#include "core/image/Buffer.h"
 
-#pragma message NICE_WARNING("Filter.h is obsolete. Please use FilterT.h instead and adapt your calls and implement the filter if necessary :)")
+//#pragma message NICE_WARNING("Filter.h is obsolete. Please use FilterT.h instead and adapt your calls and implement the filter if necessary :)")
 
 namespace NICE {
 /**
@@ -471,7 +478,7 @@ ColorImageT<P>* wiener ( const ColorImageT<P>& src, int anchorx = -1, int anchor
 } // namespace
 
 //#ifdef __GNUC__
-#include <core/image/Filter.tcc>
+#include "core/image/DeprecatedFilter.tcc"
 //#endif
 
 #endif //LIMUN_FILTER_H

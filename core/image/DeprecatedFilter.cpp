@@ -1,12 +1,12 @@
-#include "core/image/Filter.h"
+#include "core/image/DeprecatedFilter.h"
+#include "core/basics/numerictools.h"
+
 #include <math.h>
 #include <limits>
-#include <core/basics/numerictools.h>
-
 #include <iostream>
 using namespace std;
 
-#ifdef NICE_BOOST_FOUND 
+#ifdef NICE_BOOST_FOUND
 #include <boost/math/special_functions/round.hpp>
 #endif
 
