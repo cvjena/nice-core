@@ -1,10 +1,14 @@
+// NOTE: This suite of unit tests has been deactivated because Filter.h is deprecated and should be substituted
+// by FilterT.h. A new test suite needs to be written.
+//
+// Sven Sickert, 05/23/2017
 
 #include "TestFilter.h"
 #include <string>
 
 #include "core/image/ImageT.h"
 #include "core/image/ColorImageT.h"
-#include "core/image/Filter.h"
+//#include "core/image/Filter.h"
 
 using namespace std;
 using namespace NICE;
@@ -21,6 +25,7 @@ void TestFilter::tearDown()
 
 void TestFilter::testSepFloatFilter()
 {
+/*
     FloatImage fsrc(5,5);
     fsrc(0,0)=1; fsrc(1,0)=5; fsrc(2,0)=3; fsrc(3,0)=2; fsrc(4,0)=12;
     fsrc(0,1)=3; fsrc(1,1)=3; fsrc(2,1)=5; fsrc(3,1)=2; fsrc(4,1)=15;
@@ -121,10 +126,12 @@ void TestFilter::testSepFloatFilter()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(- 0.50000, static_cast<double>(fresult->getPixel(4,1)), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(- 1.00000, static_cast<double>(fresult->getPixel(4,2)), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(  3.50000, static_cast<double>(fresult->getPixel(4,3)), 0.00001);
+*/
 }
 
 void TestFilter::testSepIntFilter()
 {
+/*
     Image src(5,5);
     src(0,0)=1; src(1,0)=5; src(2,0)=3; src(3,0)=2; src(4,0)=12;
     src(0,1)=3; src(1,1)=3; src(2,1)=5; src(3,1)=2; src(4,1)=15;
@@ -225,10 +232,12 @@ void TestFilter::testSepIntFilter()
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 0+128, static_cast<double>(result->getPixel(4,1)), 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-1+128, static_cast<double>(result->getPixel(4,2)), 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 3+128, static_cast<double>(result->getPixel(4,3)), 1);
+*/
 }
 
 void TestFilter::testFloatFilter()
 {
+/*
     FloatImage fsrc(5,5);
     fsrc(0,0)=1; fsrc(1,0)=5; fsrc(2,0)=3; fsrc(3,0)=2; fsrc(4,0)=12;
     fsrc(0,1)=3; fsrc(1,1)=3; fsrc(2,1)=5; fsrc(3,1)=2; fsrc(4,1)=15;
@@ -305,10 +314,12 @@ void TestFilter::testFloatFilter()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(- 1.37500, static_cast<double>(fresult->getPixel(1,3)), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(- 0.50000, static_cast<double>(fresult->getPixel(2,3)), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(  1.25000, static_cast<double>(fresult->getPixel(3,3)), 0.00001);
+*/
 }
 
 void TestFilter::testIntFilter()
 {
+/*
     Image src(5,5);
     Image*  result  = new Image(src.width(), src.height());
 
@@ -385,10 +396,12 @@ void TestFilter::testIntFilter()
     CPPUNIT_ASSERT_DOUBLES_EQUAL( -1+128, static_cast<int>(result->getPixel(1,3)), 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(  0+128, static_cast<int>(result->getPixel(2,3)), 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(  1+128, static_cast<int>(result->getPixel(3,3)), 1);
+*/
 }
 
 void TestFilter::testSmoothing()
 {
+/*
     Image src(14,14);
     src.set(0);
     for(int j=4; j<src.height()-4; ++j)
@@ -763,10 +776,12 @@ void TestFilter::testSmoothing()
             CPPUNIT_ASSERT_EQUAL(  9, static_cast<int>(result->getPixel(11, 6)));
         #endif
     }
+*/
 }
 
 void TestFilter::testGradient()
 {
+/*
     Image src(10,10);
     src = 0;
     for(int j=3;j<src.height(); ++j)
@@ -836,10 +851,12 @@ void TestFilter::testGradient()
         CPPUNIT_ASSERT_EQUAL( 90, static_cast<int>(gradDir->getPixel(4,3)));
         CPPUNIT_ASSERT_EQUAL(  0, static_cast<int>(gradDir->getPixel(2,4)));
         CPPUNIT_ASSERT_EQUAL(  0, static_cast<int>(gradDir->getPixel(2,4)));
+*/
 }
 
 void TestFilter::testCanny()
 {
+/*
     // canny: test a rectangle
     {
         Image src = Image(19,19);
@@ -913,4 +930,5 @@ void TestFilter::testCanny()
                 CPPUNIT_ASSERT_EQUAL(  0, static_cast<int>(result->getPixel( j, 6+i)));
             }
     }
+*/
 }
