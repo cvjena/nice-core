@@ -459,11 +459,11 @@ void ImageFile::getPNGHeader ()
   png_set_sig_bytes(png_ptr, headersize);
   png_read_info(png_ptr, info_ptr);
 
-  fileheader.width = info_ptr->width;
-  fileheader.height = info_ptr->height;
-  fileheader.bitdepth = info_ptr->bit_depth;
+  fileheader.width = png_get_image_width(png_ptr, info_ptr);
+  fileheader.height = png_get_image_height(png_ptr, info_ptr);
+  fileheader.bitdepth = png_get_bit_depth(png_ptr, info_ptr);
   
-  png_byte color_type = info_ptr->color_type;
+  png_byte color_type = png_get_color_type(png_ptr, info_ptr);
   if ( color_type == PNG_COLOR_TYPE_GRAY ) 
     fileheader.channel = 1;
   else

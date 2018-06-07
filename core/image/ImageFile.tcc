@@ -324,10 +324,10 @@ void ImageFile::readerPNG ( GrayColorImageCommonImplementationT<P> *image )
   png_set_sig_bytes ( png_ptr, headersize );
   png_read_info ( png_ptr, info_ptr );
 
-  int width = info_ptr->width;
-  int height = info_ptr->height;
-  png_byte color_type = info_ptr->color_type;
-  png_byte bit_depth = info_ptr->bit_depth;
+  int width = png_get_image_width(png_ptr, info_ptr);
+  int height = png_get_image_height(png_ptr, info_ptr);
+  png_byte color_type = png_get_color_type(png_ptr, info_ptr);
+  png_byte bit_depth = png_get_bit_depth(png_ptr, info_ptr);
 
 
   // resize image if necessary
@@ -404,8 +404,8 @@ void ImageFile::writerPNG ( const GrayColorImageCommonImplementationT<P> *image 
   if ( ( pfile = fopen ( filename.c_str(), "wb" ) ) == NULL )
     fthrow ( ImageException, "ImageFile::writerPNG: Cannot write " + filename );
 
-  png_structp png_ptr = png_create_write_struct ( PNG_LIBPNG_VER_STRING, png_voidp_NULL,
-                        png_error_ptr_NULL, png_error_ptr_NULL );
+  png_structp png_ptr = png_create_write_struct ( PNG_LIBPNG_VER_STRING, NULL,
+                        NULL, NULL );
 
   if ( !png_ptr ) {
     fclose ( pfile );
@@ -453,7 +453,7 @@ void ImageFile::writerPNG ( const GrayColorImageCommonImplementationT<P> *image 
   png_set_filter ( png_ptr, 0, PNG_FILTER_AVG );
 
   /* set the zlib compression level */
-  png_set_compression_level ( png_ptr, Z_BEST_COMPRESSION );
+  //png_set_compression_level ( png_ptr, Z_BEST_COMPRESSION );
   //png_set_compression_level(png_ptr, Z_DEFAULT_COMPRESSION);
 
   /* set other zlib parameters */
