@@ -1,5 +1,4 @@
-#version 2.8.9 required for position independent code
-cmake_minimum_required(VERSION 2.8.9)
+cmake_minimum_required(VERSION 3.1.0)
 project (NICELibrary)
 
 include(CheckSymbolExists)
@@ -96,10 +95,10 @@ if(WITH_BOOST)
   set(Boost_USE_STATIC_LIBS ON)
   FIND_PACKAGE(Boost COMPONENTS date_time filesystem)
   IF (Boost_FOUND)
-	  message(STATUS "boost-incl-dir: ${Boost_INCLUDE_DIRS}")
-      INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
-      ADD_DEFINITIONS( "-DNICE_BOOST_FOUND" )
-	  ADD_DEFINITIONS( "-DNICE_USELIB_BOOST" )
+	message(STATUS "boost-incl-dir: ${Boost_INCLUDE_DIRS}")
+	INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
+	ADD_DEFINITIONS( "-DNICE_BOOST_FOUND" )
+	ADD_DEFINITIONS( "-DNICE_USELIB_BOOST" )
   ENDIF()
   set(external_deps ${external_deps} "BOOST")
 endif()
@@ -135,7 +134,7 @@ if(WITH_DBV_LIBRARIES)
         ADD_DEFINITIONS( "-DNICE_USELIB_IPP=5" )
 	ADD_DEFINITIONS( "-lpthread" )
         INCLUDE_DIRECTORIES(${IPP_INCLUDE_DIRS})
-        
+
         set(external_deps ${external_deps} "IPP")
       else()
         message(STATUS "IPP library not found")
@@ -202,11 +201,11 @@ NICE_OPTION(WITH_IMAGEMAGICK "Build with ImageMagick++" OFF)
 if(WITH_IMAGEMAGICK)
   find_package(ImageMagick COMPONENTS Magick++ MagickCore)
   if(ImageMagick_FOUND)
-	  message(STATUS "imagemagick found: ${ImageMagick_LIBRARIES}")
+    message(STATUS "imagemagick found: ${ImageMagick_LIBRARIES}")
     ADD_DEFINITIONS( "-DNICE_USELIB_LIBMAGICK")
     INCLUDE_DIRECTORIES(${ImageMagick_INCLUDE_DIRS})
-	else()
-	  message(STATUS "imagemagick not found")
+  else()
+    message(STATUS "imagemagick not found")
   endif()
 endif()
 
@@ -236,26 +235,26 @@ if(WITH_OPENGL)
 
   #try using GLUT
   if(WIN32)
-  	message(STATUS "find GLUT for win32")
-  	set(GLUT_INCLUDE_DIR "C:/Libraries/freeglut-MSVC-2.8.0-1.mp/freeglut/include/")# , where to find GL/glut.h, etc.
-  	set(GLUT_ROOT_PATH "C:/Libraries/freeglut-MSVC-2.8.0-1.mp/freeglut/") #  GLUT_LIBRARIES
-  	set(tmp_OPENGL_LIBRARY_DIR "${OPENGL_LIBRARY_DIR}") #temporarily store opengl_lib path
-  	set(OPENGL_LIBRARY_DIR "${GLUT_ROOT_PATH}lib")
-  	find_package(GLUT)
-  	if(GLUT_FOUND)
-  	  message(STATUS "GLUT found")
-  	  include_directories( ${GLUT_INCLUDE_DIR} )
-  	  ADD_DEFINITIONS( -DNICE_USELIB_GLUT)
-  	  #ADD_DEFINITIONS(-DBUILD_VTI -DFREEGLUT_STATIC) with static seems not to work
-  	endif()
-  	set(OPENGL_LIBRARY_DIR "${tmp_OPENGL_LIBRARY_DIR}") #reset opengl lib path
+    message(STATUS "find GLUT for win32")
+    set(GLUT_INCLUDE_DIR "C:/Libraries/freeglut-MSVC-2.8.0-1.mp/freeglut/include/")# , where to find GL/glut.h, etc.
+    set(GLUT_ROOT_PATH "C:/Libraries/freeglut-MSVC-2.8.0-1.mp/freeglut/") #  GLUT_LIBRARIES
+    set(tmp_OPENGL_LIBRARY_DIR "${OPENGL_LIBRARY_DIR}") #temporarily store opengl_lib path
+    set(OPENGL_LIBRARY_DIR "${GLUT_ROOT_PATH}lib")
+    find_package(GLUT)
+    if(GLUT_FOUND)
+      message(STATUS "GLUT found")
+      include_directories( ${GLUT_INCLUDE_DIR} )
+      ADD_DEFINITIONS( -DNICE_USELIB_GLUT)
+      #ADD_DEFINITIONS(-DBUILD_VTI -DFREEGLUT_STATIC) with static seems not to work
+    endif()
+    set(OPENGL_LIBRARY_DIR "${tmp_OPENGL_LIBRARY_DIR}") #reset opengl lib path
   else()
-  	find_package(GLUT)
-  	if(GLUT_FOUND)
-  	  message(STATUS "GLUT found")
-  	  include_directories( ${GLUT_INCLUDE_DIR} )
-  	  ADD_DEFINITIONS(-DNICE_USELIB_GLUT)
-  	endif()
+    find_package(GLUT)
+    if(GLUT_FOUND)
+      message(STATUS "GLUT found")
+      include_directories( ${GLUT_INCLUDE_DIR} )
+      ADD_DEFINITIONS(-DNICE_USELIB_GLUT)
+    endif()
   endif()
 
 endif()
@@ -273,17 +272,12 @@ if(MSVC)
   #enable solution folders
   SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
   SET_PROPERTY(GLOBAL PROPERTY AUTOMOC_FOLDER automoc) #in future (>cmake1.8.11 this might separate the automoc projects into a separate solution folder)
-  
+
   #in Visual Studio avoid overwriting of std::max with macro definition max() in WinDef.h (http://support.microsoft.com/kb/143208/de)
   ADD_DEFINITIONS("-DNOMINMAX")
 endif()
 
-NICE_OPTION(BUILD_UNITTESTS "Build all unit tests" ON IF CPPUNIT_FOUND)
-#if(CPPUNIT_FOUND)
-#	set(BUILD_UNITTESTS ON)
-#else()
-#	set(BUILD_UNITTESTS OFF)
-#endif()
+NICE_OPTION(BUILD_UNITTESTS "Build all unit tests" OFF)
 if( BUILD_UNITTESTS)
 	enable_testing()
 	include(CTest)
@@ -304,8 +298,8 @@ set(__listSubLibs "")
 foreach(_curSubdir ${__listSubDirs})
 	nice_get_real_path(__modpath "${NICE_CURR_DIR}/${_curSubdir}/")
 	if(EXISTS "${__modpath}/CMakeLists.txt")
-	    LIST(APPEND __listSubLibs ${_curSubdir})
-	  NICE_OPTION(BUILD_LIB_${_curSubdir} "Build library ${_curSubdir}" ON)
+          LIST(APPEND __listSubLibs ${_curSubdir})
+          NICE_OPTION(BUILD_LIB_${_curSubdir} "Build library ${_curSubdir}" ON)
 	endif()
 endforeach()
 
