@@ -1,5 +1,5 @@
 ## NICE Libary
-by Computer Vision Group Jena
+by Computer Vision Group Jena, 2004-2019
 
 #### Dependencies
 
@@ -24,7 +24,7 @@ navigate to the repository directory using the terminal and run the following co
 	cmake ..
 	make
 
-Alternatively, you can use 'ccmake ..' to modfiy the install configuration.
+Alternatively, you can use `ccmake ..` instead to modfiy the installation configuration.
 
-Please note, there are additional library modules for optimzation, segmentation, semantic segmentation and visual learning available.
+Please note, there are additional library modules for *optimization*, *segmentation*, *semantic segmentation* and *visual learning* available.
 If you are interested in using them, contact the authors.
