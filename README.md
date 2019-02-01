@@ -1,4 +1,4 @@
-## NICE Libary
+## NICE Library
 by Computer Vision Group Jena, 2004-2019
 
 #### Dependencies
